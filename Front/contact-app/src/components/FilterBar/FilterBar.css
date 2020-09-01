@@ -1,0 +1,15 @@
+.FilterBar {
+        min-height: 80px;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px 20px 30px;
+        
+        box-shadow: 0 2px 3px #ccc;
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        z-index: 90;
+        display: flex;
+        border-radius: 10px;
+        /* box-shadow: 0 8px 6px -6px #989898 ; */
+}

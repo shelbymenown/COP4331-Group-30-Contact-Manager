@@ -1,0 +1,35 @@
+
+.NavigationItems {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    height: 100%;
+}
+
+.search {
+    display: inline-flex;
+    font-size: 14px;
+    -webkit-transform: rotate(45deg); 
+    -moz-transform: rotate(45deg); 
+      -o-transform: rotate(45deg);
+         transform: rotate(45deg);
+    
+}
+
+.search::before {
+    color: #dadada;
+    content: '⚲';
+}
+
+
+
+
+@media (min-width: 500px) {
+    .NavigationItems {
+        flex-flow: row;
+        /* overflow: hidden; */
+    }
+}
