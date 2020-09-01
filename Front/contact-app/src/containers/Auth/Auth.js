@@ -24,7 +24,6 @@ class Auth extends Component {
         email: "",
         emailError: "",
         passwordConfirm: "",
-        isCompany: false,
     };
 
     state = {
@@ -53,12 +52,6 @@ class Auth extends Component {
                 onChange={e => this.change(e)}
                 errorText={this.state.passwordError}
                 floatingLabelFixed
-            /><br />
-            <Checkbox
-                checked={this.state.isCompany}
-                onClick={() => this.handleCheck()}
-                label="Company"
-                color="primary"
             /><br />
         </Ax>
     );
@@ -99,7 +92,6 @@ class Auth extends Component {
                 name="email"
                 hintText="Email"
                 floatingLabelText="Email"
-                disabled={!this.state.isCompany}
                 value={this.state.email}
                 onChange={e => this.change(e)}
                 errorText={this.state.emailError}
@@ -122,12 +114,6 @@ class Auth extends Component {
                 onChange={e => this.change(e)}
                 errorText={this.state.lastNameError}
                 floatingLabelFixed
-            /><br />
-            <Checkbox
-                checked={this.state.isCompany}
-                onClick={() => this.handleCheck()}
-                label="Company"
-                color="primary"
             /><br />
         </Ax>
     );
@@ -169,9 +155,8 @@ class Auth extends Component {
             else if (!errors.passwordError && this.state.password !== this.state.passwordConfirm)
                 errors.passwordError = "Passwords should match";
 
-            if (this.state.isCompany)
-                if (this.state.email.length < 5 || !emailPattern.test(this.state.email))
-                    errors.emailError = "Requires valid email";
+            if (this.state.email.length < 5 || !emailPattern.test(this.state.email))
+                errors.emailError = "Requires valid email";
         }
 
         if (!(Object.keys(errors).length === 0 && errors.constructor === Object)) {
@@ -197,19 +182,13 @@ class Auth extends Component {
         e.preventDefault();
         if (this.validate()) {
             if (this.state.isLogin)
-                this.props.onAuth(this.state.username, this.state.password, this.state.isCompany);
+                this.props.onAuth(this.state.username, this.state.password);
             else {
-                if (this.state.isCompany)
-                    this.props.onSignUp({
-                        username: this.state.username,
-                        password: this.state.password,
-                        email: this.state.email
-                    }, this.state.isCompany);
-                else
-                    this.props.onSignUp({
-                        username: this.state.username,
-                        password: this.state.password
-                    }, this.state.isCompany);
+				this.props.onSignUp({
+					username: this.state.username,
+					password: this.state.password,
+					email: this.state.email
+				})
                 this.toggle()
             }
         }
@@ -277,8 +256,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (username, password, isCompany) => dispatch(actions.auth(username, password, isCompany)),
-        onSignUp: (userData, isCompany) => dispatch(actions.signUp(userData, isCompany)),
+        onAuth: (username, password) => dispatch(actions.auth(username, password)),
+        onSignUp: (userData) => dispatch(actions.signUp(userData)),
         onLogout: () => dispatch(actions.logout())
     };
 };
