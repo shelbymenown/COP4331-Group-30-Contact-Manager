@@ -1,14 +1,14 @@
 var urlBase = 'http://spadecontactmanager.com/LAMPAPI';
 var extension = 'php';
 
-
-
 var userID = 0;
 var Username = "";
 var Password = "";
 
-function loginSubmission()
+function doLogin(e)
 {
+	e.preventDefault();
+	
     userID = 0;
     Username = "";
     Password = "";
@@ -35,19 +35,16 @@ function loginSubmission()
         console.log(jsonPayload);
         xhr.send(jsonPayload);
 
-        var jsonObject = JSON.parse(xhr.responseText);
+		var res = JSON.parse(xhr.responseText);
+		console.log(res);
+		
+		if (!res.id || res.error)
+		if (res.id && res.id >= 0 && !res.error)
+		{
+			// TODO : log in!
+		}
+		else document.getElementById("loginResult").innerHTML = res.error;
 
-        userID = jsonObject.id;
-
-        console.log(jsonPayload);
-
-        if(userID < 1)
-        {
-            document.getElementById("loginResult").innerHTML = "Username or Password is incorrect";
-        }
-
-        //Username = jsonObject.Username;
-        //Password = jsonObject.Password; 
     }
     catch(err)
 	{
