@@ -1,0 +1,19 @@
+
+.Content_Parent {
+    top: 54px;
+    height:100%;
+    width: 100%;
+    position: absolute;
+    overflow-y: scroll;
+}
+
+.Content {
+    padding-top: 65px;
+    padding-bottom: 100px;
+}
+
+.Cart {
+    position: fixed;
+    bottom: 7px;
+    right: 30px;
+}

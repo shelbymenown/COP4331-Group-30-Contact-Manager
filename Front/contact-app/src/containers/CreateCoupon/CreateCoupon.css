@@ -1,0 +1,55 @@
+.Create {
+    margin: 20px auto;
+    width: 80%;
+    text-align: center;
+    box-shadow: 0 2px 3px #ccc;
+    border: 1px solid #eee;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.FormActions {
+    padding-bottom: 15px;
+    overflow: hidden
+}
+
+.BundledButtons {
+    float: right;
+}
+
+
+.Dates {
+    margin: auto;
+}
+
+.Left {
+    /* padding-left:10px; */
+    float: left;
+}
+
+.Right {
+    float: right;
+    /* margin: auto; */
+    /* padding-right:60px; */
+}
+
+@media (min-width: 600px) {
+    .Create {
+        width: 550px;
+        padding: 0 20px;
+    }
+
+    .Dates {
+        display: inline-block;
+        width: 550px;
+    }
+}
+
+
+
+@media (max-width: 899px) {
+    .BundledButtons {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
