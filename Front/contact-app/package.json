@@ -1,7 +1,7 @@
 {
-  "name": "coupon-app-react",
-  "homepage": "http://spadecontactmanager.com/",
+  "name": "cop-4331-project",
   "version": "0.1.0",
+  "homepage": "spadecontactmanager.com ",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^1.2.2",

@@ -7,6 +7,17 @@ body{
     font-family: sans-serif;
 }
 
+
+.Logo header 
+{
+    text-align: left;
+}
+
+.Logo h1 
+{
+    text-align: left;
+}
+
 h1 
 {
     text-align: center;
@@ -45,6 +56,10 @@ form {
     background: rgb(37, 39, 46);
     padding: 70px 30px;
     border-radius: 20px;
+}
+
+.Login-Box h1 {
+    color: white;
 }
 
 .Login-Box p {
@@ -114,4 +129,13 @@ input[type="password" i] {
     outline: none;
     background: rgb(255, 51, 0);
     border-radius: 20px;
+}
+
+.Login-Box input[type="submit"]:hover {
+    cursor: pointer;
+    background:  rgb(248, 112, 33);
+}
+
+.Login-Box a:hover {
+    color: white;
 }

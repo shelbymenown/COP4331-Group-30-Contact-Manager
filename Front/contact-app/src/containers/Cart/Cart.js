@@ -33,7 +33,7 @@ class Cart extends Component {
     getCoupon = key => {
         const { coupons } = this.props
         for (let c in coupons) {
-            if (coupons[c].id == key)
+            if (coupons[c].id === key)
                 return coupons[c];
         }
         return null;

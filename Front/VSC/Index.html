@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>Homepage</title>
         <link rel="stylesheet" href="styles.css" type="text/css">
+        <script type="text/javascript" src="script.js"></script>
     </head>
 
     <body>
@@ -19,15 +20,15 @@
             <img src="usericon.png" class="usericon">
             <h1> Welcome! </h1>
 
-            <form>
+            <form action="/LAMPAPI/Login.php" method="POST">
                 <p> Username </p>
-                <input type="text" name="" placeholder="Enter Username">
+                <input type="text" id="Username" name="Username" placeholder="Enter Username">
                 <p> Password </p>
-                <input type="text" name="" placeholder="Enter Password">
-                <input type="submit" name="" placeholder="Login">
-                <a href="#"> Forgot your Password? </a>
+                <input type="password" id="Password" name="Password" placeholder="Enter Password">
+                <input type="submit" id="LoginButton" placeholder="Submit" onclick="loginSubmission()">
+                <!---<a href="#"> Forgot your Password? </a>-->
                 <br>
-                <a href="#"> Don't have an account? </a>
+                <a href="Signup.html"> Don't have an account? </a>
             </form>
         </div>
     </body>
