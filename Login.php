@@ -17,17 +17,16 @@
 	}
 	else
 	{
-		$sql = "SELECT Username,Password FROM Users where Username='" . $inData["Username"] . "' and Password='" . $inData["Password"] . "'";
+		$sql = "SELECT Username, UserID FROM Users WHERE Username='" . $inData["Username"] . "' and Password='" . $inData["Password"] . "'";
 		$result = $conn->query($sql);
 		
 		if ($result->num_rows > 0)
 		{
 			$row = $result->fetch_assoc();
 			$Username = $row["Username"];
-			$Password = $row["Password"];
 			$UserID = $row["UserID"];
 
-			returnWithInfo($Username, $Password, $UserID );
+			returnWithInfo( $UserID, $Username );
 		}
 		else
 		{
@@ -57,9 +56,9 @@
 		sendResultInfoAsJson( $retValue );
 	}
 
-	function returnWithInfo( $Username, $Password, $UserID )
+	function returnWithInfo( $UserID, $Username )
 	{
-		$retValue = '{"UserID":' . $UserID . ',"Username":"' . $Username . '","Password":"' . $Password . '","error":""}';
+		$retValue = '{"UserID":' . $UserID . ',"Username":"' . $Username . '"}';
 		sendResultInfoAsJson( $retValue );
 	}
 
