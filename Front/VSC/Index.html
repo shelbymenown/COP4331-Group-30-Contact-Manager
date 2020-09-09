@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Homepage</title>
+        <link rel="stylesheet" href="styles.css" type="text/css">
+        <script type="text/javascript" src="script.js"></script>
+    </head>
+
+    <body>
+        <div class="Logo">
+            <header>
+                <img src="spade.png">
+                <h1> SPADE </h1>
+                <h1> Contact Manager</h1>
+            </header>
+        </div>
+
+        <div class="Login-Box">
+            <img src="usericon.png" class="usericon">
+            <h1> Welcome! </h1>
+
+            <form onsubmit="return doLogin(event)">
+                <p> Username </p>
+                <input type="text" id="Username" name="Username" placeholder="Enter Username">
+                <p> Password </p>
+                <input type="password" id="Password" name="Password" placeholder="Enter Password">
+                <input type="submit" id="LoginButton" placeholder="Submit">
+                <!---<a href="#"> Forgot your Password? </a>-->
+                <br>
+				<p id="loginResult" style="color: red; text-align: center;"></p>
+				<a href="Signup.html"> Don't have an account? </a>
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,67 @@
+/* Style The Dropdown Button */
+.Dropdown_Header {
+    margin: 0;
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+    width:auto;
+    align-items: center;
+    width: 100%;
+    border:none;
+    cursor: pointer;
+}
+
+.Dropdown_Header a {
+    color: white;
+    text-decoration: none;
+    padding: 17px 10px;
+    border-bottom: 4px solid transparent;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: block;
+}
+
+.Dropdown:hover .Dropdown_Header a {
+    background-color: #8F5C2C;
+    border-bottom: 4px solid #40A4C8;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.Dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdownContent {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.Dropdown_Item a{
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+}
+
+.Dropdown_Item a:active::before,
+.Dropdown_Item a.active::before {
+    color: #40A4C8;
+    content: '»';
+}
+
+/* Change color of dropdown links on hover */
+.Dropdown_Item a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.Dropdown:hover .dropdownContent {
+    display: block;
+}
