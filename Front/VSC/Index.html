@@ -20,7 +20,7 @@
             <img src="usericon.png" class="usericon">
             <h1> Welcome! </h1>
 
-            <form onsubmit="doLogin($event)">
+            <form onsubmit="return doLogin(event)">
                 <p> Username </p>
                 <input type="text" id="Username" name="Username" placeholder="Enter Username">
                 <p> Password </p>
@@ -28,7 +28,8 @@
                 <input type="submit" id="LoginButton" placeholder="Submit">
                 <!---<a href="#"> Forgot your Password? </a>-->
                 <br>
-                <a href="Signup.html"> Don't have an account? </a>
+				<p id="loginResult" style="color: red; text-align: center;"></p>
+				<a href="Signup.html"> Don't have an account? </a>
             </form>
         </div>
     </body>

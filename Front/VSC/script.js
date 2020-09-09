@@ -9,6 +9,9 @@ function doLogin(e)
 {
 	e.preventDefault();
 	
+	// Clear previous login attempt
+	document.getElementById("loginResult").innerHTML = "";
+
     userID = 0;
     Username = "";
     Password = "";
@@ -38,7 +41,6 @@ function doLogin(e)
 		var res = JSON.parse(xhr.responseText);
 		console.log(res);
 		
-		if (!res.id || res.error)
 		if (res.id && res.id >= 0 && !res.error)
 		{
 			// TODO : log in!
