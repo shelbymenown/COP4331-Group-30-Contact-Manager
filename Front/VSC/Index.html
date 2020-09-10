@@ -3,8 +3,10 @@
     <head>
         <meta charset="utf-8">
         <title>Homepage</title>
-        <link rel="stylesheet" href="styles.css" type="text/css">
-        <script type="text/javascript" src="script.js"></script>
+		<link rel="stylesheet" href="styles.css" type="text/css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+        <script type="text/javascript" src="login.js"></script>
     </head>
 
     <body>
@@ -20,15 +22,15 @@
             <img src="usericon.png" class="usericon">
             <h1> Welcome! </h1>
 
-            <form onsubmit="return doLogin(event)">
+            <form id="login_form">
                 <p> Username </p>
-                <input type="text" id="Username" name="Username" placeholder="Enter Username">
+                <input type="text" id="username" name="Username" placeholder="Enter Username">
                 <p> Password </p>
-                <input type="password" id="Password" name="Password" placeholder="Enter Password">
+                <input type="password" id="password" name="Password" placeholder="Enter Password">
                 <input type="submit" id="LoginButton" placeholder="Submit">
                 <!---<a href="#"> Forgot your Password? </a>-->
                 <br>
-				<p id="loginResult" style="color: red; text-align: center;"></p>
+				<p id="login_result" style="color: red; text-align: center;"></p>
 				<a href="Signup.html"> Don't have an account? </a>
             </form>
         </div>
