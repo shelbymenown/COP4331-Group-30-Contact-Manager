@@ -1,5 +1,4 @@
 <?php
-
 	$inData = getRequestInfo();
 
 	$UserID = 0;
@@ -37,7 +36,7 @@
 		}
 		else
 		{
-			$sql = "SELECT Username, UserID FROM Users WHERE Username='" . $inData["Username"] . "' and Password='" . $inData["Password"] . "'";
+			$sql = "SELECT Username, UserID FROM User WHERE Username='" . $inData["Username"] . "' and Password='" . $inData["Password"] . "'";
 			$result = $conn->query($sql);
 			
 			if ($result->num_rows > 0)
