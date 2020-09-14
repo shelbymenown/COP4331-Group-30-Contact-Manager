@@ -1,36 +1,60 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Homepage</title>
-        <link rel="stylesheet" href="styles.css" type="text/css">
-        <script type="text/javascript" src="script.js"></script>
-    </head>
 
-    <body>
-        <div class="Logo">
-            <header>
-                <img src="spade.png">
-                <h1> SPADE </h1>
-                <h1> Contact Manager</h1>
-            </header>
-        </div>
+<head>
+	<meta charset="utf-8">
+	<title>Authenticate</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+		integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	<link rel="stylesheet" href="auth.css" type="text/css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+	<script type="text/javascript" src="auth.js"></script>
+</head>
 
-        <div class="Login-Box">
-            <img src="usericon.png" class="usericon">
-            <h1> Welcome! </h1>
+<body>
 
-            <form onsubmit="return doLogin(event)">
-                <p> Username </p>
-                <input type="text" id="Username" name="Username" placeholder="Enter Username">
-                <p> Password </p>
-                <input type="password" id="Password" name="Password" placeholder="Enter Password">
-                <input type="submit" id="LoginButton" placeholder="Submit">
-                <!---<a href="#"> Forgot your Password? </a>-->
-                <br>
-				<p id="loginResult" style="color: red; text-align: center;"></p>
-				<a href="Signup.html"> Don't have an account? </a>
-            </form>
-        </div>
-    </body>
+	<div class="container" id="container">
+		<div class="form-container sign-up-container">
+			<form id="signup-form">
+				<h1>Create Account</h1>
+				<input type="text" name="name" placeholder="Name">
+				<input type="text" name="username" placeholder="Username">
+				<input type="password" name="password" placeholder="Password">
+				<button type="submit">Sign Up</button>
+				<!-- <input type="submit">Sign Up</input> -->
+				<span class="error" id="signup-error">Username is not available</span>
+			</form>
+		</div>
+		<div class="form-container sign-in-container">
+			<form id="login-form">
+				<h1>Sign In</h1>
+				<input type="text" name="username" placeholder="Username">
+				<input type="password" name="password" placeholder="Password">
+				
+				<!-- <a href="#">Forgot Your Password</a> -->
+				<button type="submit">Login</button>
+				<span class="error" id="login-error">Username or password incorrect</span>
+			</form>
+		</div>
+		<div class="overlay-container">
+			<div class="overlay">
+				<div class="overlay-panel overlay-right">
+					<h1>We Missed you!</h1>
+					<p>To manage your contacts please login with your personal information</p>
+					<button class="ghost" id="signup">or Sign Up</button>
+					<span class="i-spade i-spade-right i-spade-bottom">♣</span>
+				</div>
+				<div class="overlay-panel overlay-left">
+					<span class="i-spade i-spade-left">♠</span>
+					<span class="i-spade i-spade-right">♠</span>
+					<h1>Contacts</h1>
+					<p>Sign up to enjoy Spades Contact Manager</p>
+					<button class="ghost" id="login">or Login</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
 </html>

@@ -1,0 +1,98 @@
+.logo-name
+{
+    color: black;
+}
+
+body{
+    background-color: #F33016;
+    
+}
+
+#welcome-user
+{
+    text-align: center;
+}
+
+.user-body
+{
+    background-color:rgb(37, 39, 46);
+    border-radius: 20px;
+    width: 80%;
+    height: 40vw;
+    margin: 0 auto;
+
+}
+
+h1
+{
+    color: white;
+    text-align: left;
+    margin: 3px;
+    float: left;
+}
+
+.user-top > h1
+{
+    padding-left: 10px; 
+    width: 30px;
+
+}
+
+.btn
+{
+    margin: 10px;
+}
+
+
+.vertical { 
+    border-left: 3px solid white; 
+    height: 200px; 
+    position:absolute; 
+    left: 50%; 
+} 
+
+.user-top
+{
+    display: inline;
+    padding: 2px;
+}
+
+.padding-container
+{
+    padding: 20px;
+}
+
+.ending-container
+{
+    padding: 20px;
+}
+
+.form-inline
+{
+    
+    padding: 10px;
+}
+
+.user-body-header
+{
+    height: 15%;
+}
+
+.user-body-contacts
+{
+    display: block;
+    margin: auto;
+}
+
+.card{
+    float: right;
+    width: 80%;
+    
+}
+
+.search-bar
+{
+    float: initial;
+    
+    
+}
