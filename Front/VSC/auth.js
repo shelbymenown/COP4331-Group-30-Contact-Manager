@@ -6,6 +6,9 @@ var signUpButton;
 var signInButton;
 var container;
 
+var __uRgx = /^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$/
+
+
 var submitted_signup = false;
 var submitted_login = false;
 
