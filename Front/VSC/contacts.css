@@ -54,6 +54,9 @@ body {
     -webkit-box-align: center;
     -ms-flex-align: center;
 	align-items: center;
+
+	box-shadow: 0 8px 12px rgba(0,0,0,0.13), 
+				0 3px 3px rgba(0,0,0,0.10);
 }
 
 @media only screen and (max-width: 31.25em) {
@@ -109,6 +112,8 @@ body {
 	transform: translateX(40px);
 }
 .search {
+	margin-left: 13vw;
+
     -webkit-box-flex: 0;
     -ms-flex: 0 0 40%;
 	flex: 0 0 40%;
@@ -242,6 +247,10 @@ body {
 
 .user-nav__container:active {
     background-color: var(--color-grey-light-3)
+}
+
+.user-nav__container:last-child {
+	margin-right: 40px;
 }
 
 .logo-name
