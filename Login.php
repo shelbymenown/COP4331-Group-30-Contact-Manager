@@ -2,8 +2,6 @@
 
 	$serverKey = '5f2b5cdbe5194f10b3241568fe4e2b24';
 	
-
-
 	$inData = getRequestInfo();
 
 	$UserID = 0;
@@ -81,16 +79,17 @@
 		sendResultInfoAsJson( $retValue );
 	}
 
-	function returnWithInfo( $UserID, $Username )
+	function returnWithInfo( $UserID )
 	{
+        require_once('jwt.php');
+        
+        // Encode UserID into a token
 		$payloadArray = array();
 		$payloadArray['userId'] = $UserID;
 		$token = JWT::encode($payloadArray, $serverKey);
 
-		// return to caller
-		$returnArray = array('token' => $token);
-		$jsonEncodedReturnArray = json_encode($returnArray, JSON_PRETTY_PRINT);
-		sendResultInfoAsJson( $jsonEncodedReturnArray );
+        // Respond with token
+        sendResultInfoAsJson( '{"token": "' . $token . '"}' );
 	}
 
 	function IsNullOrEmptyString($str){
