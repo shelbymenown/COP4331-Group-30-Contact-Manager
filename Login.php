@@ -1,4 +1,9 @@
 <?php
+
+	$serverKey = '5f2b5cdbe5194f10b3241568fe4e2b24';
+	
+
+
 	$inData = getRequestInfo();
 
 	$UserID = 0;
@@ -78,8 +83,14 @@
 
 	function returnWithInfo( $UserID, $Username )
 	{
-		$retValue = '{"UserID":' . $UserID . ',"Username":"' . $Username . '"}';
-		sendResultInfoAsJson( $retValue );
+		$payloadArray = array();
+		$payloadArray['userId'] = $UserID;
+		$token = JWT::encode($payloadArray, $serverKey);
+
+		// return to caller
+		$returnArray = array('token' => $token);
+		$jsonEncodedReturnArray = json_encode($returnArray, JSON_PRETTY_PRINT);
+		sendResultInfoAsJson( $jsonEncodedReturnArray );
 	}
 
 	function IsNullOrEmptyString($str){
