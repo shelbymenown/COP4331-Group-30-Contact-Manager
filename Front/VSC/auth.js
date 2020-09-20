@@ -1,6 +1,7 @@
 var URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
 var API_EXTENSION = 'php';
 
+var token;
 var userId = 0;
 var signUpButton;
 var signInButton;
@@ -32,10 +33,10 @@ function showError(element, error)
 
 // Handle page load
 $(document).ready(function () {
-	userId = Cookies.get("userId");
+	token = Cookies.get("token");
 
 	// TODO : Change page to /contacts??
-	if (userId && userId >= 0)
+	if (token)
 	{
 		alert("You are already logged in!");
 		window.location.pathname = "/contacts.html"
