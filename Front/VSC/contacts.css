@@ -521,15 +521,15 @@ h1
 	clear: both;
   }
   
-  .row [class^="col-"] {
+  .row [class^="footer__col-"] {
 	float: left;
   }
   
-  .row [class^="col-"]:not(:last-child) {
+  .row [class^="footer__col-"]:not(:last-child) {
 	margin-right: 6rem;
   }
   
-  .row .col-1-of-2 {
+  .row .footer__col-1-of-2 {
 	width: calc((100% - 6rem) / 2);
   }
   
