@@ -1,6 +1,7 @@
 var URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
 var API_EXTENSION = 'php';
 
+var token;
 var userId = 0;
 var searchQry = ''
 var page = 0;
@@ -16,20 +17,20 @@ function getInt(val, def=0) {
 // Handle page load
 $(document).ready(function () {
 	var urlParams = new URLSearchParams(window.location.search);
-	userId = Cookies.get("userId");
+	token = Cookies.get("token");
 
 	page = urlParams.has("page") ? getInt(urlParams.get("page")) : 0;
 	searchQry = urlParams.has("search") ? urlParams.get("search") : '';
 
 	// Change Auth page if not logged in
-	if (!userId || userId < 0)
+	if (!token)
 	{
 		alert("You must log in to view this page!");
 		window.location.pathname = "";
 	}
 
 	// TODO : Load Contacts from API!!!!!
-	loadedContacts = getContacts(userId, searchQry, page);
+	loadedContacts = getContacts(token, searchQry, page);
 
 	// TODO : Display Contacts in page
 	if (loadedContacts) {
@@ -46,6 +47,8 @@ $(document).ready(function () {
 		// TODO : Display erros if no contacts or invalid page number
 	}
 
+	$('#logoutBtn').click(doLogout);
+	$('#addBtn').click(doCreate);
 });
 
 
@@ -61,28 +64,28 @@ function doCreate(e) {
 	// window.location.pathname = "/create.html";
 }
 
-function getContacts(userId, searchQry, page) {
+function getContacts(token, searchQry, page) {
 	
 	let uri = `${URL_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
-	let payload = { userId: userId, searchName: searchQry, page: page };
+	let payload = { token: token, searchName: searchQry, page: page };
 
 	let contacts = [];
 
-	$.get(uri, JSON.stringify(payload))
-		.done(function (res){
-			console.log(res);
-			contacts = res;
-		})
-		.fail(function (jqXHR, textStatus, errorThrown) {
-			// TODO : handle error
-			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error + "😢" : "An error has occured 😟";
-			console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
+	// $.get(uri, JSON.stringify(payload))
+	// 	.done(function (res){
+	// 		console.log(res);
+	// 		contacts = res;
+	// 	})
+	// 	.fail(function (jqXHR, textStatus, errorThrown) {
+	// 		// TODO : handle error
+	// 		errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error + "😢" : "An error has occured 😟";
+	// 		console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
 
-			// Display error
-			showError($("#signup-error"), errMsg)
-		});
+	// 		// Display error
+	// 		showError($("#signup-error"), errMsg)
+	// 	});
 	
 	// payload = {userId: userId, page: page}
-	alert("getContacts() not functional yet");
+	// alert("getContacts() not functional yet");
 	return contacts;
 }

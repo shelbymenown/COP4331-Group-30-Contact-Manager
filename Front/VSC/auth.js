@@ -119,12 +119,11 @@ function doLogin(e) {
 
 	$.post(uri, JSON.stringify(payload))
 		.done(function (res) {
-			userId = res.UserID;
+			token = res.token;
 
-			if (res.UserID && res.UserID >= 0) {
-				Cookies.set("userId", userId);
+			if (token) {
+				Cookies.set("token", token);
 				window.location.pathname = "/contacts.html"
-				// TODO : change page to hub/contacts/etc..
 			}
 			else {
 				// Display error
