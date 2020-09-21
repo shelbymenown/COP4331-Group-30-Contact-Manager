@@ -15,10 +15,11 @@
   else
 	{
         //Grabbing the search field, page number needed, and token from user
-        if(isset($inData['searchName'], $inData['page'], $inData['token']))
+        if(isset($inData['searchName'], $inData['page']))//, $inData['token']))
         {
             $searching = $inData['searchName'];
-            $startingPage = 5 * page;
+            $pageNumber = (int)$inData['page'];
+            $startingPage = 5 * $pageNumber;
             //Replaces all characters that arent letters or numbers with space
             $sql = "SELECT * FROM Contact WHERE (FirstName LIKE '%$searching%' OR LastName LIKE  '%$searching%') LIMIT $startingPage,5 ";
 
@@ -38,26 +39,10 @@
                   {
                       $datas[] = $row;
                       
-                      /*
-                    echo "UserID: " . $row["UserID"]. " - FirstName: " . $row["FirstName"]. " " . $row["LastName"]. " Email Address: " . $row["EmailAddress"]. " Phone Number " . $row["PhoneNumber"]. " ";
-                    */
                   }
             }
         }
         
-    
-        //Creating the pagination
-        $results_per_page = 5;
-        $num_of_results = mysqli_num_rows($result);
-
-        $num_of_pages = ceil($num_of_results/$results_per_page);
-
-        //Displaying the links to the pages
-        for($page = 1; $page<=$num_of_pages; $page++)
-        {
-            echo '<a href="https://spadecontactmanager.com/LAMPAPI/randcontact.php?page=' . $page . '">' . $page . '</a>';
-        }
-
         //Determining user page number currently
         if(!isset($_GET['page']))
         {
@@ -69,7 +54,22 @@
             //Else, grab whatever page they're on
             $page = $_GET['page'];
         }
-    
+
+
+        //Creating the pagination
+        $results_per_page = 5;
+        $num_of_results = mysqli_num_rows($result);
+
+        $num_of_pages = ceil($num_of_results/$results_per_page);
+
+        //Displaying the links to the pages
+        for($page = 1; $page<=$num_of_pages; $page++)
+        {
+            //echo '<a href="https://spadecontactmanager.com/LAMPAPI/randcontact.php?page=' . $page . '">' . $page . '</a>';
+        }
+
+
+
         echo json_encode($datas);
 		// Cleanup
 		$conn->close();
