@@ -2,14 +2,18 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="contacts.css" type="text/css">
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-    <link rel="stylesheet" href="contacts.css" type="text/css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.js"></script>
 	<script type="text/javascript" src="contacts.js"></script>
 
 	<title>Contacts</title>
@@ -46,161 +50,21 @@
 			</button>
 		</nav>
 	</header>
-	
+
 	<section class="main">
 		<div class="main__title">
 			<h1 id="main-header">All Contacts</h1>
 		</div>
 		<div class="main__container" id="container">
-
-		</div>
-
-		<div class="">
-
-		<div class="main__container" id="container">
-
-
 			<div class="user-body">
-
-				<!-- <div class="" style="margin-top: 1rem"> -->
-					<div class="user-body-contacts">
-						<!-- <div class="card card-default text-center" id="card_contacts"> -->
-							<!-- <div id="contacts" class="panel-collapse collapse show" aria-expanded="true" style=""> -->
-								<ul class="list-group pull-down" id="contact-list">
-									<li class="list-group-item">
-										<div class="row w-100">
-											<div class="col-12 col-sm-6 col-md-3 px-0">
-												<img src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg"
-													alt="Mike Anamendolla" class="rounded-circle mx-auto d-block img-fluid">
-											</div>
-											<div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
-												<span class="fa fa-mobile fa-2x text-success float-right pulse"
-													title="online now"></span>
-												<label class="name lead">Mike Anamendolla</label>
-												<br>
-												<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
-													data-original-title="5842 Hillcrest Rd"></span>
-												<span class="text-muted">5842 Hillcrest Rd</span>
-												<br>
-												<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
-													data-original-title="(870) 288-4149"></span>
-												<span class="text-muted small">(870) 288-4149</span>
-												<br>
-												<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip"
-													data-original-title="" title=""></span>
-												<span class="text-muted small text-truncate">mike.ana@example.com</span>
-											</div>
-										</div>
-									</li>
-									<li class="list-group-item">
-										<div class="row w-100">
-											<div class="col-12 col-sm-6 col-md-3 px-0">
-												<img src="http://demos.themes.guide/bodeo/assets/images/users/m105.jpg"
-													alt="Seth Frazier" class="img-fluid rounded-circle d-block mx-auto">
-											</div>
-											<div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
-												<span class="name lead">Seth Frazier</span>
-												<br>
-												<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
-													data-original-title="7396 E North St"></span>
-												<span class="text-muted">7396 E North St</span>
-												<br>
-												<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
-													data-original-title="(560) 180-4143"></span>
-												<span class="text-muted small">(560) 180-4143</span>
-												<br>
-												<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip" title=""
-													data-original-title="seth.frazier@example.com"></span>
-												<span class="text-muted small text-truncate">seth.frazier@example.com</span>
-											</div>
-										</div>
-									</li>
-									<li class="list-group-item">
-										<div class="row w-100">
-											<div class="col-12 col-sm-6 col-md-3 px-0">
-												<img src="http://demos.themes.guide/bodeo/assets/images/users/w102.jpg"
-													alt="Rosemary Porter" class="img-fluid rounded-circle d-block mx-auto">
-											</div>
-											<div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
-												<span class="fa fa-envelope fa-lg text-danger float-right"
-													title="left you a message"></span>
-												<span class="name lead">Rosemary Porter</span>
-												<br> <span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
-													data-original-title="5267 Cackson St"></span>
-												<span class="text-muted">5267 Cackson St</span>
-												<br>
-												<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
-													data-original-title="(497) 160-9776"></span>
-												<span class="text-muted small">(497) 160-9776</span>
-												<br>
-												<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip" title=""
-													data-original-title="rosemary.porter@example.com"></span>
-												<span class="text-muted small text-truncate">rosemary.porter@example.com</span>
-												<br>
-
-											</div>
-										</div>
-									</li>
-									<li class="list-group-item">
-										<div class="row w-100">
-											<div class="col-12 col-sm-6 col-md-3 px-0">
-												<img src="http://demos.themes.guide/bodeo/assets/images/users/w104.jpg"
-													alt="Debbie Schmidt" class="img-fluid rounded-circle d-block mx-auto">
-											</div>
-											<div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
-												<label class="name lead">Debbie Schmidt</label>
-												<br>
-
-												<span class="fa fa-fw fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
-													data-original-title="3903 W Alexander Rd"></span>
-												<span class="text-muted">3903 W Alexander Rd</span>
-												<br>
-
-												<span class="fa fa-fw fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
-													data-original-title="(867) 322-1852"></span>
-												<span class="text-muted small">(867) 322-1852</span>
-												<br>
-
-												<span class="fa fa-fw fa-envelope fa-fw text-muted" data-toggle="tooltip" title=""
-													data-original-title="debbie.schmidt@example.com"></span>
-												<span class="text-muted small text-truncate">debbie.schmidt@example.com</span>
-
-											</div>
-										</div>
-									</li>
-								</ul>
-								<!--/contacts list-->
-							<!-- </div> -->
-						<!-- </div> -->
-						<div class="search-bar">
-							<!-- <nav aria-label="Page navigation example">
-								<ul class="pagination">
-									<li class="page-item">
-										<a class="page-link" href="#" aria-label="Previous">
-											<span aria-hidden="true">&laquo;</span>
-											<span class="sr-only">Previous</span>
-										</a>
-									</li>
-									<li class="page-item"><a class="page-link" href="#">1</a></li>
-									<li class="page-item"><a class="page-link" href="#">2</a></li>
-									<li class="page-item"><a class="page-link" href="#">3</a></li>
-									<li class="page-item">
-										<a class="page-link" href="#" aria-label="Next">
-											<span aria-hidden="true">&raquo;</span>
-											<span class="sr-only">Next</span>
-										</a>
-									</li>
-								</ul>
-							</nav> -->
-						</div>
-					</div>
-				<!-- </div> -->
-				
+				<div class="user-body-contacts">
+					<ul class="list-group pull-down" id="contact-list"></ul>
+				</div>
 			</div>
 		</div>
-		</div>
 
-	</div>
+		</div>
+	</section>
 	<footer class="footer">
 		<div class="footer__logo-box">
 			<img src="img/bee_spade.svg" alt="Full logo" class="footer__logo footer__logo-1">
@@ -219,7 +83,8 @@
 			</div>
 			<div class="footer__col-1-of-2">
 				<p class="footer__copyright">
-					Built and Designed by <a href="#" class="footer__link">Gonen Matias</a> for COP4331. <a href="#" class="footer__link">Spades Contact Manager</a> &copy;.
+					Built and Designed by <a href="#" class="footer__link">Gonen Matias</a> for COP4331. <a href="#"
+						class="footer__link">Spades Contact Manager</a> &copy;.
 				</p>
 			</div>
 		</div>
