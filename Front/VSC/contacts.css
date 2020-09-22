@@ -610,36 +610,63 @@ h1
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
 }
 
-.row
+.footer__row
 {
     max-width: 114rem;
     margin: 0 auto;
     padding: 0 3rem;
 }
 
-.row:not(:last-child)
+.footer__row:not(:last-child)
 {
     margin-bottom: 8rem;
 }
 
-.row::after
+.footer__row::after
 {
     content: "";
     display: table;
     clear: both;
 }
 
-.row [class^="footer__col-"]
+.footer__row [class^="footer__col-"]
 {
     float: left;
 }
 
-.row [class^="footer__col-"]:not(:last-child)
+.footer__row [class^="footer__col-"]:not(:last-child)
 {
     margin-right: 6rem;
 }
 
-.row .footer__col-1-of-2
+.footer__row .footer__col-1-of-2
 {
     width: calc((100% - 6rem) / 2);
+}
+
+.tool-tip
+{
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    transition: opacity .3s;
+	opacity: .3;
+}
+
+.tool-tip >*:not(:first-child)
+{
+	margin-left: 10px;
+}
+
+/* Override bootstrap's row */
+.row
+{
+	padding: 0 1rem 0 3rem;
+    margin: 10px auto;
+}
+
+.row:hover >div>.tool-tip
+{
+	opacity: 1;
 }

@@ -46,7 +46,7 @@ $(document).ready(function () {
 	// // loadPagination(token, searchQry, page);
 
 	// Load Contacts on page render
-	loadContacts(token, searchQry, page);
+	if (!DEBUG) loadContacts(token, searchQry, page);
 });
 
 
@@ -119,13 +119,13 @@ function displayContacts(contacts) {
 
 		// Generate contact HTML
 		contact_li = `
-			<li class="list-group-item">
+			<li class="list-group-item" id="${`contact-${contact.id}`}">
 				<div class="row w-100">
 					<div class="col-12 col-sm-6 col-md-3 px-0">
 						<img src="${faker.image.avatar()}"
 							alt="${FULL_NAME}" class="rounded-circle mx-auto d-block img-fluid">
 					</div>
-					<div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
+					<div class="col-12 col-sm-4 col-md-7 text-center text-sm-left">
 						<label class="name lead">${FULL_NAME}</label>
 						<br>
 						<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
@@ -140,6 +140,18 @@ function displayContacts(contacts) {
 							data-original-title="" title=""></span>
 						<span class="text-muted small text-truncate">${contact.email}</span>
 					</div>
+					<div class="col-12 col-sm-2 col-md-2 text-center text-sm-right">
+						<div class="tool-tip">
+							<button class="btn btn-success btn-sm" onclick="doEdit(${contact.id})"
+									type="button" title="Edit">
+								<i class="fa fa-pencil"></i>
+							</button>
+							<button class="btn btn-danger btn-sm" onclick="doDelete(${contact.id})
+									type="button" title="Delete"">
+								<i class="fa fa-trash-o"></i>
+							</button>
+						</div>
+					</div>
 				</div>
 			</li>
 		`;
@@ -147,6 +159,16 @@ function displayContacts(contacts) {
 		// console.log(contact_li);
 		contact_list.append(contact_li);
 	});
+}
+
+function doEdit(id)
+{
+	alert(`Editing contact (${id})`);
+}
+
+function doDelete(id)
+{
+	alert(`Deleting contact (${id})`);
 }
 
 function displayPagination(page, total_pages)
