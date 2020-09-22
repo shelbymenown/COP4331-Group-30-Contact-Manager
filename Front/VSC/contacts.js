@@ -1,6 +1,6 @@
 const URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
 const API_EXTENSION = 'php';
-const DEBUG = false;
+const DEBUG = true;
 const CONTACTS_PER_PAGE = 5;
 
 var token;
@@ -46,7 +46,7 @@ $(document).ready(function () {
 	// // loadPagination(token, searchQry, page);
 
 	// Load Contacts on page render
-	if (!DEBUG) loadContacts(token, searchQry, page);
+	loadContacts(token, searchQry, page);
 });
 
 
@@ -84,7 +84,9 @@ function loadContacts(token, search, page) {
 
 	let uri = `${URL_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 
-	$.get(uri, { search: search, page: page-1 })
+	if (!DEBUG) {
+
+		$.get(uri, { search: search, page: page-1 })
 		.done(function (res) {
 			// Display contacts
 			displayContacts(res.contacts);
@@ -94,10 +96,24 @@ function loadContacts(token, search, page) {
 			// TODO : handle error
 			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error + "😢" : "An error has occured 😟";
 			console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
-
+			
 			// Display error
 			// showError($("#signup-error"), errMsg)
 		});
+		
+	}
+	else{
+		let contacts = [...Array(CONTACTS_PER_PAGE)].map(() => ({
+			id: faker.random.number(),
+			firstName: faker.name.firstName(),
+			lastName: faker.name.lastName(),
+			phone: faker.phone.phoneNumberFormat(1),
+			address: faker.address.streetAddress(),
+			email: faker.internet.email()
+		}));
+		displayContacts(contacts);
+		displayPagination(page, page + faker.random.number(4));
+	}
 }
 
 
@@ -146,7 +162,7 @@ function displayContacts(contacts) {
 									type="button" title="Edit">
 								<i class="fa fa-pencil"></i>
 							</button>
-							<button class="btn btn-danger btn-sm" onclick="doDelete(${contact.id})
+							<button class="btn btn-danger btn-sm" onclick="doDelete(${contact.id})"
 									type="button" title="Delete"">
 								<i class="fa fa-trash-o"></i>
 							</button>

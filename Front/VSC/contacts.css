@@ -515,7 +515,14 @@ h1
 
 .list-group-item
 {
+	background: rgba(0, 0, 0, 0);
+	transition: background 50ms;
 	width: 100% !important;
+}
+
+.list-group-item:hover
+{
+	background: rgba(0, 0, 0, .006);
 }
 
 .footer
@@ -650,7 +657,8 @@ h1
 	display: flex;
 	align-items: center;
 	justify-content: center;
-    transition: opacity .3s;
+	transition: opacity .3s, transform .4s;
+	transform: scale(0.95);
 	opacity: .3;
 }
 
@@ -662,11 +670,13 @@ h1
 /* Override bootstrap's row */
 .row
 {
-	padding: 0 1rem 0 3rem;
-    margin: 10px auto;
+	padding: 0 1rem 0 2.5rem;
+    margin: 2px auto;
 }
 
-.row:hover >div>.tool-tip
+.list-group-item:hover >.row>div>.tool-tip
+/* :hover >div>.tool-tip */
 {
 	opacity: 1;
+	transform: scale(1);
 }
