@@ -288,12 +288,13 @@ body
 
 .pagination ul
 {
+	transform: scale(.8);
 	position: relative;
 	background-color: #fff;
 	display: flex;
 	padding: 10px 20px;
 	border-radius: 50px;
-	box-shadow: 0 5px 15px rgba(0,0,0,.2);
+	box-shadow: 0 11px 15px rgba(0,0,0,.2);
 }
 
 .pagination ul li
@@ -430,6 +431,8 @@ body
 	width: 600px;
 	max-width: 100%;
 	/* min-height: 50vh; */
+
+	margin-bottom: 3.5rem;
 
 }
 

@@ -1,6 +1,6 @@
 const URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
 const API_EXTENSION = 'php';
-const DEBUG = true;
+const DEBUG = false;
 const CONTACTS_PER_PAGE = 5;
 
 var token;
@@ -21,7 +21,7 @@ $(document).ready(function () {
 	var urlParams = new URLSearchParams(window.location.search);
 	token = Cookies.get("token");
 
-	page = urlParams.has("page") && urlParams.get("page") >= 0 ? urlParams.get("page") : 0;
+	page = urlParams.has("page") && urlParams.get("page") > 0 ? urlParams.get("page") : 0;
 	searchQry = urlParams.has("search") ? urlParams.get("search") : '';
 
 	// Change Auth page if not logged in
@@ -33,6 +33,7 @@ $(document).ready(function () {
 	// Add event listeners to header buttons
 	$('#logoutBtn').click(doLogout);
 	$('#addBtn').click(doCreate);
+	$('#search-form').on('submit', doSearch)
 
 	// // Load Pagination
 	// // page = faker.random.number(100) + 10;
@@ -47,7 +48,7 @@ $(document).ready(function () {
 
 
 function doLogout(e) {
-	Cookies.remove("userId");
+	Cookies.remove("token");
 	alert("Logged out successfuly!");
 	window.location.pathname = "";
 }
@@ -56,6 +57,19 @@ function doCreate(e) {
 	alert("Create contact form does not exist yet");
 
 	// window.location.pathname = "/create.html";
+}
+
+function doSearch(e) {
+	e.preventDefault();
+	searchQry = $("#search-form :input[name='search']").val();
+
+	if (history.pushState) {
+		var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname
+		+ `?search=${searchQry}` + `&page=${page}`;
+		window.history.pushState({path:newurl},'',newurl);
+	}
+	
+	loadContacts(token, searchQry, page);
 }
 
 function loadContacts(token, search, page) {
@@ -67,7 +81,7 @@ function loadContacts(token, search, page) {
 
 	let uri = `${URL_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 
-	$.get(uri, { search: search, page: page })
+	$.get(uri, { search: search, page: page-1 })
 		.done(function (res) {
 			// Display contacts
 			displayContacts(res.contacts);
@@ -87,6 +101,7 @@ function loadContacts(token, search, page) {
 
 function displayContacts(contacts) {
 	var contact_list = $("#contact-list");
+	contact_list.empty();
 
 	contacts.forEach(contact => {
 		let FULL_NAME = `${contact.firstName} ${contact.lastName}`;
@@ -133,17 +148,25 @@ function displayContacts(contacts) {
 
 function displayPagination(page, total_pages)
 {
+	
 	let pagination_ul = $("#pagination ul");
 	let pagination_content = [];
 	pagination_ul.empty();
-
+	
 	let first_page = page > 3 ? page - 3 : 1;
 	let last_page = page > 3 ? page + 3 : 6;
+	
+
+	// console.log("[displayPagination()] page:", page);
+	// console.log("[displayPagination()] total_pages:", total_pages);
+	// console.log("[displayPagination()] first_page:", first_page);
+	// console.log("[displayPagination()] last_page:", last_page);
+
 
 	disabled = page < 6;
 	pagination_content.push(`
 		<li>
-			<a class="page-first ${disabled ? ' disabled' : ''}" href="javascript:;" ${disabled ? '' : 'onclick="changePage(0)"'}><<</a>
+			<a class="page-first ${disabled ? ' disabled' : ''}" href="javascript:;" ${disabled ? '' : 'onclick="changePage(1)"'}><<</a>
 		</li>
 	`);
 
@@ -157,7 +180,7 @@ function displayPagination(page, total_pages)
 		`);
 	}
 	
-	disabled = total_pages <= last_page;
+	disabled = total_pages < last_page;
 	pagination_content.push(`
 		<li>
 			<a class="page-last ${disabled ? ' disabled' : ''}" href="javascript:;" ${disabled ? '' : ` onclick="changePage(${total_pages})"` }>>></a>

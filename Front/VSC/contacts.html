@@ -29,9 +29,9 @@
 		<!-- <object type="image/svg+xml" data="/SVG/spade_fixed_2.svg" class="logo"></object> -->
 		<img src="/SVG/spade_fixed_2.svg" alt="spade logo" class="logo">
 		<h1 class="logo-text">Spade</h1>
-		<form action="" class="search">
-			<input type="text" class="search__input" placeholder="Search Contacts">
-			<button class="search__button">
+		<form action="" class="search" id="search-form">
+			<input type="text" name="search" class="search__input" placeholder="Search Contacts">
+			<button type="submit" class="search__button">
 				<i class="fa fa-search fa-fw text-muted" aria-hidden="true"></i>
 			</button>
 		</form>
@@ -53,7 +53,7 @@
 
 	<section class="main">
 		<div class="main__title">
-			<h1 id="main-header">All Contacts</h1>
+			<h1 id="main-header">Your Contacts</h1>
 		</div>
 		<div class="main__container" id="container">
 			<div class="user-body">
@@ -63,25 +63,8 @@
 			</div>
 		</div>
 		<nav class="pagination" id="pagination">
-			<ul>
-				<li><a class="page-first disabled" href="#"><<</a></li>
-				<li class="page-number active"><a href="#">1</a></li>
-				<li class="page-number"><a href="#">2</a></li>
-				<li class="page-number"><a href="#">3</a></li>
-				<li class="page-number"><a href="#">4</a></li>
-				<li class="page-number disabled"><a href="#">5</a></li>
-				<li class="page-number disabled"><a href="#">6</a></li>
-				<li><a class="page-last" href="#">>></a></li>
-			</ul>
+			<ul></ul>
 		</nav>
-			<!-- <a href="#" class=> << </a>
-			<a href="#">1</a>
-			<a class="active" href="#">2</a>
-			<a href="#">3</a>
-			<a href="#">4</a>
-			<a href="#">5</a>
-			<a href="#">6</a>
-			<a href="#"> >> </a> -->
 	</section>
 	<footer class="footer">
 		<div class="footer__logo-box">
@@ -101,7 +84,7 @@
 			</div>
 			<div class="footer__col-1-of-2">
 				<p class="footer__copyright">
-					Built and Designed by <a href="#" class="footer__link">Gonen Matias</a> for COP4331. <a href="#"
+					Built and Designed by <a href="https://github.com/source144/" class="footer__link">Gonen Matias</a> for COP4331. <a href="#"
 						class="footer__link">Spades Contact Manager</a> &copy;.
 				</p>
 			</div>
