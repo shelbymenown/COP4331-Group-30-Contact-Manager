@@ -34,15 +34,15 @@ $(document).ready(function () {
 	$('#logoutBtn').click(doLogout);
 	$('#addBtn').click(doCreate);
 
-	// Load Pagination
-	// page = faker.random.number(100) + 10;
-	page = 1;
-	displayPagination(page + 3, 5);
-	// displayPagination(page, page + faker.random.number(100) + 1);
-	// loadPagination(token, searchQry, page);
+	// // Load Pagination
+	// // page = faker.random.number(100) + 10;
+	// page = 1;
+	// displayPagination(page + 3, 5);
+	// // displayPagination(page, page + faker.random.number(100) + 1);
+	// // loadPagination(token, searchQry, page);
 
 	// Load Contacts on page render
-	// loadContacts(token, searchQry, page);
+	loadContacts(token, searchQry, page);
 });
 
 
