@@ -3,12 +3,13 @@ const API_EXTENSION = 'php';
 const DEBUG = true;
 const CONTACTS_PER_PAGE = 5;
 
-var token;
-var userId = 0;
+
+// State
+var editing = false;
+var loadedContacts = [];
 var searchQry = ''
 var page = 1;
-var loadedContacts = [];
-var container;
+var token;
 
 function getInt(val, def = 0) {
 	if (!isNaN(val) && parseInt(Number(val) == val) && !isNaN(parseInt(val, 10)))
@@ -36,14 +37,7 @@ $(document).ready(function () {
 	// Add event listeners to header buttons
 	$('#logoutBtn').click(doLogout);
 	$('#addBtn').click(doCreate);
-	$('#search-form').on('submit', doSearch)
-
-	// // Load Pagination
-	// // page = faker.random.number(100) + 10;
-	// page = 1;
-	// displayPagination(page + 3, 5);
-	// // displayPagination(page, page + faker.random.number(100) + 1);
-	// // loadPagination(token, searchQry, page);
+	$('#search-form').on('submit', doSearch);
 
 	// Load Contacts on page render
 	loadContacts(token, searchQry, page);
@@ -125,6 +119,8 @@ function displayContacts(contacts) {
 	var contact_list = $("#contact-list");
 	contact_list.empty();
 
+	loadedContacts = [...contacts];
+
 	contacts.forEach(contact => {
 		let FULL_NAME = `${contact.firstName} ${contact.lastName}`;
 
@@ -140,11 +136,11 @@ function displayContacts(contacts) {
 		contact_li = `
 			<li class="list-group-item" id="${`contact-${contact.id}`}">
 				<div class="row w-100">
-					<div class="col-12 col-sm-6 col-md-3 px-0">
+					<div class="col-12 col-sm-4 col-md-3 px-0">
 						<img src="${faker.image.avatar()}"
 							alt="${FULL_NAME}" class="rounded-circle mx-auto d-block img-fluid">
 					</div>
-					<div class="col-12 col-sm-4 col-md-7 text-center text-sm-left">
+					<div class="col-12 col-sm-6 col-md-7 text-center text-sm-left">
 						<label class="name lead">${FULL_NAME}</label>
 						<br>
 						<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
@@ -183,11 +179,15 @@ function displayContacts(contacts) {
 function doEdit(id)
 {
 	alert(`Editing contact (${id})`);
+	contact = loadedContacts.filter(contact => contact.id === id)[0];
+	console.log(contact);
 }
 
 function doDelete(id)
 {
 	alert(`Deleting contact (${id})`);
+	contact = loadedContacts.filter(contact => contact.id === id)[0];
+	console.log(contact);
 }
 
 function displayPagination(page, total_pages)
