@@ -23,6 +23,9 @@ $(document).ready(function () {
 
 	page = urlParams.has("page") && urlParams.get("page") > 0 ? urlParams.get("page") : 0;
 	searchQry = urlParams.has("search") ? urlParams.get("search") : '';
+	$("#search-form :input[name='search']").val(searchQry);
+
+
 
 	// Change Auth page if not logged in
 	if (!token && !DEBUG) {
@@ -175,7 +178,7 @@ function displayPagination(page, total_pages)
 		disabled = p > total_pages;
 		pagination_content.push(`
 			<li class="page-number${page==p && !disabled ? ' active':''} ${disabled ? ' disabled' : ''}">
-				<a href="javascript:;" ${disabled ? '' : `onclick="changePage(${p})"`}>${p}</a>
+				<a href="javascript:;" ${page==p || disabled ? '' : `onclick="changePage(${p})"`}>${p}</a>
 			</li>
 		`);
 	}
