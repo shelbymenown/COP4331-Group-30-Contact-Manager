@@ -6,7 +6,7 @@ const CONTACTS_PER_PAGE = 5;
 var token;
 var userId = 0;
 var searchQry = ''
-var page = 0;
+var page = 1;
 var loadedContacts = [];
 var container;
 
@@ -21,7 +21,7 @@ $(document).ready(function () {
 	var urlParams = new URLSearchParams(window.location.search);
 	token = Cookies.get("token");
 
-	page = urlParams.has("page") && urlParams.get("page") > 0 ? urlParams.get("page") : 0;
+	page = urlParams.has("page") && urlParams.get("page") > 0 ? urlParams.get("page") : 1;
 	searchQry = urlParams.has("search") ? urlParams.get("search") : '';
 	$("#search-form :input[name='search']").val(searchQry);
 
@@ -81,6 +81,9 @@ function loadContacts(token, search, page) {
 			'x-access-token': token
 		}
 	});
+
+	if (page < 1) page = 1;
+
 
 	let uri = `${URL_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 
@@ -156,7 +159,7 @@ function displayContacts(contacts) {
 							data-original-title="" title=""></span>
 						<span class="text-muted small text-truncate">${contact.email}</span>
 					</div>
-					<div class="col-12 col-sm-2 col-md-2 text-center text-sm-right">
+					<div class="col-12 col-sm-2 col-md-2">
 						<div class="tool-tip">
 							<button class="btn btn-success btn-sm" onclick="doEdit(${contact.id})"
 									type="button" title="Edit">
