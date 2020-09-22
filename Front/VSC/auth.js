@@ -1,6 +1,7 @@
 var URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
 var API_EXTENSION = 'php';
 
+var token;
 var userId = 0;
 var signUpButton;
 var signInButton;
@@ -32,11 +33,14 @@ function showError(element, error)
 
 // Handle page load
 $(document).ready(function () {
-	userId = Cookies.get("userId");
+	token = Cookies.get("token");
 
 	// TODO : Change page to /contacts??
-	if (userId && userId >= 0)
+	if (token)
+	{
 		alert("You are already logged in!");
+		window.location.pathname = "/contacts.html"
+	}
 
 	var signupBtn = $('#signup');
 	var loginBtn = $('#login');
@@ -56,9 +60,7 @@ $(document).ready(function () {
 	$("#login-error").removeClass("error-show");
 	$("#signup-error").removeClass("error-show");
 
-
-
-	// Add submit events
+	// Add event listeners
 	$("#signup-form").on('submit', doSignup);
 	$("#login-form").on('submit', doLogin);
 });
@@ -71,12 +73,35 @@ function doSignup(e) {
 	if (submitted_signup) fadeError($("#signup-error"));
 	else submitted_signup = true;
 
-	// Display error
-	showError($("#signup-error"), "Endpoint does not exist yet")
-	
-	// setTimeout(function() {fadeError($("#signup-error"));}, 1000)
+	let name = $("#signup-form :input[name='name']").val();
+	let username = $("#signup-form :input[name='username']").val();
+	let password = $("#signup-form :input[name='password']").val();
 
+	let uri = `${URL_BASE}/Signup${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let payload = { Name: name, Username: username, Password: password };
+
+	$.post(uri, JSON.stringify(payload))
+		.done(function (res){
+			// TODO : nicer alert
+			alert("User was successfuly created!\nYou can now log in.");
+
+			// Go to login section
+			$("#container").removeClass("right-panel-active");
+
+			// Empty sign up from
+			$("#signup-form :input[name='name']").val('');
+			$("#signup-form :input[name='username']").val('')
+			$("#signup-form :input[name='password']").val('')
+		})
+		.fail(function (jqXHR, textStatus, errorThrown) {
+			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error + "😢" : "An error has occured 😟";
+			console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
+
+			// Display error
+			showError($("#signup-error"), errMsg)
+		});
 }
+
 function doLogin(e) {
 	e.preventDefault();
 
@@ -95,13 +120,11 @@ function doLogin(e) {
 
 	$.post(uri, JSON.stringify(payload))
 		.done(function (res) {
-			console.log(res);
-			userId = res.UserID;
-			alert(`Got ${userId} as a response`);
+			token = res.token;
 
-			if (res.UserID && res.UserID >= 0) {
-				Cookies.set("userId", userId);
-				// TODO : change page to hub/contacts/etc..
+			if (token) {
+				Cookies.set("token", token);
+				window.location.pathname = "/contacts.html"
 			}
 			else {
 				// Display error
