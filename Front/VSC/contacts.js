@@ -1,6 +1,7 @@
 const URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
 const API_EXTENSION = 'php';
-const DEBUG = false;
+// const DEBUG = false;
+const DEBUG = true;
 const CONTACTS_PER_PAGE = 5;
 
 
@@ -119,7 +120,7 @@ function displayContacts(contacts) {
 	console.log(loadedContacts);
 
 	contacts.forEach(contact => {
-		let FULL_NAME = `${contact.firstName} ${contact.lastName}`;
+		let FULL_NAME = [contact.firstName, contact.lastName].join(contact.firstName && contact.lastName ? " " : "");
 
 		// HTML list item
 		var contact_li;
@@ -294,10 +295,20 @@ function submitDelete(contactId)
 {
 	console.log(contactId);
 	$('#deleteModal').modal('toggle');
+
+	// https://stackoverflow.com/a/41223246/9382757
+	// var elem = document.querySelector('#'+id);
+	// elem.className += 'closeSlide';
+	// setTimeout(function(){
+	//   elem.remove();
+	// }, 200);
+	
 }
 
 function displayPagination(page, total_pages)
 {
+	page = parseInt(page);
+	total_pages = parseInt(total_pages);
 	
 	let pagination_ul = $("#pagination ul");
 	let pagination_content = [];
@@ -316,15 +327,17 @@ function displayPagination(page, total_pages)
 	disabled = page == 1;
 	pagination_content.push(`
 		<li>
-			<a class="page-first ${disabled ? ' disabled' : ''}" href="javascript:;" ${disabled ? '' : 'onclick="changePage(1)"'}><<</a>
+			<a class="page-first${disabled ? ' disabled' : ''}" href="javascript:;" ${disabled ? '' : 'onclick="changePage(1)"'}><<</a>
 		</li>
 	`);
 
 	for (let p = first_page; p <= last_page; p++)
 	{
 		disabled = p > total_pages;
+		mobile = Math.abs(p - page) <= 1;
+		// console.log(`Page: ${page}\nTotal Pages: ${total_pages}\nFirst Page: ${first_page}\nLast Page: ${last_page}\np: ${p}\nMobile? - ${mobile}`);
 		pagination_content.push(`
-			<li class="page-number${page==p && !disabled ? ' active':''} ${disabled ? ' disabled' : ''}">
+			<li class="page-number${page==p && !disabled ? ' active':''}${disabled ? ' disabled' : ''}${mobile ? ' mobile' : ''}">
 				<a href="javascript:;" ${page==p || disabled ? '' : `onclick="changePage(${p})"`}>${p}</a>
 			</li>
 		`);
@@ -333,7 +346,7 @@ function displayPagination(page, total_pages)
 	disabled = total_pages < last_page;
 	pagination_content.push(`
 		<li>
-			<a class="page-last ${disabled ? ' disabled' : ''}" href="javascript:;" ${disabled ? '' : ` onclick="changePage(${total_pages})"` }>>></a>
+			<a class="page-last${disabled ? ' disabled' : ''}" href="javascript:;"${disabled ? '' : ` onclick="changePage(${total_pages})"` }>>></a>
 		</li>`);
 
 	pagination_ul.append(pagination_content.join("\n"));
