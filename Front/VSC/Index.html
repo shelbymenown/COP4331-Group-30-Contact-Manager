@@ -13,44 +13,49 @@
 </head>
 
 <body>
-
-	<div class="container" id="container">
-		<div class="form-container sign-up-container">
-			<form id="signup-form">
-				<h1>Create Account</h1>
-				<input type="text" name="name" placeholder="Name">
-				<input type="text" name="username" placeholder="Username">
-				<input type="password" name="password" placeholder="Password">
-				<button type="submit">Sign Up</button>
-				<!-- <input type="submit">Sign Up</input> -->
-				<span class="error" id="signup-error">Username is not available</span>
-			</form>
-		</div>
-		<div class="form-container sign-in-container">
-			<form id="login-form">
-				<h1>Sign In</h1>
-				<input type="text" name="username" placeholder="Username">
-				<input type="password" name="password" placeholder="Password">
-				
-				<!-- <a href="#">Forgot Your Password</a> -->
-				<button type="submit">Login</button>
-				<span class="error" id="login-error">Username or password incorrect</span>
-			</form>
-		</div>
-		<div class="overlay-container">
-			<div class="overlay">
-				<div class="overlay-panel overlay-right">
-					<h1>We Missed you!</h1>
-					<p>To manage your contacts please login with your personal information</p>
-					<button class="ghost" id="signup">or Sign Up</button>
-					<span class="i-spade i-spade-right i-spade-bottom">♣</span>
-				</div>
-				<div class="overlay-panel overlay-left">
-					<span class="i-spade i-spade-left">♠</span>
-					<span class="i-spade i-spade-right">♠</span>
-					<h1>Contacts</h1>
-					<p>Sign up to enjoy Spades Contact Manager</p>
-					<button class="ghost" id="login">or Login</button>
+	<div class="flex">
+		<div class="container" id="container">
+			<div class="form-container sign-up-container">
+				<form id="signup-form">
+					<h1>Create Account</h1>
+					<input type="text" name="name" placeholder="Name">
+					<input type="text" name="username" placeholder="Username">
+					<input type="password" name="password" placeholder="Password">
+					<button type="submit">Sign Up</button>
+					<!-- <input type="submit">Sign Up</input> -->
+					<span class="error" id="signup-error">Username is not available</span>
+				</form>
+			</div>
+			<div class="form-container sign-in-container">
+				<form id="login-form">
+					<h1>Sign In</h1>
+					<input type="text" name="username" placeholder="Username">
+					<input type="password" name="password" placeholder="Password">
+					<button type="submit">Login</button>
+					<span class="error" id="login-error">Username or password incorrect</span>
+				</form>
+			</div>
+			<div class="overlay-container">
+				<div class="overlay">
+					<div class="overlay-panel overlay-right">
+						<h1>We Missed you!</h1>
+						<p>To manage your contacts please login with your personal information</p>
+						<button class="ghost" id="signup">or Sign Up</button>
+						<span class="i-spade i-spade-right i-spade-bottom utf-8">♣</span>
+						<span class="i-spade i-spade-right i-spade-bottom svg"><img src="/img/bee_club.svg"
+								alt="spade logo" class="logo-2"></span>
+					</div>
+					<div class="overlay-panel overlay-left">
+						<span class="i-spade i-spade-left utf-8">♠</span>
+						<span class="i-spade i-spade-right utf-8">♠</span>
+						<span class="i-spade i-spade-left svg"><img src="/img/bee_spade.svg" alt="spade logo"
+								class="logo"></span>
+						<span class="i-spade i-spade-right svg"><img src="/img/bee_spade.svg" alt="spade logo"
+								class="logo"></span>
+						<h1>Contacts</h1>
+						<p>Sign up to enjoy Spades Contact Manager</p>
+						<button class="ghost" id="login">or Login</button>
+					</div>
 				</div>
 			</div>
 		</div>
