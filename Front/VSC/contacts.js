@@ -158,10 +158,12 @@ function displayContacts(contacts) {
 					<div class="col-12 col-sm-2 col-md-2">
 						<div class="tool-tip">
 							<button class="btn btn-success btn-sm" onclick="doEdit(${contact.id})"
+									data-toggle="modal" data-target="#editCreateModal"
 									type="button" title="Edit">
 								<i class="fa fa-pencil"></i>
 							</button>
 							<button class="btn btn-danger btn-sm" onclick="doDelete(${contact.id})"
+									data-toggle="modal" data-target="#deleteModal"
 									type="button" title="Delete"">
 								<i class="fa fa-trash-o"></i>
 							</button>
@@ -178,16 +180,56 @@ function displayContacts(contacts) {
 
 function doEdit(id)
 {
-	alert(`Editing contact (${id})`);
 	contact = loadedContacts.filter(contact => contact.id === id)[0];
 	console.log(contact);
+	$("#editCreateModal__title").text(`Edit contact ${id}`);
+	$("#editCreateModal-form :input[name='firstName']")	.val(contact.firstName);
+	$("#editCreateModal-form :input[name='lastName']")	.val(contact.lastName);
+	$("#editCreateModal-form :input[name='address']")	.val(contact.address);
+	$("#editCreateModal-form :input[name='email']")		.val(contact.email);
+	$("#editCreateModal-form :input[name='phone']")		.val(contact.phone);
+
+	$("#editCreateModal__continue").unbind();
+	$("#editCreateModal__continue").click(() => submitEdit(contact.id));
 }
 
 function doDelete(id)
 {
-	alert(`Deleting contact (${id})`);
 	contact = loadedContacts.filter(contact => contact.id === id)[0];
 	console.log(contact);
+	$("#deleteModal__body").text(
+		`Are you sure you want to delete 
+		${[contact.firstName, contact.lastName].join(" ")} 
+		from your contacts?`
+	);
+}
+
+function submitEdit(contactId)
+{
+	console.log(contactId);
+
+	editedContact = {
+		id: contactId,
+		firstName: $("#editCreateModal-form :input[name='firstName']").val(),
+		lastName: $("#editCreateModal-form :input[name='lastName']").val(),
+		address: $("#editCreateModal-form :input[name='address']").val(),
+		email: $("#editCreateModal-form :input[name='email']").val(),
+		phone: $("#editCreateModal-form :input[name='phone']").val()
+	};
+
+	console.log(editedContact);
+
+	// TODO : POST to API
+	// TODO : On success	- close modal
+	// TODO : On fail 		- display error
+	
+	$('#editCreateModal').modal('toggle');
+}
+
+function submitDelete(contactId)
+{
+	console.log(contactId);
+	$('#deleteModal').modal('toggle');
 }
 
 function displayPagination(page, total_pages)
