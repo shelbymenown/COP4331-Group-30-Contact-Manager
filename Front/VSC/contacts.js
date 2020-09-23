@@ -1,6 +1,6 @@
 const URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
 const API_EXTENSION = 'php';
-const DEBUG = true;
+const DEBUG = false;
 const CONTACTS_PER_PAGE = 5;
 
 
@@ -225,11 +225,12 @@ function doDelete(id)
 	);
 	
 	$("#deleteModal-continue").unbind();
-	$("#deleteModal-continue").click(() => submitCreate(id));
+	$("#deleteModal-continue").click(() => submitDelete(id));
 }
 
 function submitDelete(contactId)
 {
+	console.log(contactId);
 	// TODO : DELETE to API
 	// TODO : On success	- close modal
 	// TODO : On fail 		- display error
