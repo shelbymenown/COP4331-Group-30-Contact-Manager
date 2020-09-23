@@ -72,9 +72,21 @@ span.error.error-hide {
 }
 
 span.i-spade.utf-8 {
+
+	cursor: default;
 	display: flex;
 	font-size: 1.3em;
-	opacity: .99;
+	opacity: .9;
+
+	/* No selecting */
+	-webkit-user-select: none;
+	/* Safari */
+	-moz-user-select: none;
+	/* Firefox */
+	-ms-user-select: none;
+	/* IE10+/Edge */
+	user-select: none;
+	/* Standard */
 }
 
 span.i-spade.i-spade-left.utf-8 {
@@ -104,7 +116,7 @@ span.i-spade.i-spade-bottom.utf-8{
 span.i-spade.svg {
 	display: none;
 	font-size: 1.3em;
-	opacity: .99;
+	opacity: .9;
 }
 
 span.i-spade.i-spade-left.svg {
