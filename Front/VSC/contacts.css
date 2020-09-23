@@ -30,6 +30,7 @@ body
 	font-family: 'Montserrat', "Lato", sans-serif;
     line-height: 1.7;
 	color: #777;
+	width: 100vw;
 }
 
 
@@ -69,8 +70,8 @@ body
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
         -ms-flex-line-pack: distribute;
-        align-content: space-around;
-        height: 8.8rem
+		height: 8.8rem;
+		justify-content: center;
     }
 }
 
@@ -150,10 +151,27 @@ body
         -ms-flex-order: 1;
         order: 1;
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 100%;
-        flex: 0 0 100%;
-        background-color: var(--color-grey-light-2)
-    }
+        -ms-flex: 0 0 80%;
+        flex: 0 0 80%;
+		margin: 0;
+	}
+	.user-nav__button>i:not(.mobile),
+	.logo-text,
+	.logo
+	{
+		display: none;
+	}
+	
+	.user-nav__container
+	{
+		margin: 20px;
+	}
+
+	/* Good enough.. */
+	.footer .footer__logo-box
+	{
+		display: flex;
+	}
 }
 
 .search__input
@@ -225,7 +243,7 @@ body
     display: flex;
     -webkit-box-align: center;
     -ms-flex-align: center;
-    align-items: center
+	align-items: center;
 }
 
 .user-nav>*
@@ -238,7 +256,7 @@ body
     display: flex;
     -webkit-box-align: center;
     -ms-flex-align: center;
-    align-items: center
+    align-items: center;
 }
 
 .user-nav>*:hover
@@ -286,7 +304,13 @@ body
 	margin-right: 26px;
 }
 
-.pagination ul
+.pagination-nav
+{
+	display: flex;
+	justify-content: center;
+	max-width: 100vw;
+}
+.pagination-nav ul
 {
 	transform: scale(.8);
 	position: relative;
@@ -298,7 +322,7 @@ body
 	margin: 0;
 }
 
-.pagination ul li
+.pagination-nav ul li
 {
 	list-style: none;
 	line-height: 50px;
@@ -306,7 +330,7 @@ body
 	cursor: pointer;
 }
 
-.pagination ul li a
+.pagination-nav ul li a
 {
 	margin: 4px 0;
     padding: 8px 16px;
@@ -317,30 +341,30 @@ body
     transition: background-color .3s;
 }
 
-.pagination ul li.page-number:hover:not(.disabled) a,
-.pagination ul li.page-number.active a
+.pagination-nav ul li.page-number:hover:not(.disabled) a,
+.pagination-nav ul li.page-number.active a
 {
 	background: #333;
 	color: #fff;
 }
 
-.pagination ul li.disabled:hover a,
-.pagination ul li:first-child:hover a.disabled,
-.pagination ul li:last-child:hover a.disabled
+.pagination-nav ul li.disabled:hover a,
+.pagination-nav ul li:first-child:hover a.disabled,
+.pagination-nav ul li:last-child:hover a.disabled
 {
 	background: #ddd;
 }
 
-.pagination ul li:first-child a.disabled,
-.pagination ul li:last-child a.disabled,
-.pagination ul li.disabled a,
-.pagination ul li.disabled
+.pagination-nav ul li:first-child a.disabled,
+.pagination-nav ul li:last-child a.disabled,
+.pagination-nav ul li.disabled a,
+.pagination-nav ul li.disabled
 {
 	color: #aaa;
 	cursor: default;
 }
 
-.pagination ul li.page-number
+.pagination-nav ul li.page-number
 {
 	width: 50px;
 	height: 50px;
@@ -348,26 +372,34 @@ body
 	text-align: center;
 }
 
-.pagination ul li:first-child:hover a,
-.pagination ul li:last-child:hover a
+.pagination-nav ul li:first-child:hover a,
+.pagination-nav ul li:last-child:hover a
 {
 	background: #222;
 	color: #fff
 }
 
-.pagination ul li:first-child,
-.pagination ul li:last-child
+.pagination-nav ul li:first-child,
+.pagination-nav ul li:last-child
 {
 	font-size: 20px;
 }
 
-.pagination ul li:first-child
+.pagination-nav ul li:first-child
 {
 	margin-right: 30px;
 }
-.pagination ul li:last-child
+.pagination-nav ul li:last-child
 {
 	margin-left: 30px;
+}
+
+@media only screen and (max-width: 31.25em)
+{	
+	.pagination-nav ul li.page-number:not(.mobile)
+	{
+		display: none;
+	}
 }
 
 .main
@@ -510,12 +542,11 @@ h1
 .search-bar
 {
     float: initial;
-    
-    
 }
 
 .list-group-item
 {
+	overflow: hidden;
 	background: rgba(0, 0, 0, 0);
 	transition: background 50ms;
 	width: 100% !important;
@@ -524,6 +555,16 @@ h1
 .list-group-item:hover
 {
 	background: rgba(0, 0, 0, .006);
+}
+
+/* https://stackoverflow.com/a/41223246/9382757 */
+.list-group-item.closeSlide {
+	z-index: -1;
+	margin-bottom:0;
+	height:0px;
+	padding-top:0;
+	padding-bottom:0;
+	transition: 0.2s all ease-out;
 }
 
 .footer

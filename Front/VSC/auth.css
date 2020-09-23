@@ -143,7 +143,7 @@ span.i-spade.i-spade-bottom.svg {
 	transform: translateX(-73%) rotate(-33deg);
 }
 
-@media only screen and (max-width: 768px)
+@media only screen and (max-width: 900px)
 {
 	span.i-spade.svg
 	{
