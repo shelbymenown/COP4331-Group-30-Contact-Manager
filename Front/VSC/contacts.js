@@ -17,6 +17,16 @@ function getInt(val, def = 0) {
 	else return def;
 }
 
+function mustLogIn()
+{
+	$("#alertModal-title").text("Unauthorized Access");
+	$("#alertModal-body").text("You must log in to view this page!");
+	$("#alertModal-continue").hide();
+	$("#alertModal-dismiss").text("Continue");
+	$('#alertModal').on('hidden.bs.modal', () => {setTimeout(() => {window.location.pathname = "";}, 50)});
+	$('#alertModal').modal('toggle');
+}
+
 // Handle page load
 $(document).ready(function () {
 	var urlParams = new URLSearchParams(window.location.search);
@@ -26,12 +36,10 @@ $(document).ready(function () {
 	searchQry = urlParams.has("search") ? urlParams.get("search") : '';
 	$("#search-form :input[name='search']").val(searchQry);
 
-
-
 	// Change Auth page if not logged in
 	if (!token && !DEBUG) {
-		alert("You must log in to view this page!");
-		window.location.pathname = "";
+		mustLogIn();
+		return;
 	}
 
 	// Add event listeners to header buttons

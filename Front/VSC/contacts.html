@@ -174,7 +174,15 @@
 			</div>
 		</div>
 		<nav class="pagination" id="pagination">
-			<ul></ul>
+			<ul>
+				<li><a class="page-first disabled" href="javascript:;"><<</a></li>
+				<li class="page-number disabled"><a href="javascript:;">1</a></li>
+				<li class="page-number disabled"><a href="javascript:;">2</a></li>
+				<li class="page-number disabled"><a href="javascript:;">3</a></li>
+				<li class="page-number disabled"><a href="javascript:;">4</a></li>
+				<li class="page-number disabled"><a href="javascript:;">5</a></li>
+				<li><a class="page-last disabled" href="javascript:;">>></a></li>
+			</ul>
 		</nav>
 	</section>
 	<footer class="footer">
@@ -274,7 +282,8 @@
 					<span class="error" style="display: none" id="alertModal-error">An error has occured</span>
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<button class="btn btn-secondary" type="button" data-dismiss="modal"
+						id="alertModal-dismiss">Cancel</button>
 					<button class="btn btn-danger" type="button" id="alertModal-continue">Continue</button>
 				</div>
 			</div>
