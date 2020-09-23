@@ -1,6 +1,6 @@
 const URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
 const API_EXTENSION = 'php';
-const DEBUG = false;
+const DEBUG = true;
 const CONTACTS_PER_PAGE = 5;
 
 
