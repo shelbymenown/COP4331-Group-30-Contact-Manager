@@ -1,6 +1,6 @@
 const URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
 const API_EXTENSION = 'php';
-const DEBUG = true;
+const DEBUG = false;
 const CONTACTS_PER_PAGE = 5;
 
 
@@ -43,18 +43,6 @@ $(document).ready(function () {
 	loadContacts(token, searchQry, page);
 });
 
-
-function doLogout(e) {
-	Cookies.remove("token");
-	alert("Logged out successfuly!");
-	window.location.pathname = "";
-}
-
-function doCreate(e) {
-	alert("Create contact form does not exist yet");
-
-	// window.location.pathname = "/create.html";
-}
 
 function doSearch(e) {
 	e.preventDefault();
@@ -120,6 +108,7 @@ function displayContacts(contacts) {
 	contact_list.empty();
 
 	loadedContacts = [...contacts];
+	console.log(loadedContacts);
 
 	contacts.forEach(contact => {
 		let FULL_NAME = `${contact.firstName} ${contact.lastName}`;
@@ -178,31 +167,79 @@ function displayContacts(contacts) {
 	});
 }
 
+function doLogout() {
+	$("#alertModal-title").text("Logout?");
+	$("#alertModal-body").text("Are you sure you want to log out?");
+	$("#alertModal-continue").text("Continue");
+	$("#alertModal-continue").unbind();
+	$("#alertModal-continue").click(submitLogout);
+}
+
 function doEdit(id)
 {
-	contact = loadedContacts.filter(contact => contact.id === id)[0];
+	contact = loadedContacts.filter(contact => contact.id == id)[0];
 	console.log(contact);
-	$("#editCreateModal__title").text(`Edit contact ${id}`);
+	$("#editCreateModal-title").text(`Edit Contact (${[contact.firstName, contact.lastName].join(' ')})`);
 	$("#editCreateModal-form :input[name='firstName']")	.val(contact.firstName);
 	$("#editCreateModal-form :input[name='lastName']")	.val(contact.lastName);
 	$("#editCreateModal-form :input[name='address']")	.val(contact.address);
 	$("#editCreateModal-form :input[name='email']")		.val(contact.email);
 	$("#editCreateModal-form :input[name='phone']")		.val(contact.phone);
 
-	$("#editCreateModal__continue").unbind();
-	$("#editCreateModal__continue").click(() => submitEdit(contact.id));
+	$("#editCreateModal-continue").text("Save");
+	$("#editCreateModal-continue").unbind();
+	$("#editCreateModal-continue").click(() => submitEdit(id));
+}
+
+function doCreate()
+{
+	console.log("Here")
+	$("#editCreateModal-title").text(`Create New Contact`);
+	$("#editCreateModal-form :input[name='firstName']")	.val('');
+	$("#editCreateModal-form :input[name='lastName']")	.val('');
+	$("#editCreateModal-form :input[name='address']")	.val('');
+	$("#editCreateModal-form :input[name='email']")		.val('');
+	$("#editCreateModal-form :input[name='phone']")		.val('');
+
+	$("#editCreateModal-continue").text("Create");
+	$("#editCreateModal-continue").unbind();
+	$("#editCreateModal-continue").click(submitCreate);
 }
 
 function doDelete(id)
 {
-	contact = loadedContacts.filter(contact => contact.id === id)[0];
+	contact = loadedContacts.filter(contact => contact.id == id)[0];
 	console.log(contact);
-	$("#deleteModal__body").text(
+	$("#deleteModal-body").text(
 		`Are you sure you want to delete 
 		${[contact.firstName, contact.lastName].join(" ")} 
 		from your contacts?`
 	);
+	
+	$("#deleteModal-continue").unbind();
+	$("#deleteModal-continue").click(() => submitCreate(id));
 }
+
+function submitDelete(contactId)
+{
+	// TODO : DELETE to API
+	// TODO : On success	- close modal
+	// TODO : On fail 		- display error
+	
+	$('#deleteModal').modal('toggle');
+}
+
+function submitLogout()
+{
+
+	// TODO : DELETE to API
+	// TODO : On success	- close modal
+	// TODO : On fail 		- display error
+	
+	$('#alertModal').modal('toggle');
+	setTimeout(() => { token = undefined; Cookies.remove("token"); window.location.pathname = ""; }, 50);
+}
+
 
 function submitEdit(contactId)
 {
@@ -218,6 +255,24 @@ function submitEdit(contactId)
 	};
 
 	console.log(editedContact);
+
+	// TODO : POST to API
+	// TODO : On success	- close modal
+	// TODO : On fail 		- display error
+	
+	$('#editCreateModal').modal('toggle');
+}
+function submitCreate()
+{
+	createContact = {
+		firstName: $("#editCreateModal-form :input[name='firstName']").val(),
+		lastName: $("#editCreateModal-form :input[name='lastName']").val(),
+		address: $("#editCreateModal-form :input[name='address']").val(),
+		email: $("#editCreateModal-form :input[name='email']").val(),
+		phone: $("#editCreateModal-form :input[name='phone']").val()
+	};
+
+	console.log(createContact);
 
 	// TODO : POST to API
 	// TODO : On success	- close modal
@@ -249,7 +304,7 @@ function displayPagination(page, total_pages)
 	// console.log("[displayPagination()] last_page:", last_page);
 
 
-	disabled = page < 6;
+	disabled = page == 1;
 	pagination_content.push(`
 		<li>
 			<a class="page-first ${disabled ? ' disabled' : ''}" href="javascript:;" ${disabled ? '' : 'onclick="changePage(1)"'}><<</a>
