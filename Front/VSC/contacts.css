@@ -29,13 +29,13 @@ body
     min-height: 100vh;
 	font-family: 'Montserrat', "Lato", sans-serif;
     line-height: 1.7;
-    color: #777;
+	color: #777;
 }
 
 
 .header
 {
-	z-index: 999999;
+	z-index: 1000;
 	position: fixed;
 	top: 0;
 	left: 0;
