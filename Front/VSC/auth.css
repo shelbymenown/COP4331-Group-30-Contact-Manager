@@ -135,25 +135,13 @@ span.i-spade.i-spade-right.svg {
 	left: 100%;
 	transform: translateX(-100%) rotate(28deg);
 }
+
 span.i-spade.i-spade-bottom.svg {
 	position: absolute;
 	/* font-size: 15em; */
 	top: 69%;
 	left: 100%;
 	transform: translateX(-73%) rotate(-33deg);
-}
-
-@media only screen and (max-width: 900px)
-{
-	span.i-spade.svg
-	{
-		display: flex;
-	}
-
-	span.i-spade.utf-8
-	{
-		display: none;
-	}
 }
 
 a {
@@ -365,4 +353,17 @@ input {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+@media screen and (max-width: 600px)
+{
+	span.i-spade.svg
+	{
+		display: flex;
+	}
+
+	span.i-spade.utf-8
+	{
+		display: none;
+	}
 }
