@@ -1,7 +1,7 @@
 const URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
 const API_EXTENSION = 'php';
-// const DEBUG = false;
-const DEBUG = true;
+const DEBUG = false;
+// const DEBUG = true;
 const CONTACTS_PER_PAGE = 5;
 
 
@@ -141,17 +141,19 @@ function displayContacts(contacts) {
 					<div class="col-12 col-sm-6 col-md-7 text-center text-sm-left">
 						<label class="name lead">${FULL_NAME}</label>
 						<br>
-						<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
-							data-original-title="${contact.address}"></span>
-						<span class="text-muted">${contact.address}</span>
-						<br>
-						<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
-							data-original-title="${contact.phone}"></span>
-						<span class="text-muted small">${contact.phone}</span>
-						<br>
-						<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip"
-							data-original-title="" title=""></span>
-						<span class="text-muted small text-truncate">${contact.email}</span>
+						<div class="contact-info">
+							<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
+								data-original-title="${contact.address}"></span>
+							<span class="text-muted">${contact.address}</span>
+							<br>
+							<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
+								data-original-title="${contact.phone}"></span>
+							<span class="text-muted small">${contact.phone}</span>
+							<br>
+							<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip"
+								data-original-title="" title=""></span>
+							<span class="text-muted small text-truncate">${contact.email}</span>
+						</div>
 					</div>
 					<div class="col-12 col-sm-2 col-md-2">
 						<div class="tool-tip">
