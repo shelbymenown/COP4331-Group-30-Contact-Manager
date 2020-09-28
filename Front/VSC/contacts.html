@@ -30,10 +30,6 @@
 
 	<!-- <div class="container"> -->
 	<header class="header">
-
-		<!-- <img src="/SVG/spade_fixed_2.svg" style="width:100px;height:100px" alt="spade logo" class="logo"> -->
-		<!-- <iframe src="/SVG/spade_fixed_2.svg" alt="spade logo" class="logo"></iframe> -->
-		<!-- <object type="image/svg+xml" data="/SVG/spade_fixed_2.svg" class="logo"></object> -->
 		<img src="/SVG/spade_fixed_2.svg" alt="spade logo" class="logo">
 		<h1 class="logo-text">Spade</h1>
 		<form action="" class="search" id="search-form">
@@ -64,7 +60,12 @@
 		<div class="main__container" id="container">
 			<div class="user-body">
 				<div class="user-body-contacts">
-					<ul class="list-group pull-down" id="contact-list"></ul>
+					<ul class="list-group pull-down" id="contact-list">
+						<div class="text-center" style="display: none">
+							<h3>No contacts found</h3>
+							<img src="/SVG/forever-alone-bw.svg" alt="forever alone" class="forever-alone">
+						</div>
+					</ul>
 				</div>
 			</div>
 		</div>
