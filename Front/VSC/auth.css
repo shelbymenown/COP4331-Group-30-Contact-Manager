@@ -72,6 +72,7 @@ span.error.error-hide {
 }
 
 span.i-spade.utf-8 {
+	display: none;
 
 	cursor: default;
 	display: flex;
@@ -114,7 +115,6 @@ span.i-spade.i-spade-bottom.utf-8{
 }
 
 span.i-spade.svg {
-	display: none;
 	font-size: 1.3em;
 	opacity: .9;
 }
@@ -357,7 +357,7 @@ input {
 
 @media screen and (max-width: 600px)
 {
-	span.i-spade.svg
+	/* span.i-spade.svg
 	{
 		display: flex;
 	}
@@ -365,5 +365,5 @@ input {
 	span.i-spade.utf-8
 	{
 		display: none;
-	}
+	} */
 }
