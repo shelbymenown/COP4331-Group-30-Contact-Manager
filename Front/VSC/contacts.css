@@ -721,7 +721,29 @@ h1
 	{
 		margin-top: 17rem;
 	}
+}
 
+@media only screen and (max-width: 75em)
+{
+	.container
+	{
+        margin: 0;
+        max-width: 100%;
+        width: 100%
+	}
+}
+
+@media only screen and (max-width: 720px)
+{
+	.logo-text,
+	.logo
+	{
+		display: none;
+	}
+}
+
+@media only screen and (max-width: 575px)
+{
 	.lead
 	{
 		font-size: 2.25rem;
@@ -732,24 +754,5 @@ h1
 		font-size: 1.4rem;
 		/* text-align: left !important; */
 		margin-bottom: 1rem;
-	}
-}
-
-@media only screen and (max-width: 75em)
-{
-	.container
-	{
-        margin: 0;
-        max-width: 100%;
-        width: 100%
-    }
-}
-
-@media only screen and (max-width: 720px)
-{
-	.logo-text,
-	.logo
-	{
-		display: none;
 	}
 }

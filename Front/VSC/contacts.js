@@ -119,63 +119,71 @@ function displayContacts(contacts) {
 	loadedContacts = [...contacts];
 	console.log(loadedContacts);
 
-	contacts.forEach(contact => {
-		let FULL_NAME = [contact.firstName, contact.lastName].join(contact.firstName && contact.lastName ? " " : "");
+	if (loadedContacts && loadedContacts.length) {
+		contacts.forEach(contact => {
+			let FULL_NAME = [contact.firstName, contact.lastName].join(contact.firstName && contact.lastName ? " " : "");
 
-		// HTML list item
-		var contact_li;
+			// HTML list item
+			var contact_li;
 
-		// TODO : add buttons to the <li>'s
-		// Unique id for buttons (#delete{contact.id}), (#edit{contact.id})
-		// Bind delete with this contact.id
-		// Bind edit with this contact.id
+			// TODO : add buttons to the <li>'s
+			// Unique id for buttons (#delete{contact.id}), (#edit{contact.id})
+			// Bind delete with this contact.id
+			// Bind edit with this contact.id
 
-		// Generate contact HTML
-		contact_li = `
-			<li class="list-group-item" id="${`contact-${contact.id}`}">
-				<div class="row w-100">
-					<div class="col-12 col-sm-4 col-md-3 px-0">
-						<img src="${faker.image.avatar()}"
-							alt="${FULL_NAME}" class="rounded-circle mx-auto d-block img-fluid">
-					</div>
-					<div class="col-12 col-sm-6 col-md-7 text-center text-sm-left">
-						<label class="name lead">${FULL_NAME}</label>
-						<br>
-						<div class="contact-info">
-							<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
-								data-original-title="${contact.address}"></span>
-							<span class="text-muted">${contact.address}</span>
+			// Generate contact HTML
+			contact_li = `
+				<li class="list-group-item" id="${`contact-${contact.id}`}">
+					<div class="row w-100">
+						<div class="col-12 col-sm-4 col-md-3 px-0">
+							<img src="${faker.image.avatar()}"
+								alt="${FULL_NAME}" class="rounded-circle mx-auto d-block img-fluid">
+						</div>
+						<div class="col-12 col-sm-6 col-md-7 text-center text-sm-left">
+							<label class="name lead">${FULL_NAME}</label>
 							<br>
-							<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
-								data-original-title="${contact.phone}"></span>
-							<span class="text-muted small">${contact.phone}</span>
-							<br>
-							<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip"
-								data-original-title="" title=""></span>
-							<span class="text-muted small text-truncate">${contact.email}</span>
+							<div class="contact-info">
+								<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
+									data-original-title="${contact.address}"></span>
+								<span class="text-muted">${contact.address}</span>
+								<br>
+								<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
+									data-original-title="${contact.phone}"></span>
+								<span class="text-muted small">${contact.phone}</span>
+								<br>
+								<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip"
+									data-original-title="" title=""></span>
+								<span class="text-muted small text-truncate">${contact.email}</span>
+							</div>
+						</div>
+						<div class="col-12 col-sm-2 col-md-2">
+							<div class="tool-tip">
+								<button class="btn btn-success btn-sm" onclick="doEdit(${contact.id})"
+										data-toggle="modal" data-target="#editCreateModal"
+										type="button" title="Edit">
+									<i class="fa fa-pencil"></i>
+								</button>
+								<button class="btn btn-danger btn-sm" onclick="doDelete(${contact.id})"
+										data-toggle="modal" data-target="#deleteModal"
+										type="button" title="Delete"">
+									<i class="fa fa-trash-o"></i>
+								</button>
+							</div>
 						</div>
 					</div>
-					<div class="col-12 col-sm-2 col-md-2">
-						<div class="tool-tip">
-							<button class="btn btn-success btn-sm" onclick="doEdit(${contact.id})"
-									data-toggle="modal" data-target="#editCreateModal"
-									type="button" title="Edit">
-								<i class="fa fa-pencil"></i>
-							</button>
-							<button class="btn btn-danger btn-sm" onclick="doDelete(${contact.id})"
-									data-toggle="modal" data-target="#deleteModal"
-									type="button" title="Delete"">
-								<i class="fa fa-trash-o"></i>
-							</button>
-						</div>
-					</div>
-				</div>
-			</li>
-		`;
+				</li>
+			`;
 
-		// console.log(contact_li);
-		contact_list.append(contact_li);
-	});
+			// console.log(contact_li);
+			contact_list.append(contact_li);
+		});
+	}
+	else contact_list.append(`
+		<div class="text-center">
+			<h3>No contacts found</h3>
+			<img src="/SVG/forever-alone-bw.svg" alt="forever alone" class="forever-alone">
+		</div>
+	`);
 }
 
 function doLogout() {
