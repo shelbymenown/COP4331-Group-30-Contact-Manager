@@ -180,7 +180,7 @@ function displayContacts(contacts) {
 	}
 	else contact_list.append(`
 		<div class="text-center">
-			<h3>No contacts found</h3>
+			<h3 class="p-3 m-0">No contacts found</h3>
 			<img src="/SVG/forever-alone-bw.svg" alt="forever alone" class="forever-alone">
 		</div>
 	`);
