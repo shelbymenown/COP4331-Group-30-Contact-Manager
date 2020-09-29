@@ -275,6 +275,15 @@ body
 	display: flex;
 	justify-content: center;
 	max-width: 100vw;
+
+	/* Disable select */
+	-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }
 .pagination-nav ul
 {
@@ -304,11 +313,21 @@ body
 	text-decoration: none;
 	color: #777;
 	border-radius: 50px;
-    transition: background-color .3s;
+    transition: background-color .3s, transform .3s;
+}
+
+.pagination-nav ul li.page-number:not(.disabled):not(.active) a:active,
+.pagination-nav ul li:first-child:not(.disabled) a:active,
+.pagination-nav ul li:last-child:not(.disabled) a:active
+{
+	background-color: #555 !important;
+	transform: scale(.9);
 }
 
 .pagination-nav ul li.page-number:hover:not(.disabled) a,
-.pagination-nav ul li.page-number.active a
+.pagination-nav ul li.page-number.active a,
+.pagination-nav ul li:first-child:hover a,
+.pagination-nav ul li:last-child:hover a
 {
 	background: #333;
 	color: #fff;
