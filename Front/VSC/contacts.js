@@ -143,17 +143,23 @@ function displayContacts(contacts) {
 							<label class="name lead">${FULL_NAME}</label>
 							<br>
 							<div class="contact-info">
-								<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
-									data-original-title="${contact.address}"></span>
-								<span class="text-muted">${contact.address}</span>
-								<br>
-								<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
-									data-original-title="${contact.phone}"></span>
-								<span class="text-muted small">${contact.phone}</span>
-								<br>
-								<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip"
-									data-original-title="" title=""></span>
-								<span class="text-muted small text-truncate">${contact.email}</span>
+								${contact.address ? `
+									<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
+										data-original-title="${contact.address}"></span>
+									<span class="text-muted">${contact.address}</span>
+									<br>
+								` : ``}
+								${contact.phone ? `
+									<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
+										data-original-title="${contact.phone}"></span>
+									<span class="text-muted small">${contact.phone}</span>
+									<br>
+								` : ``}
+								${contact.email ? `
+									<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip"
+										data-original-title="" title=""></span>
+									<span class="text-muted small text-truncate">${contact.email}</span>
+								` : ``}
 							</div>
 						</div>
 						<div class="col-12 col-sm-2 col-md-2">
