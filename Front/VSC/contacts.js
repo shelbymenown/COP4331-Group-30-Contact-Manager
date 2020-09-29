@@ -114,11 +114,16 @@ function loadContacts(token, search, page) {
 
 function displayContacts(contacts) {
 	var contact_list = $("#contact-list");
-	contact_list.empty();
+	var contact_list_html = [];
+	var should_hide = loadedContacts && loadedContacts.length;
+
+	// Fade current contact list
+	if (should_hide) $("#contact-list > li").hide('slow');
 
 	loadedContacts = [...contacts];
 	console.log(loadedContacts);
 
+	// Generate component html
 	if (loadedContacts && loadedContacts.length) {
 		contacts.forEach(contact => {
 			let FULL_NAME = [contact.firstName, contact.lastName].join(contact.firstName && contact.lastName ? " " : "");
@@ -133,7 +138,7 @@ function displayContacts(contacts) {
 
 			// Generate contact HTML
 			contact_li = `
-				<li class="list-group-item" id="${`contact-${contact.id}`}">
+				<li class="list-group-item" id="${`contact-${contact.id}`}" style="display: none">
 					<div class="row w-100">
 						<div class="col-12 col-sm-4 col-md-3 px-0">
 							<img src="${faker.image.avatar()}"
@@ -181,15 +186,22 @@ function displayContacts(contacts) {
 			`;
 
 			// console.log(contact_li);
-			contact_list.append(contact_li);
+			contact_list_html.push(contact_li);
 		});
 	}
-	else contact_list.append(`
+	else contact_list_html.push(`
 		<div class="text-center">
 			<h3 class="p-3 m-0">No contacts found</h3>
 			<img src="/SVG/forever-alone-bw.svg" alt="forever alone" class="forever-alone">
 		</div>
 	`);
+
+	// Render to DOM
+	setTimeout(() => {
+		contact_list.empty();
+		contact_list.append(contact_list_html.join('\n'));
+		setTimeout(() => $("#contact-list > li").show('slow'), 300);
+	}, should_hide ? 500 : 0);
 }
 
 function doLogout() {
