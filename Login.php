@@ -37,21 +37,19 @@ else
 	}
 	else
 	{
-		$sql = "SELECT Password, UserID FROM User WHERE Username='" . $inData["Username"] . "'";
+		// $password_sql = "SELECT Password FROM User WHERE Username='" . $inData["Username"] . "'";
+		$sql = "SELECT UserID, Password, Name FROM User WHERE Username='" . $inData["Username"] . "'";
 		$result = $conn->query($sql);
 		
-		//Grabbing hashed password from Database where Username matches
-		$password_sql = "SELECT Password FROM User WHERE Username='" . $inData["Username"] . "'";
-		$passResult = $conn->query($password_sql);
-		$passRow = $passResult->fetch_assoc();
-		$passwordHash = $passRow["Password"];
+		// $passResult = $conn->query($password_sql);
+		// $passRow = $passResult->fetch_assoc();
+		// $passwordHash = $passRow["Password"];
 
 		//Verifying the password hash with user inputted hash
-		$passVerify = password_verify($inData["Password"], $passwordHash);
-		
-		if (($result->num_rows > 0) && password_verify($inData["Password"], $passwordHash))
+		// $passVerify = password_verify($inData["Password"], $passwordHash);
+
+		if ($result->num_rows > 0 && password_verify($inData["Password"], ($row = $result->fetch_assoc())["Password"]))
 		{
-			$row = $result->fetch_assoc();
 			$Username = $row["Username"];
 			$UserID = $row["UserID"];
 			
