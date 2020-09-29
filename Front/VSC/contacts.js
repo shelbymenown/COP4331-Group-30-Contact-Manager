@@ -142,32 +142,32 @@ function displayContacts(contacts) {
 
 			// Generate contact HTML
 			contact_li = `
-				<li class="list-group-item" id="${`contact-${contact.id}`}" style="display: none">
+				<li class="list-group-item" id="${`contact-${contact.id}`}" ${!isMobile() ? 'style="display: none"' : ''}>
 					<div class="row w-100">
 						<div class="col-12 col-sm-4 col-md-3 px-0">
 							<img src="${faker.image.avatar()}"
 								alt="${FULL_NAME}" class="rounded-circle mx-auto d-block img-fluid">
 						</div>
 						<div class="col-12 col-sm-6 col-md-7 text-center text-sm-left">
-							<label class="name lead">${FULL_NAME}</label>
+							<label class="name lead" info="fullName">${FULL_NAME}</label>
 							<br>
 							<div class="contact-info">
 								${contact.address ? `
 									<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
 										data-original-title="${contact.address}"></span>
-									<span class="text-muted">${contact.address}</span>
+									<span class="text-muted" info="address">${contact.address}</span>
 									<br>
 								` : ``}
 								${contact.phone ? `
 									<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
 										data-original-title="${contact.phone}"></span>
-									<span class="text-muted small">${contact.phone}</span>
+									<span class="text-muted small" info="phone">${contact.phone}</span>
 									<br>
 								` : ``}
 								${contact.email ? `
 									<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip"
 										data-original-title="" title=""></span>
-									<span class="text-muted small text-truncate">${contact.email}</span>
+									<span class="text-muted small text-truncate" info="email">${contact.email}</span>
 								` : ``}
 							</div>
 						</div>
