@@ -359,7 +359,7 @@ function displayPagination(page, total_pages)
 		`);
 	}
 	
-	disabled = total_pages < last_page;
+	disabled = page >= total_pages;
 	pagination_content.push(`
 		<li>
 			<a class="page-last${disabled ? ' disabled' : ''}" href="javascript:;"${disabled ? '' : ` onclick="changePage(${total_pages})"` }>>></a>
