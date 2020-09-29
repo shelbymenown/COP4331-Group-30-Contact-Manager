@@ -61,10 +61,10 @@ $(document).ready(function () {
 	$("#signup-error").removeClass("error-show");
 
 	// Add event listeners
+	$('#alertModal').on('hidden.bs.modal',onCloseAlert);
 	$("#signup-form").on('submit', doSignup);
 	$("#login-form").on('submit', doLogin);
 });
-
 
 function doSignup(e) {
 	e.preventDefault();
@@ -81,18 +81,7 @@ function doSignup(e) {
 	let payload = { Name: name, Username: username, Password: password };
 
 	$.post(uri, JSON.stringify(payload))
-		.done(function (res){
-			// TODO : nicer alert
-			alert("User was successfuly created!\nYou can now log in.");
-
-			// Go to login section
-			$("#container").removeClass("right-panel-active");
-
-			// Empty sign up from
-			$("#signup-form :input[name='name']").val('');
-			$("#signup-form :input[name='username']").val('')
-			$("#signup-form :input[name='password']").val('')
-		})
+		.done(function (res){ $('#alertModal').modal('toggle'); })
 		.fail(function (jqXHR, textStatus, errorThrown) {
 			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error + "😢" : "An error has occured 😟";
 			console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
@@ -138,4 +127,17 @@ function doLogin(e) {
 			// Display error
 			showError($("#login-error"), errMsg)
 		});
+}
+
+function onCloseAlert()
+{
+	setTimeout(() => {
+		// Go to login section
+		$("#container").removeClass("right-panel-active");
+
+		// Empty sign up from
+		$("#signup-form :input[name='name']").val('');
+		$("#signup-form :input[name='username']").val('');
+		$("#signup-form :input[name='password']").val('');
+	}, 50);
 }
