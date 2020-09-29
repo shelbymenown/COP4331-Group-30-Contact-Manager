@@ -317,8 +317,8 @@ body
 }
 
 .pagination-nav ul li.page-number:not(.disabled):not(.active) a:active,
-.pagination-nav ul li:first-child:not(.disabled) a:active,
-.pagination-nav ul li:last-child:not(.disabled) a:active
+.pagination-nav ul li:first-child a:not(.disabled):active,
+.pagination-nav ul li:last-child a:not(.disabled):active
 {
 	background-color: #555 !important;
 	transform: scale(.9);
