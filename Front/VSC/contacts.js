@@ -11,6 +11,7 @@ var loadedContacts = [];
 var searchQry = ''
 var page = 1;
 var token;
+var isLoading;
 
 function getInt(val, def = 0) {
 	if (!isNaN(val) && parseInt(Number(val) == val) && !isNaN(parseInt(val, 10)))
@@ -75,7 +76,6 @@ function loadContacts(token, search, page) {
 
 	if (page < 1) page = 1;
 
-
 	let uri = `${URL_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 
 	if (!DEBUG) {
@@ -85,6 +85,7 @@ function loadContacts(token, search, page) {
 			// Display contacts
 			displayContacts(res.contacts);
 			displayPagination(page, res.total_pages ? res.total_pages : page + faker.random.number(4));
+			disablePagination();
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
 			// TODO : handle error
@@ -107,6 +108,7 @@ function loadContacts(token, search, page) {
 		}));
 		displayContacts(contacts);
 		displayPagination(page, page + faker.random.number(4));
+		disablePagination();
 	}
 }
 
@@ -200,7 +202,10 @@ function displayContacts(contacts) {
 	setTimeout(() => {
 		contact_list.empty();
 		contact_list.append(contact_list_html.join('\n'));
-		setTimeout(() => $("#contact-list > li").show('slow'), 300);
+		setTimeout(() => {
+			$("#contact-list > li").show('slow');
+			activatePagination();
+		}, 300);
 	}, should_hide ? 500 : 0);
 }
 
@@ -355,7 +360,7 @@ function displayPagination(page, total_pages)
 	disabled = page == 1;
 	pagination_content.push(`
 		<li>
-			<a class="page-first${disabled ? ' disabled' : ''}" href="javascript:;" ${disabled ? '' : 'onclick="changePage(1)"'}><<</a>
+			<a class="page-first${disabled ? ' disabled' : ' flag'}" href="javascript:;" ${disabled ? '' : 'onclick="changePage(1)"'}><<</a>
 		</li>
 	`);
 
@@ -365,7 +370,7 @@ function displayPagination(page, total_pages)
 		mobile = Math.abs(p - page) <= 1;
 		// console.log(`Page: ${page}\nTotal Pages: ${total_pages}\nFirst Page: ${first_page}\nLast Page: ${last_page}\np: ${p}\nMobile? - ${mobile}`);
 		pagination_content.push(`
-			<li class="page-number${page==p && !disabled ? ' active':''}${disabled ? ' disabled' : ''}${mobile ? ' mobile' : ''}">
+			<li class="page-number${page==p && !disabled ? ' active':''}${disabled ? ' disabled' : ' flag'}${mobile ? ' mobile' : ''}">
 				<a href="javascript:;" ${page==p || disabled ? '' : `onclick="changePage(${p})"`}>${p}</a>
 			</li>
 		`);
@@ -374,7 +379,7 @@ function displayPagination(page, total_pages)
 	disabled = page >= total_pages;
 	pagination_content.push(`
 		<li>
-			<a class="page-last${disabled ? ' disabled' : ''}" href="javascript:;"${disabled ? '' : ` onclick="changePage(${total_pages})"` }>>></a>
+			<a class="page-last${disabled ? ' disabled' : ' flag'}" href="javascript:;"${disabled ? '' : ` onclick="changePage(${total_pages})"` }>>></a>
 		</li>`);
 
 	pagination_ul.append(pagination_content.join("\n"));
@@ -382,6 +387,9 @@ function displayPagination(page, total_pages)
 
 function changePage(page)
 {
+	if (isLoading)
+		return;
+
 	if (history.pushState) {
 		var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname
 		+ `?search=${searchQry}` + `&page=${page}`;
@@ -389,6 +397,22 @@ function changePage(page)
 	}
 
 	loadContacts(token, searchQry, page);
+}
+
+function disablePagination()
+{
+	// $("#pagination > ul > li.flag").removeClass("active");
+	$("#pagination > ul > li > a.flag").addClass("disabled");
+	$("#pagination > ul > li.flag:not(.active)").addClass("disabled");
+	isLoading = true;
+}
+
+function activatePagination()
+{
+	// $("#pagination > ul > li.flag").removeClass("active");
+	$("#pagination > ul > li > a.flag").removeClass("disabled flag");
+	$("#pagination > ul > li.flag").removeClass("disabled flag");
+	isLoading = false;
 }
 
 
