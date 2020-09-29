@@ -77,6 +77,8 @@ function loadContacts(token, search, page) {
 	if (page < 1) page = 1;
 
 	let uri = `${URL_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	disablePagination();
+
 
 	if (!DEBUG) {
 
@@ -117,7 +119,7 @@ function loadContacts(token, search, page) {
 function displayContacts(contacts) {
 	var contact_list = $("#contact-list");
 	var contact_list_html = [];
-	var should_hide = loadedContacts && loadedContacts.length;
+	var should_hide = !isMobile() && loadedContacts && loadedContacts.length;
 
 	// Fade current contact list
 	if (should_hide) $("#contact-list > li").hide('slow');
@@ -396,6 +398,7 @@ function changePage(page)
 		window.history.pushState({path:newurl},'',newurl);
 	}
 
+	$('html,body').animate({ scrollTop: 0 }, 'slow');
 	loadContacts(token, searchQry, page);
 }
 
@@ -415,6 +418,10 @@ function activatePagination()
 	isLoading = false;
 }
 
+function isMobile()
+{
+	return typeof window.orientation !== 'undefined'
+}
 
 
 	// // List of random contacts
