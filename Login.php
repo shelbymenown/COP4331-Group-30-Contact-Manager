@@ -27,7 +27,6 @@ elseif (IsNullOrEmptyString($inData["Password"]))
 
 else
 {
-
 	$conn = new mysqli("localhost", "cop4311g_30", "Copcop24!!", "cop4311g_contactmanager");
 	
 	if ($conn->connect_error)
@@ -38,10 +37,19 @@ else
 	}
 	else
 	{
-		$sql = "SELECT Username, Name, UserID FROM User WHERE Username='" . $inData["Username"] . "' and Password='" . $inData["Password"] . "'";
+		$sql = "SELECT Password, UserID FROM User WHERE Username='" . $inData["Username"] . "'";
 		$result = $conn->query($sql);
 		
-		if ($result->num_rows > 0)
+		//Grabbing hashed password from Database where Username matches
+		$password_sql = "SELECT Password FROM User WHERE Username='" . $inData["Username"] . "'";
+		$passResult = $conn->query($password_sql);
+		$passRow = $passResult->fetch_assoc();
+		$passwordHash = $passRow["Password"];
+
+		//Verifying the password hash with user inputted hash
+		$passVerify = password_verify($inData["Password"], $passwordHash);
+		
+		if (($result->num_rows > 0) && password_verify($inData["Password"], $passwordHash))
 		{
 			$row = $result->fetch_assoc();
 			$Username = $row["Username"];
