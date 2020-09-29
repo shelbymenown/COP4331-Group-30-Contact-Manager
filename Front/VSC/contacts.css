@@ -665,17 +665,10 @@ h1
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
         -ms-flex-line-pack: distribute;
-		height: 8.8rem;
-		justify-content: center;
-    }
-
-	.header
-	{
-        -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-        -ms-flex-line-pack: distribute;
         align-content: space-around;
-        height: 11rem
+		justify-content: center;
+		height: 9rem;
+		padding: .5rem 0;
     }
 
 	.search
@@ -687,6 +680,7 @@ h1
         -ms-flex: 0 0 80%;
         flex: 0 0 80%;
 		margin: 0;
+		padding-bottom: .25rem;
 	}
 	.user-nav__button>i:not(.mobile)
 	{
@@ -695,7 +689,12 @@ h1
 	
 	.user-nav__container
 	{
-		margin: 20px;
+		border-radius: 20px;
+	}
+
+	.user-nav__button
+	{
+		padding: 1rem;
 	}
 
 	/* Good enough.. */
