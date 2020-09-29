@@ -37,17 +37,10 @@ else
 	}
 	else
 	{
-		// $password_sql = "SELECT Password FROM User WHERE Username='" . $inData["Username"] . "'";
 		$sql = "SELECT UserID, Password, Name FROM User WHERE Username='" . $inData["Username"] . "'";
 		$result = $conn->query($sql);
-		
-		// $passResult = $conn->query($password_sql);
-		// $passRow = $passResult->fetch_assoc();
-		// $passwordHash = $passRow["Password"];
 
-		//Verifying the password hash with user inputted hash
-		// $passVerify = password_verify($inData["Password"], $passwordHash);
-
+		// Check if username matched as well as password verified
 		if ($result->num_rows > 0 && password_verify($inData["Password"], ($row = $result->fetch_assoc())["Password"]))
 		{
 			$Username = $row["Username"];
