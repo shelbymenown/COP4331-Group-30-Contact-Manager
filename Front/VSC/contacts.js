@@ -59,11 +59,11 @@ function doSearch(e) {
 
 	if (history.pushState) {
 		var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname
-		+ `?search=${searchQry}` + `&page=${page}`;
+		+ `?search=${searchQry}` + `&page=1`;
 		window.history.pushState({path:newurl},'',newurl);
 	}
 	
-	loadContacts(token, searchQry, page);
+	loadContacts(token, searchQry, 1);
 }
 
 function loadContacts(token, search, page) {
