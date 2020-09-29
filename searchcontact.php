@@ -48,8 +48,12 @@
 		$datas = array();
 		$startingPage = $page * $ITEMS_PER_PAGE;
 
-		$sql = "SELECT UserID, ContactID as id, FirstName as firstName, LastName as lastName, EmailAddress as email, PhoneNumber as phone FROM Contact
-				WHERE UserId = $userId AND (FirstName LIKE '%$searching%' OR LastName LIKE  '%$searching%')
+		$sql = "SELECT ContactID as id, FirstName as firstName, LastName as lastName,
+				EmailAddress as email, PhoneNumber as phone, Address as address FROM Contact
+				WHERE UserId = $userId AND (FirstName LIKE '%$searching%'
+											OR LastName LIKE  '%$searching%'
+											OR EmailAddress LIKE  '%$searching%'
+											OR PhoneNumber LIKE  '%$searching%')
 				LIMIT $startingPage, $ITEMS_PER_PAGE
 			";
 		$result = $conn->query($sql);
@@ -66,7 +70,7 @@
 
 		// echo "[]";
 		// sendResultInfoAsJson( "{}" );
-		sendResultInfoAsJson( "{" . json_encode($datas) . "}" );
+		sendResultInfoAsJson( "{\"contacts\": " . json_encode($datas) . "}" );
 
 		// Cleanup
 		$conn->close();
