@@ -7,6 +7,15 @@
 	parse_str($_SERVER['QUERY_STRING'], $inData);
 
 	$userId = check_token($_SERVER["HTTP_X_ACCESS_TOKEN"]);
+	
+	//Throwing error if id is not thrown in
+	if (IsNullOrEmptyString($inData["Username"]))
+	{
+		// Bad Request
+		http_response_code ( 400 );
+		returnWithError( "Contact id is missing" );
+	}
+
 
 	if ($conn->connect_error)
 	{

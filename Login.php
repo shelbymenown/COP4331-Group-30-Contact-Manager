@@ -6,6 +6,12 @@ $inData = getRequestInfo();
 $UserID = 0;
 $Username = "";
 
+//Making sure only method called is POST
+if ($_SERVER['REQUEST_METHOD'] != 'POST') 
+{
+	exit;
+}
+ 
 if (IsNullOrEmptyString($inData["Username"]) && IsNullOrEmptyString($inData["Password"]))
 {
 	// Bad Request
