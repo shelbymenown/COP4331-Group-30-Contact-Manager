@@ -27,7 +27,7 @@ function mustLogIn()
 	$("#alertModal-continue").hide();
 	$("#alertModal-dismiss").text("Continue");
 	$('#alertModal').on('hidden.bs.modal', () => {setTimeout(() => {window.location.pathname = "";}, 50)});
-	$('#alertModal').modal('toggle');
+	$('#alertModal').modal('show');
 }
 
 // Handle page load
@@ -59,28 +59,32 @@ function doSearch(e) {
 	e.preventDefault();
 	searchQry = $("#search-form :input[name='search']").val();
 
-	if (history.pushState) {
-		var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname
-		+ `?search=${searchQry}` + `&page=1`;
-		window.history.pushState({path:newurl},'',newurl);
-	}
-	
 	loadContacts(token, searchQry, 1);
 }
 
 function loadContacts(token, search, page) {
+	let uri = `${URL_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
 		}
 	});
 
-	if (page < 1) page = 1;
+	// Ensure page is valid
+	page = parseInt(page);
+	if (!page || page < 1) page = 1;
+	
+	// Update URL bar
+	if (history.pushState) {
+		var newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`
+						+ `?search=${searchQry}&page=${page}`
+		window.history.pushState({path:newurl},'',newurl);
+	}
 
-	let uri = `${URL_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	// Show loading modal and disable pagination
+	$('#loadingModal').modal({backdrop: 'static', keyboard: false});
 	disablePagination();
-
-
+	
 	if (!DEBUG) {
 
 		$.get(uri, { search: search, page: page-1 })
@@ -209,6 +213,7 @@ function displayContacts(contacts) {
 			$("#contact-list > li, #contact-list > div").show('slow');
 			activatePagination();
 		}, 300);
+		$('#loadingModal').modal('hide');
 	}, should_hide ? 500 : 0);
 }
 
@@ -265,31 +270,17 @@ function doDelete(id)
 	$("#deleteModal-continue").click(() => submitDelete(id));
 }
 
-function submitDelete(contactId)
-{
-	console.log(contactId);
-	// TODO : DELETE to API
-	// TODO : On success	- close modal
-	// TODO : On fail 		- display error
-	
-	$('#deleteModal').modal('toggle');
-}
-
 function submitLogout()
 {
-
-	// TODO : DELETE to API
-	// TODO : On success	- close modal
-	// TODO : On fail 		- display error
-	
-	$('#alertModal').modal('toggle');
+	$('#alertModal').modal('hide');
 	setTimeout(() => { token = undefined; Cookies.remove("token"); window.location.pathname = ""; }, 50);
 }
 
 
 function submitEdit(contactId)
 {
-	console.log(contactId);
+	// maintain same avatar (because of faker)
+	var avatarSrc;
 
 	editedContact = {
 		id: contactId,

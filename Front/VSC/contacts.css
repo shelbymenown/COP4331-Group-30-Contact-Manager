@@ -178,8 +178,9 @@ body
 
 .search__button
 {
+    cursor: pointer;
     border: none;
-    background-color: var(--color-grey-light-2)
+	background-color: var(--color-grey-light-2)
 }
 
 .search__button:focus
@@ -438,7 +439,6 @@ body
 	/* min-height: 50vh; */
 
 	margin-bottom: 3.5rem;
-
 }
 
 
@@ -482,7 +482,7 @@ h1
 .user-body-contacts
 {
     display: block;
-    margin: auto;
+	margin: auto;
 }
 
 .card
@@ -676,6 +676,33 @@ h1
 	opacity: 1;
 	transform: scale(1);
 }
+
+.loader {
+	position: relative;
+	text-align: center;
+	margin: 15px auto 35px auto;
+	z-index: 9999;
+	display: block;
+	width: 80px;
+	height: 80px;
+	border: 10px solid rgba(0, 0, 0, .3);
+	border-radius: 50%;
+	border-top-color: #000;
+	animation: spin 1s ease-in-out infinite;
+	-webkit-animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+	to {
+	  -webkit-transform: rotate(360deg);
+	}
+  }
+  
+  @-webkit-keyframes spin {
+	to {
+	  -webkit-transform: rotate(360deg);
+	}
+  }
 
 @media only screen and (max-width: 31.25em)
 {
