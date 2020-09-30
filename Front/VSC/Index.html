@@ -31,7 +31,7 @@
 					<input type="text" name="name" placeholder="Name">
 					<input type="text" name="username" placeholder="Username">
 					<input type="password" name="password" placeholder="Password">
-					<button type="submit">Sign Up</button>
+					<button class="button" type="submit">Sign Up</button>
 					<!-- <input type="submit">Sign Up</input> -->
 					<span class="error" id="signup-error">Username is not available</span>
 				</form>
@@ -41,7 +41,7 @@
 					<h1>Sign In</h1>
 					<input type="text" name="username" placeholder="Username">
 					<input type="password" name="password" placeholder="Password">
-					<button type="submit">Login</button>
+					<button class="button" type="submit">Login</button>
 					<span class="error" id="login-error">Username or password incorrect</span>
 				</form>
 			</div>
@@ -50,7 +50,7 @@
 					<div class="overlay-panel overlay-right">
 						<h1>We Missed you!</h1>
 						<p>To manage your contacts please login with your personal information</p>
-						<button class="ghost" id="signup">or Sign Up</button>
+						<button class="button ghost" id="signup">or Sign Up</button>
 						<!-- <span class="i-spade i-spade-right i-spade-bottom utf-8">♣</span> -->
 						<span class="i-spade i-spade-right i-spade-bottom svg"><img src="/img/bee_club.svg"
 								alt="spade logo" class="logo-2"></span>
@@ -64,7 +64,7 @@
 								class="logo"></span>
 						<h1>Contacts</h1>
 						<p>Sign up to enjoy Spades Contact Manager</p>
-						<button class="ghost" id="login">or Login</button>
+						<button class="button ghost" id="login">or Login</button>
 					</div>
 				</div>
 			</div>
@@ -82,6 +82,17 @@
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-success" type="button" data-dismiss="modal">Continue</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" id="loadingModal">
+		<div class="modal-dialog modal-sm modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body text-center">
+					<div class="loader"></div>
+					<div><p>Loading...</p></div>
 				</div>
 			</div>
 		</div>
