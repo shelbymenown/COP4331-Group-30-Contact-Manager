@@ -274,6 +274,7 @@ function submitEdit(contactId)
 {
 	// maintain same avatar (because of faker)
 	var avatarSrc;
+	var contactIdx;
 
 	editedContact = {
 		id: contactId,
@@ -291,6 +292,10 @@ function submitEdit(contactId)
 	
 	// Close Modal
 	$('#editCreateModal').modal('hide');
+
+	// Update the contact in the loadedContacts array
+	contactIdx = loadedContacts.findIndex((c => c.id == contactId))
+	if (contactIdx >= 0) loadedContacts[contactIdx] = {...editedContact};
 
 	// Keep old randomly loaded avatar
 	avatarSrc = $(`#contact-${contact.id}-img`).attr('src');
@@ -337,6 +342,7 @@ function submitCreate()
 	}
 	else
 	{
+		loadedContacts = [createContact];
 		$("#contact-list > *").hide("puff").delay(10).queue(function() {$this.remove();});
 		$("#contact-list").append(generateContact_li(createContact));
 		$(`#contact-${createContact.id}`).show('puff');

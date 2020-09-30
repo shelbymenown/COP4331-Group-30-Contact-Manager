@@ -178,6 +178,7 @@ body
 
 .search__button
 {
+	transition: all .2s;
     cursor: pointer;
     border: none;
 	background-color: var(--color-grey-light-2)
@@ -677,7 +678,8 @@ h1
 	transform: scale(1);
 }
 
-.loader {
+.loader
+{
 	position: relative;
 	text-align: center;
 	margin: 15px auto 35px auto;
@@ -690,19 +692,21 @@ h1
 	border-top-color: #000;
 	animation: spin 1s ease-in-out infinite;
 	-webkit-animation: spin 1s ease-in-out infinite;
-  }
-  
-  @keyframes spin {
+}
+
+@keyframes spin
+{
 	to {
-	  -webkit-transform: rotate(360deg);
+		-webkit-transform: rotate(360deg);
 	}
-  }
-  
-  @-webkit-keyframes spin {
+}
+
+@-webkit-keyframes spin
+{
 	to {
-	  -webkit-transform: rotate(360deg);
+		-webkit-transform: rotate(360deg);
 	}
-  }
+}
 
 @media only screen and (max-width: 31.25em)
 {
