@@ -119,7 +119,60 @@ function loadContacts(token, search, page) {
 	}
 }
 
+function generateContact_li(contact, should_hide=true, li_tag=true)
+{
+	if (!contact)
+		return;
 
+	let FULL_NAME = [contact.firstName, contact.lastName].join(contact.firstName && contact.lastName ? " " : "");
+	return `
+		${li_tag ? `<li class="list-group-item" id="${`contact-${contact.id}`}" ${should_hide ? 'style="display: none"' : ''}>` : ''}
+			<div class="row w-100">
+				<div class="col-12 col-sm-4 col-md-3 px-0">
+					<img id=${`"contact-${contact.id}-img"`} src="${faker.image.avatar()}"
+						alt="${FULL_NAME}" class="rounded-circle mx-auto d-block img-fluid">
+				</div>
+				<div class="col-12 col-sm-6 col-md-7 text-center text-sm-left">
+					<label class="name lead" info="fullName">${FULL_NAME}</label>
+					<br>
+					<div class="contact-info">
+						${contact.address ? `
+							<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
+								data-original-title="${contact.address}"></span>
+							<span class="text-muted" info="address">${contact.address}</span>
+							<br>
+						` : ``}
+						${contact.phone ? `
+							<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
+								data-original-title="${contact.phone}"></span>
+							<span class="text-muted small" info="phone">${contact.phone}</span>
+							<br>
+						` : ``}
+						${contact.email ? `
+							<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip"
+								data-original-title="" title=""></span>
+							<span class="text-muted small text-truncate" info="email">${contact.email}</span>
+						` : ``}
+					</div>
+				</div>
+				<div class="col-12 col-sm-2 col-md-2">
+					<div class="tool-tip">
+						<button class="btn btn-success btn-sm" onclick="doEdit(${contact.id})"
+								data-toggle="modal" data-target="#editCreateModal"
+								type="button" title="Edit">
+							<i class="fa fa-pencil"></i>
+						</button>
+						<button class="btn btn-danger btn-sm" onclick="doDelete(${contact.id})"
+								data-toggle="modal" data-target="#deleteModal"
+								type="button" title="Delete"">
+							<i class="fa fa-trash-o"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		${li_tag ? `</li>` : ''}
+	`;
+}
 
 function displayContacts(contacts) {
 	var contact_list = $("#contact-list");
@@ -135,67 +188,7 @@ function displayContacts(contacts) {
 	// Generate component html
 	if (loadedContacts && loadedContacts.length) {
 		contacts.forEach(contact => {
-			let FULL_NAME = [contact.firstName, contact.lastName].join(contact.firstName && contact.lastName ? " " : "");
-
-			// HTML list item
-			var contact_li;
-
-			// TODO : add buttons to the <li>'s
-			// Unique id for buttons (#delete{contact.id}), (#edit{contact.id})
-			// Bind delete with this contact.id
-			// Bind edit with this contact.id
-
-			// Generate contact HTML
-			contact_li = `
-				<li class="list-group-item" id="${`contact-${contact.id}`}" ${should_hide ? 'style="display: none"' : ''}>
-					<div class="row w-100">
-						<div class="col-12 col-sm-4 col-md-3 px-0">
-							<img src="${faker.image.avatar()}"
-								alt="${FULL_NAME}" class="rounded-circle mx-auto d-block img-fluid">
-						</div>
-						<div class="col-12 col-sm-6 col-md-7 text-center text-sm-left">
-							<label class="name lead" info="fullName">${FULL_NAME}</label>
-							<br>
-							<div class="contact-info">
-								${contact.address ? `
-									<span class="fa fa-map-marker fa-fw text-muted" data-toggle="tooltip" title=""
-										data-original-title="${contact.address}"></span>
-									<span class="text-muted" info="address">${contact.address}</span>
-									<br>
-								` : ``}
-								${contact.phone ? `
-									<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
-										data-original-title="${contact.phone}"></span>
-									<span class="text-muted small" info="phone">${contact.phone}</span>
-									<br>
-								` : ``}
-								${contact.email ? `
-									<span class="fa fa-envelope fa-fw text-muted" data-toggle="tooltip"
-										data-original-title="" title=""></span>
-									<span class="text-muted small text-truncate" info="email">${contact.email}</span>
-								` : ``}
-							</div>
-						</div>
-						<div class="col-12 col-sm-2 col-md-2">
-							<div class="tool-tip">
-								<button class="btn btn-success btn-sm" onclick="doEdit(${contact.id})"
-										data-toggle="modal" data-target="#editCreateModal"
-										type="button" title="Edit">
-									<i class="fa fa-pencil"></i>
-								</button>
-								<button class="btn btn-danger btn-sm" onclick="doDelete(${contact.id})"
-										data-toggle="modal" data-target="#deleteModal"
-										type="button" title="Delete"">
-									<i class="fa fa-trash-o"></i>
-								</button>
-							</div>
-						</div>
-					</div>
-				</li>
-			`;
-
-			// console.log(contact_li);
-			contact_list_html.push(contact_li);
+			contact_list_html.push(generateContact_li(contact, should_hide));
 		});
 	}
 	else contact_list_html.push(`
@@ -292,12 +285,21 @@ function submitEdit(contactId)
 	};
 
 	console.log(editedContact);
-
-	// TODO : POST to API
-	// TODO : On success	- close modal
-	// TODO : On fail 		- display error
 	
-	$('#editCreateModal').modal('toggle');
+	// Do ajax edit
+	// On success:
+	
+	// Close Modal
+	$('#editCreateModal').modal('hide');
+
+	// Keep old randomly loaded avatar
+	avatarSrc = $(`#contact-${contact.id}-img`).attr('src');
+
+	// TODO : maybe just generate li content and switch it, no animation.
+	$(`#contact-${contactId}`).html(generateContact_li(editedContact, false, false));
+
+	// Maintain old avatar in edited contact
+	$(`#contact-${contact.id}-img`).attr('src', avatarSrc);
 }
 function submitCreate()
 {
@@ -315,21 +317,60 @@ function submitCreate()
 	// TODO : On success	- close modal
 	// TODO : On fail 		- display error
 	
-	$('#editCreateModal').modal('toggle');
+	// Do ajax create
+	// On success:
+	
+	// Close Modal
+	$('#editCreateModal').modal('hide');
+
+	// Capture id
+	createContact.id = faker.random.number(100); // Random until API ready
+
+	// There are already contacts on display
+	// Append new contact to display
+	if (loadedContacts && loadedContacts.length)
+	{
+		// Append new contact to loadedContacts
+		loadedContacts.push(createContact);
+		$("#contact-list").append(generateContact_li(createContact));
+		$(`#contact-${createContact.id}`).show('puff');
+	}
+	else
+	{
+		$("#contact-list > *").hide("puff").delay(10).queue(function() {$this.remove();});
+		$("#contact-list").append(generateContact_li(createContact));
+		$(`#contact-${createContact.id}`).show('puff');
+	}
+
 }
 
 function submitDelete(contactId)
 {
 	console.log(contactId);
-	$('#deleteModal').modal('toggle');
-
-	// https://stackoverflow.com/a/41223246/9382757
-	// var elem = document.querySelector('#'+id);
-	// elem.className += 'closeSlide';
-	// setTimeout(function(){
-	//   elem.remove();
-	// }, 200);
 	
+	// Do ajax delete
+	// On success:
+	
+	// Close Modal
+	$('#deleteModal').modal('hide');
+
+	// Remove contact from DOM
+	var contact_li = $(`#contact-${contactId}`);
+	if (contact_li)	$(`#contact-${contactId}`).hide("puff").delay(10).queue(function(){$(this).remove();});
+	
+	// Remove contact from loaded contacts
+	if (loadedContacts)
+	{
+		// Remove deleted contact from loadedContacts
+		loadedContacts = loadedContacts.filter(c => c.id != contactId);
+
+		// Load previous page if page is empty
+		if (!loadedContacts.length) loadContacts(token, searchQry, --page);
+	}
+	else loadContacts(token, searchQry, --page);
+
+	// On error:
+	// Show error in red in modal
 }
 
 function displayPagination(page, total_pages)
@@ -384,13 +425,7 @@ function changePage(page)
 	if (isLoading)
 		return;
 
-	if (history.pushState) {
-		var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname
-		+ `?search=${searchQry}` + `&page=${page}`;
-		window.history.pushState({path:newurl},'',newurl);
-	}
-
-	$('html,body').animate({ scrollTop: 0 }, 'slow');
+	// $('html,body').animate({ scrollTop: 0 }, 'slow');
 	loadContacts(token, searchQry, page);
 }
 
