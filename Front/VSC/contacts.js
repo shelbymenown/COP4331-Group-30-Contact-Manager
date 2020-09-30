@@ -3,6 +3,7 @@ const API_EXTENSION = 'php';
 const DEBUG = false;
 // const DEBUG = true;
 const CONTACTS_PER_PAGE = 5;
+const RENDER_ANIMATION = false;
 
 
 // State
@@ -119,7 +120,7 @@ function loadContacts(token, search, page) {
 function displayContacts(contacts) {
 	var contact_list = $("#contact-list");
 	var contact_list_html = [];
-	var should_hide = !isMobile() && loadedContacts && loadedContacts.length;
+	var should_hide = RENDER_ANIMATION && !isMobile() && loadedContacts && loadedContacts.length;
 
 	// Fade current contact list
 	if (should_hide) $("#contact-list > li").hide('slow');
@@ -142,7 +143,7 @@ function displayContacts(contacts) {
 
 			// Generate contact HTML
 			contact_li = `
-				<li class="list-group-item" id="${`contact-${contact.id}`}" ${!isMobile() ? 'style="display: none"' : ''}>
+				<li class="list-group-item" id="${`contact-${contact.id}`}" ${should_hide ? 'style="display: none"' : ''}>
 					<div class="row w-100">
 						<div class="col-12 col-sm-4 col-md-3 px-0">
 							<img src="${faker.image.avatar()}"
@@ -194,7 +195,7 @@ function displayContacts(contacts) {
 		});
 	}
 	else contact_list_html.push(`
-		<div class="text-center">
+		<div class="text-center" ${should_hide ? 'style="display: none"' : ''}>
 			<h3 class="p-3 m-0">No contacts found</h3>
 			<img src="/SVG/forever-alone-bw.svg" alt="forever alone" class="forever-alone">
 		</div>
@@ -205,7 +206,7 @@ function displayContacts(contacts) {
 		contact_list.empty();
 		contact_list.append(contact_list_html.join('\n'));
 		setTimeout(() => {
-			$("#contact-list > li").show('slow');
+			$("#contact-list > li, #contact-list > div").show('slow');
 			activatePagination();
 		}, 300);
 	}, should_hide ? 500 : 0);
@@ -404,6 +405,9 @@ function changePage(page)
 
 function disablePagination()
 {
+	if (!RENDER_ANIMATION)
+		return;
+
 	// $("#pagination > ul > li.flag").removeClass("active");
 	$("#pagination > ul > li > a.flag").addClass("disabled");
 	$("#pagination > ul > li.flag:not(.active)").addClass("disabled");
@@ -412,6 +416,9 @@ function disablePagination()
 
 function activatePagination()
 {
+	if (!RENDER_ANIMATION)
+		return;
+
 	// $("#pagination > ul > li.flag").removeClass("active");
 	$("#pagination > ul > li > a.flag").removeClass("disabled flag");
 	$("#pagination > ul > li.flag").removeClass("disabled flag");
@@ -420,7 +427,7 @@ function activatePagination()
 
 function isMobile()
 {
-	return typeof window.orientation !== 'undefined'
+	return typeof window.orientation !== 'undefined';
 }
 
 
