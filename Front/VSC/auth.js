@@ -73,6 +73,8 @@ function doSignup(e) {
 	if (submitted_signup) fadeError($("#signup-error"));
 	else submitted_signup = true;
 
+	$('#loadingModal').modal({backdrop: 'static', keyboard: false});
+
 	let name = $("#signup-form :input[name='name']").val();
 	let username = $("#signup-form :input[name='username']").val();
 	let password = $("#signup-form :input[name='password']").val();
@@ -88,7 +90,8 @@ function doSignup(e) {
 
 			// Display error
 			showError($("#signup-error"), errMsg)
-		});
+		})
+		.always(function () { $('#loadingModal').modal('hide');});
 }
 
 function doLogin(e) {
@@ -98,8 +101,7 @@ function doLogin(e) {
 	if (submitted_login) fadeError($("#login-error"));
 	else submitted_login = true;
 
-
-	// TODO : loading state to true
+	$('#loadingModal').modal({backdrop: 'static', keyboard: false});
 
 	let username = $("#login-form :input[name='username']").val();
 	let password = $("#login-form :input[name='password']").val();
@@ -126,7 +128,8 @@ function doLogin(e) {
 
 			// Display error
 			showError($("#login-error"), errMsg)
-		});
+		})
+		.always(function () { $('#loadingModal').modal('hide');});
 }
 
 function onCloseAlert()

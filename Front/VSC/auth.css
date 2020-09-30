@@ -151,7 +151,7 @@ a {
 	margin: 15px 0;
 }
 
-button {
+.button {
 	border-radius: 20px;
 	border: 1px solid #ff4b2b;
 	background-color: #ff4b2b;
@@ -166,27 +166,27 @@ button {
 				background 1s ease-in-out;
 }
 
-button:active {
+.button:active {
 	transform: scale(0.95);
 }
 
-button:focus {
+.button:focus {
 	outline: none;
 }
 
-button:hover {
+.button:hover {
 	border: 1px solid green;
 	background-color: green;
 	/* border: 1px solid #ff6145; */
 	/* background-color: #ff6145; */
 }
 
-button.ghost {
+.button.ghost {
 	background-color: transparent;
 	border-color: #FFFFFF;
 }
 
-button:hover.ghost {
+.button:hover.ghost {
 	background-color: rgba(0,0,0,0.05);
 	/* border-color: #FFFFFF; */
 }
@@ -353,6 +353,36 @@ input {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.loader
+{
+	position: relative;
+	text-align: center;
+	margin: 15px auto 35px auto;
+	z-index: 9999;
+	display: block;
+	width: 80px;
+	height: 80px;
+	border: 10px solid rgba(0, 0, 0, .3);
+	border-radius: 50%;
+	border-top-color: #000;
+	animation: spin 1s ease-in-out infinite;
+	-webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin
+{
+	to {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@-webkit-keyframes spin
+{
+	to {
+		-webkit-transform: rotate(360deg);
+	}
 }
 
 @media screen and (max-width: 600px)
