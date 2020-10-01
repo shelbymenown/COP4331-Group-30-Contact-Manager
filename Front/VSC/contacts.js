@@ -328,7 +328,12 @@ function submitEdit(contactId)
 }
 function submitCreate()
 {
-	let uri = `${URL_BASE}/createcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${URL_BASE}/addcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	$.ajaxSetup({
+		headers: {
+			'x-access-token': token
+		}
+	});
 
 	createContact = {
 		firstName: $("#editCreateModal-form :input[name='firstName']").val(),
@@ -345,31 +350,37 @@ function submitCreate()
 	// TODO : On fail 		- display error
 	
 	// Do ajax create
-	// On success:
-	
-	// Close Modal
-	$('#editCreateModal').modal('hide');
+	$.ajax({
+		url: uri,
+		method: 'DELETE',
+	})
+	.done(function(result) {
+		// On success:
+		// Close Modal
+		$('#editCreateModal').modal('hide');
 
-	// Capture id
-	createContact.id = faker.random.number(100); // Random until API ready
+		// Capture id
+		createContact.id = result.id;
+		console.log(id);
 
-	// There are already contacts on display
-	// Append new contact to display
-	if (loadedContacts && loadedContacts.length)
-	{
-		// Append new contact to loadedContacts
-		loadedContacts.push(createContact);
-		$("#contact-list").append(generateContact_li(createContact));
-		$(`#contact-${createContact.id}`).show('puff');
-	}
-	else
-	{
-		loadedContacts = [createContact];
-		$("#contact-list > *").hide("puff").delay(10).queue(function() {$this.remove();});
-		$("#contact-list").append(generateContact_li(createContact));
-		$(`#contact-${createContact.id}`).show('puff');
-	}
-
+		// There are already contacts on display
+		// Append new contact to display
+		if (loadedContacts && loadedContacts.length)
+		{
+			// Append new contact to loadedContacts
+			loadedContacts.push(createContact);
+			$("#contact-list").append(generateContact_li(createContact));
+			$(`#contact-${createContact.id}`).show('puff');
+		}
+		else
+		{
+			loadedContacts = [createContact];
+			$("#contact-list > *").hide("puff").delay(10).queue(function() {$this.remove();});
+			$("#contact-list").append(generateContact_li(createContact));
+			$(`#contact-${createContact.id}`).show('puff');
+		}
+	})
+	.fail(function(err) { console.log(err)});
 }
 
 function submitDelete(contactId)
