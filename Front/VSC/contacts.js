@@ -45,6 +45,9 @@ $(document).ready(function () {
 		return;
 	}
 
+	// Add input mask for phone numbers
+	$("#editCreateModal-form :input[name='phone']").mask('(000) 000-0000');
+
 	// Add event listeners to header buttons
 	$('#logoutBtn').click(doLogout);
 	$('#addBtn').click(doCreate);
@@ -119,6 +122,23 @@ function loadContacts(token, search, page) {
 	}
 }
 
+
+// Formatting phone numbers
+// https://stackoverflow.com/a/8358214/9382757
+function normalize(phone)
+{
+    //normalize string and remove all unnecessary characters
+    phone = phone.replace(/[^\d]/g, "");
+
+    //check if number length equals to 10
+    if (phone.length == 10) {
+        //reformat and return phone number
+        return phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3");
+    }
+
+    return phone;
+}
+
 function generateContact_li(contact, should_hide=true, li_tag=true)
 {
 	if (!contact)
@@ -144,8 +164,8 @@ function generateContact_li(contact, should_hide=true, li_tag=true)
 						` : ``}
 						${contact.phone ? `
 							<span class="fa fa-phone fa-fw text-muted" data-toggle="tooltip" title=""
-								data-original-title="${contact.phone}"></span>
-							<span class="text-muted small" info="phone">${contact.phone}</span>
+								data-original-title="${normalize(contact.phone)}"></span>
+							<span class="text-muted small" info="phone">${normalize(contact.phone)}</span>
 							<br>
 						` : ``}
 						${contact.email ? `
@@ -227,7 +247,7 @@ function doEdit(id)
 	$("#editCreateModal-form :input[name='lastName']")	.val(contact.lastName);
 	$("#editCreateModal-form :input[name='address']")	.val(contact.address);
 	$("#editCreateModal-form :input[name='email']")		.val(contact.email);
-	$("#editCreateModal-form :input[name='phone']")		.val(contact.phone);
+	$("#editCreateModal-form :input[name='phone']")		.val(normalize(contact.phone));
 
 	$("#editCreateModal-continue").text("Save");
 	$("#editCreateModal-continue").unbind();
@@ -308,12 +328,14 @@ function submitEdit(contactId)
 }
 function submitCreate()
 {
+	let uri = `${URL_BASE}/createcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+
 	createContact = {
 		firstName: $("#editCreateModal-form :input[name='firstName']").val(),
 		lastName: $("#editCreateModal-form :input[name='lastName']").val(),
 		address: $("#editCreateModal-form :input[name='address']").val(),
 		email: $("#editCreateModal-form :input[name='email']").val(),
-		phone: $("#editCreateModal-form :input[name='phone']").val()
+		phone: $("#editCreateModal-form :input[name='phone']").cleanVal()
 	};
 
 	console.log(createContact);
