@@ -7,17 +7,17 @@
 
 	$userId = check_token($_SERVER["HTTP_X_ACCESS_TOKEN"]);
 
-	if (IsNullOrEmptyString($inData["FirstName"])) {
+	if (IsNullOrEmptyString($inData["firstName"])) {
 		// Bad Request
 		http_response_code ( 400 );
 		returnWithError("New contact must have a first name!");
 	}
-	if (IsNullOrEmptyString($inData["Phone"])) {
+	if (IsNullOrEmptyString($inData["phone"])) {
 		// Bad Request
 		http_response_code ( 400 );
 		returnWithError("New contact must have a phone number!");
 	}
-	if (strlen($inData["Phone"]) != 10 || !ctype_digit($inData["Phone"])) {
+	if (strlen($inData["phone"]) != 10 || !ctype_digit($inData["phone"])) {
 		// Bad Request
 		http_response_code ( 400 );
 		returnWithError("Phone number is invalid!");
@@ -28,8 +28,8 @@
 	} else {
 
 		$sql = "INSERT INTO Contact(UserID, FirstName, LastName, EmailAddress, PhoneNumber, Address)
-				VALUES('{$userId}', '{$inData[FirstName]}', '{$inData[LastName]}', '{$inData[Email]}',
-						'{$inData[Phone]}', '{$inData[Address]}'
+				VALUES('{$userId}', '{$inData[firstName]}', '{$inData[lastName]}', '{$inData[email]}',
+						'{$inData[phone]}', '{$inData[address]}'
 				)";
 
 		$result = $conn->query($sql);
