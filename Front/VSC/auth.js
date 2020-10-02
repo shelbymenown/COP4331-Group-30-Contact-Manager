@@ -35,11 +35,12 @@ function showError(element, error)
 $(document).ready(function () {
 	token = Cookies.get("token");
 
-	// TODO : Change page to /contacts??
+	// Change page to /contacts if logged in
+	$('#loggedInModal').on('hidden.bs.modal', function() { window.location.pathname = "/contacts.html"; });
 	if (token)
 	{
-		alert("You are already logged in!");
-		window.location.pathname = "/contacts.html"
+		$('#loggedInModal').modal('show');
+		return;
 	}
 
 	var signupBtn = $('#signup');
@@ -61,7 +62,7 @@ $(document).ready(function () {
 	$("#signup-error").removeClass("error-show");
 
 	// Add event listeners
-	$('#alertModal').on('hidden.bs.modal',onCloseAlert);
+	$('#alertModal').on('hidden.bs.modal', onCloseAlert);
 	$("#signup-form").on('submit', doSignup);
 	$("#login-form").on('submit', doLogin);
 });
