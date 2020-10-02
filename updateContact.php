@@ -39,6 +39,7 @@
 	else
 	{
 		// update query
+		$selectSQL = "SELECT * FROM Contact WHERE UserID = {$userId} AND ContactID = {$inData["id"]}";
 		$sql = "UPDATE
 					Contact
 				SET
@@ -49,12 +50,33 @@
 					Address='{$inData["address"]}'
 				WHERE
 					UserID = {$userId} AND ContactID = {$inData["id"]}";
-		$result = $conn->query($sql);
+		$select = $conn->query($selectSQL);
+
+		// Check if contact exists/belongs to user
+		if (!$select->num_rows)
+		{
+			$selectSQL = "SELECT * FROM Contact WHERE ContactID = {$inData["id"]}";
+			$select = $conn->query($selectSQL);
+
+			// Return appropriate error
+			if (!$select->num_rows)
+			{
+				http_response_code ( 422 );
+				returnWithError( "Contact does not exist." );
+			}
+			else
+			{
+				http_response_code ( 403 );
+				returnWithError( "Contact does not belong to user." );
+			}
+		}
+
+		$conn->query($sql);
 		
-		if($result != TRUE)
+		if(!$conn->affected_rows)
 		{
 			http_response_code ( 400 );
-			returnWithError( "Failed to update contact." );
+			returnWithError( "Nothing to update." );
 		}
 		else
 		{
