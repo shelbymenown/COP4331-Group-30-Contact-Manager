@@ -5,8 +5,14 @@
 
 	$inData = getRequestInfo();
 	$userId = check_token($_SERVER["HTTP_X_ACCESS_TOKEN"]);
+	$validId = (!IsNullOrEmptyString($inData["id"]) && ctype_digit($inData["id"])) || (is_int($inData["id"]) && $inData["id"] >= 0);
     $validPhone = (strlen($inData["phone"]) == 10 && ctype_digit($inData["phone"])) || preg_match('~^\([0-9]{3}\)[- ][0-9]{3}-[0-9]{4}$~', $inData["phone"]);
 
+	if (!$validId ) {
+		// Bad Request
+		http_response_code ( 400 );
+		returnWithError("Missing or invalid contact id!");
+	}
 	if (IsNullOrEmptyString($inData["firstName"])) {
 		// Bad Request
 		http_response_code ( 400 );
@@ -24,6 +30,7 @@
 	}
 
 	$inData["phone"] = preg_replace('/\D+/', '', $inData["phone"]);
+	$inData["id"] = (int)$inData["id"];
 
 	if ($conn->connect_error)
 	{
