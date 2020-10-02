@@ -248,6 +248,7 @@ function doEdit(id)
 	$("#editCreateModal-form :input[name='address']")	.val(contact.address);
 	$("#editCreateModal-form :input[name='email']")		.val(contact.email);
 	$("#editCreateModal-form :input[name='phone']")		.val(normalize(contact.phone));
+	$("#editCreateModal-error").hide();
 
 	$("#editCreateModal-continue").text("Save");
 	$("#editCreateModal-continue").unbind();
@@ -263,6 +264,7 @@ function doCreate()
 	$("#editCreateModal-form :input[name='address']")	.val('');
 	$("#editCreateModal-form :input[name='email']")		.val('');
 	$("#editCreateModal-form :input[name='phone']")		.val('');
+	$("#editCreateModal-error").hide();
 
 	$("#editCreateModal-continue").text("Create");
 	$("#editCreateModal-continue").unbind();
@@ -335,6 +337,9 @@ function submitCreate()
 		}
 	});
 
+	// Hide old error
+	$("#editCreateModal-error").hide("puff");
+
 	createContact = {
 		firstName: $("#editCreateModal-form :input[name='firstName']").val(),
 		lastName: $("#editCreateModal-form :input[name='lastName']").val(),
@@ -350,37 +355,37 @@ function submitCreate()
 	// TODO : On fail 		- display error
 	
 	// Do ajax create
-	$.ajax({
-		url: uri,
-		method: 'DELETE',
-	})
-	.done(function(result) {
+	$.post(uri, JSON.stringify(createContact))
 		// On success:
-		// Close Modal
-		$('#editCreateModal').modal('hide');
+		.done(function(result) {
+			// Close Modal
+			$('#editCreateModal').modal('hide');
 
-		// Capture id
-		createContact.id = result.id;
-		console.log(id);
+			// Capture id
+			createContact.id = result.id;
+			console.log(result.id);
 
-		// There are already contacts on display
-		// Append new contact to display
-		if (loadedContacts && loadedContacts.length)
-		{
+			// There are no contacts on display
+			if (!loadedContacts.length)
+				$("#contact-list > *").hide("puff").delay(10).queue(function() {$this.remove();});
+
 			// Append new contact to loadedContacts
-			loadedContacts.push(createContact);
+			loadedContacts = [...loadedContacts, createContact]
+
+			// Append new contact to display
 			$("#contact-list").append(generateContact_li(createContact));
 			$(`#contact-${createContact.id}`).show('puff');
-		}
-		else
-		{
-			loadedContacts = [createContact];
-			$("#contact-list > *").hide("puff").delay(10).queue(function() {$this.remove();});
-			$("#contact-list").append(generateContact_li(createContact));
-			$(`#contact-${createContact.id}`).show('puff');
-		}
-	})
-	.fail(function(err) { console.log(err)});
+		})
+		// On error:
+		// Show error in red in modal
+		.fail(function(err) {
+			errMsg = err.responseJSON && err.responseJSON.error ? err.responseJSON.error : "An error has occured 😟";
+			console.log(err.responseJSON && err.responseJSON.error ? err.responseJSON.error : err.responseJSON); console.log(err);
+			
+			// Display error
+			$("#editCreateModal-error").show("puff");
+			$("#editCreateModal-error").text(errMsg);
+		});
 }
 
 function submitDelete(contactId)

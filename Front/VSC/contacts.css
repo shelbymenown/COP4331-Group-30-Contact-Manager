@@ -708,6 +708,11 @@ h1
 	}
 }
 
+span.error {
+	color: #ff0033;
+	font-weight: 600;
+}
+
 @media only screen and (max-width: 31.25em)
 {
 	.header
