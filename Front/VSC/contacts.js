@@ -7,7 +7,6 @@ const RENDER_ANIMATION = false;
 
 
 // State
-var editing = false;
 var loadedContacts = [];
 var searchQry = ''
 var page = 1;
@@ -247,6 +246,7 @@ function doEdit(id)
 	contact = loadedContacts.filter(contact => contact.id == id)[0];
 	console.log(contact);
 	$("#editCreateModal-title").text(`Edit Contact (${[contact.firstName, contact.lastName].join(' ')})`);
+	// $("#editCreateModal-title").text(`Edit Contact`);
 	$("#editCreateModal-form :input[name='firstName']")	.val(contact.firstName);
 	$("#editCreateModal-form :input[name='lastName']")	.val(contact.lastName);
 	$("#editCreateModal-form :input[name='address']")	.val(contact.address);
@@ -558,39 +558,3 @@ function isMobile()
 {
 	return typeof window.orientation !== 'undefined';
 }
-
-
-	// // List of random contacts
-	// // let contacts = [...Array(CONTACTS_PER_PAGE)].map(() => ({
-	// // 	id: faker.random.number(),
-	// // 	firstName: faker.name.firstName(),
-	// // 	lastName: faker.name.lastName(),
-	// // 	phone: faker.phone.phoneNumberFormat(1),
-	// // 	address: faker.address.streetAddress(),
-	// // 	email: faker.internet.email()
-	// // }));
-
-	// console.log("Contacts", contacts);
-
-	// // let contacts = [
-	// // 	{
-	// // 		"name" : 
-	// // 	}
-	// // ];
-
-	// // $.get(uri, JSON.stringify(payload))
-	// // 	.done(function (res){
-	// // 		console.log(res);
-	// // 		contacts = res;
-	// // 	})
-	// // 	.fail(function (jqXHR, textStatus, errorThrown) {
-	// // 		// TODO : handle error
-	// // 		errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error + "😢" : "An error has occured 😟";
-	// // 		console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
-
-	// // 		// Display error
-	// // 		showError($("#signup-error"), errMsg)
-	// // 	});
-
-	// // payload = {userId: userId, page: page}
-	// // alert("getContacts() not functional yet");
