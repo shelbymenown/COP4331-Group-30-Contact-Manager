@@ -92,9 +92,12 @@ function loadContacts(token, search, page) {
 
 		$.get(uri, { search: search, page: page-1 })
 		.done(function (res) {
+			// HOTFIX total_pages bug
+			if (res.total_pages < 1) res.total_pages = 1;
+
 			// Display contacts
 			displayContacts(res.contacts);
-			displayPagination(page, res.total_pages && res.total_pages >= 0 ? res.total_pages : page + faker.random.number(4));
+			displayPagination(page, res.total_pages ? res.total_pages : page + faker.random.number(4));
 			disablePagination();
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
@@ -477,7 +480,6 @@ function displayPagination(page, total_pages)
 {
 	page = parseInt(page);
 	total_pages = parseInt(total_pages);
-	if (total_pages < 1) total_pages = 1;
 	
 	let pagination_ul = $("#pagination ul");
 	let pagination_content = [];
