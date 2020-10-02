@@ -4,6 +4,7 @@ const DEBUG = false;
 // const DEBUG = true;
 const CONTACTS_PER_PAGE = 5;
 const RENDER_ANIMATION = false;
+const USE_RANDOM_AVATAR = false;
 
 
 // State
@@ -141,6 +142,23 @@ function normalize(phone)
     return phone;
 }
 
+function generateContact_avatar(contact)
+{
+	let FULL_NAME = [contact.firstName, contact.lastName].join(contact.firstName && contact.lastName ? " " : "");
+	let initials = `${contact.firstName ? contact.firstName[0] : ''}${contact.lastName ? contact.lastName[0] : ''}`.toUpperCase() 
+	
+	return USE_RANDOM_AVATAR ? `
+		<div class="col-12 col-sm-4 col-md-3 px-0">
+			<img id=${`"contact-${contact.id}-img"`} src="${faker.image.avatar()}"
+				alt="${FULL_NAME}" class="rounded-circle mx-auto d-block img-fluid">
+		</div>
+	` : `
+		<div class="circle" style="background: ${stringToColor(FULL_NAME)}">
+			<span class="initials">${initials}</span>
+		</div>
+	`;
+}
+
 function generateContact_li(contact, should_hide=true, li_tag=true)
 {
 	if (!contact)
@@ -150,9 +168,8 @@ function generateContact_li(contact, should_hide=true, li_tag=true)
 	return `
 		${li_tag ? `<li class="list-group-item" id="${`contact-${contact.id}`}" ${should_hide ? 'style="display: none"' : ''}>` : ''}
 			<div class="row w-100">
-				<div class="col-12 col-sm-4 col-md-3 px-0">
-					<img id=${`"contact-${contact.id}-img"`} src="${faker.image.avatar()}"
-						alt="${FULL_NAME}" class="rounded-circle mx-auto d-block img-fluid">
+				<div class="col-12 col-sm-4 col-md-3 px-0 d-flex">
+					${generateContact_avatar(contact)}
 				</div>
 				<div class="col-12 col-sm-6 col-md-7 text-center text-sm-left">
 					<label class="name lead" info="fullName">${FULL_NAME}</label>
@@ -345,13 +362,13 @@ function submitEdit(contactId)
 			if (contactIdx >= 0) loadedContacts[contactIdx] = {...editedContact};
 
 			// Keep old randomly loaded avatar
-			avatarSrc = $(`#contact-${contact.id}-img`).attr('src');
+			if (USE_RANDOM_AVATAR) avatarSrc = $(`#contact-${contact.id}-img`).attr('src');
 
 			// TODO : maybe just generate li content and switch it, no animation.
 			$(`#contact-${contactId}`).html(generateContact_li(editedContact, false, false));
 
 			// Maintain old avatar in edited contact
-			$(`#contact-${contact.id}-img`).attr('src', avatarSrc);
+			if (USE_RANDOM_AVATAR) $(`#contact-${contact.id}-img`).attr('src', avatarSrc);
 		})
 		// On error:
 		// Show error in red in modal
@@ -557,4 +574,21 @@ function activatePagination()
 function isMobile()
 {
 	return typeof window.orientation !== 'undefined';
+}
+
+const stringToColor = str => {
+    let hash = 0;
+    let color = '#';
+
+    if (str)
+        for (let i = 0; i < str.length; i++)
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+
+
+    for (let i = 0; i < 3; i++) {
+        let value = (hash >> (i * 8)) & 0xFF;
+        color += ('00' + value.toString(16)).substr(-2);
+    }
+
+    return color;
 }

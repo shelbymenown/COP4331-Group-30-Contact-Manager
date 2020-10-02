@@ -14,7 +14,11 @@
     --color-grey-dark-3: #999;
     --shadow-dark: 0 2rem 6rem rgba(0, 0, 0, 0.3);
     --shadow-light: 0 2rem 5rem rgba(0, 0, 0, 0.06);
-    --line: 1px solid var(--color-grey-light-2)
+	--line: 1px solid var(--color-grey-light-2);
+
+	/* Relying on Initial avatar example from */
+	/* https://codepen.io/AllThingsSmitty/pen/dWmmQp */
+	--avatar-size: 128px;
 }
 
 html
@@ -667,7 +671,7 @@ h1
 /* Override bootstrap's row */
 .row
 {
-	padding: 0 1rem 0 2.5rem;
+	padding: 0 1rem;
     margin: 2px auto;
 }
 
@@ -692,6 +696,37 @@ h1
 	border-top-color: #000;
 	animation: spin 1s ease-in-out infinite;
 	-webkit-animation: spin 1s ease-in-out infinite;
+}
+
+
+/* Going off of a slight variation of this example */
+/* https://codepen.io/AllThingsSmitty/pen/dWmmQp */
+.circle
+{
+	border-radius: 50%;
+	text-align: center;
+	height: var(--avatar-size);
+	width: var(--avatar-size);
+	margin: auto;
+}
+  
+.initials
+{
+	/* Disable select */
+	-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+
+	color: #f7f7f7;
+	font-weight: 700;
+	font-size: calc(var(--avatar-size) / 3);
+	
+	/* vertically centers the inside parent div */
+	line-height: var(--avatar-size);
 }
 
 @keyframes spin
