@@ -26,7 +26,8 @@
 					 EmailAddress = '" . $inData->Email . "',
 					 PhoneNumber = '" . $inData->Phone . "'
 				WHERE
-					ContactID = '" . $inData->ContactID . "'";
+					UserID = '" . $userId . "' AND ContactID = '" . $inData["id"] . "'";
+					//ContactID = '" . $inData->ContactID . "'";
 		$result = $conn->query($sql);
 		
 		if($result != TRUE)
