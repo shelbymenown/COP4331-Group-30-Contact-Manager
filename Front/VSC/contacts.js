@@ -424,7 +424,7 @@ function submitCreate()
 function submitDelete(contactId)
 {
 	var payload = {id: contactId};
-	let uri = `${URL_BASE}/updateContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${URL_BASE}/deleteContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
