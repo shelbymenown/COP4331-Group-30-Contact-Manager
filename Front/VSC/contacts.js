@@ -294,6 +294,16 @@ function submitLogout()
 
 function submitEdit(contactId)
 {
+	let uri = `${URL_BASE}/updateContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	$.ajaxSetup({
+		headers: {
+			'x-access-token': token
+		}
+	});
+
+	// Hide old error
+	$("#editCreateModal-error").hide("puff");
+
 	// maintain same avatar (because of faker)
 	var avatarSrc;
 	var contactIdx;
@@ -304,29 +314,50 @@ function submitEdit(contactId)
 		lastName: $("#editCreateModal-form :input[name='lastName']").val(),
 		address: $("#editCreateModal-form :input[name='address']").val(),
 		email: $("#editCreateModal-form :input[name='email']").val(),
-		phone: $("#editCreateModal-form :input[name='phone']").val()
+		phone: $("#editCreateModal-form :input[name='phone']").cleanVal()
 	};
 
 	console.log(editedContact);
 	
 	// Do ajax edit
 	// On success:
-	
-	// Close Modal
-	$('#editCreateModal').modal('hide');
+	$.ajax({
+		type: 'PUT',
+		url: uri,
+		contentType: 'application/json',
+		data: JSON.stringify(editedContact), // access in body
+		})
+		// On success:
+		.done(function(result) {
+			// Close Modal
+			$('#editCreateModal').modal('hide');
 
-	// Update the contact in the loadedContacts array
-	contactIdx = loadedContacts.findIndex((c => c.id == contactId))
-	if (contactIdx >= 0) loadedContacts[contactIdx] = {...editedContact};
+			// Close Modal
+			$('#editCreateModal').modal('hide');
 
-	// Keep old randomly loaded avatar
-	avatarSrc = $(`#contact-${contact.id}-img`).attr('src');
+			// Update the contact in the loadedContacts array
+			contactIdx = loadedContacts.findIndex((c => c.id == contactId))
+			if (contactIdx >= 0) loadedContacts[contactIdx] = {...editedContact};
 
-	// TODO : maybe just generate li content and switch it, no animation.
-	$(`#contact-${contactId}`).html(generateContact_li(editedContact, false, false));
+			// Keep old randomly loaded avatar
+			avatarSrc = $(`#contact-${contact.id}-img`).attr('src');
 
-	// Maintain old avatar in edited contact
-	$(`#contact-${contact.id}-img`).attr('src', avatarSrc);
+			// TODO : maybe just generate li content and switch it, no animation.
+			$(`#contact-${contactId}`).html(generateContact_li(editedContact, false, false));
+
+			// Maintain old avatar in edited contact
+			$(`#contact-${contact.id}-img`).attr('src', avatarSrc);
+		})
+		// On error:
+		// Show error in red in modal
+		.fail(function(err) {
+			errMsg = err.responseJSON && err.responseJSON.error ? err.responseJSON.error : "An error has occured 😟";
+			console.log(err.responseJSON && err.responseJSON.error ? err.responseJSON.error : err.responseJSON); console.log(err);
+			
+			// Display error
+			$("#editCreateModal-error").show("puff");
+			$("#editCreateModal-error").text(errMsg);
+		});
 }
 function submitCreate()
 {
