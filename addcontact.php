@@ -38,10 +38,10 @@
 					'{$inData["address"]}'
 				)";
 
-		$result = $conn->query($sql);
+		$conn->query($sql);
 
-
-		if ($result != TRUE) {
+		if(!$conn->affected_rows)
+		{
 			http_response_code(400);
 			returnWithError("Failed to add contact.");
 		} else {
