@@ -231,6 +231,7 @@ function displayContacts(contacts) {
 }
 
 function doLogout() {
+	$("#alertModal-error").hide();
 	$("#alertModal-title").text("Logout?");
 	$("#alertModal-body").text("Are you sure you want to log out?");
 	$("#alertModal-continue").text("Continue");
@@ -281,6 +282,7 @@ function doDelete(id)
 		from your contacts?`
 	);
 	
+	$("#deleteModal-error").hide();
 	$("#deleteModal-continue").unbind();
 	$("#deleteModal-continue").click(() => submitDelete(id));
 }
@@ -325,7 +327,7 @@ function submitEdit(contactId)
 		type: 'PUT',
 		url: uri,
 		contentType: 'application/json',
-		data: JSON.stringify(editedContact), // access in body
+		data: JSON.stringify(editedContact),
 		})
 		// On success:
 		.done(function(result) {
@@ -398,7 +400,7 @@ function submitCreate()
 
 			// There are no contacts on display
 			if (!loadedContacts.length)
-				$("#contact-list > *").hide("puff").delay(10).queue(function() {$this.remove();});
+				$("#contact-list > *").hide("puff").delay(10).queue(function() {$(this).remove();});
 
 			// Append new contact to loadedContacts
 			loadedContacts = [...loadedContacts, createContact]
@@ -421,31 +423,54 @@ function submitCreate()
 
 function submitDelete(contactId)
 {
-	console.log(contactId);
-	
+	var payload = {id: contactId};
+	let uri = `${URL_BASE}/updateContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	$.ajaxSetup({
+		headers: {
+			'x-access-token': token
+		}
+	});
+
+	// Hide old error
+	$("#deleteModal-error").hide("puff");
+
 	// Do ajax delete
 	// On success:
-	
-	// Close Modal
-	$('#deleteModal').modal('hide');
+	$.ajax({
+		type: 'DELETE',
+		url: uri,
+		contentType: 'application/json',
+		data: JSON.stringify(payload),
+		})
+		.done(function(result) {
+			// Close Modal
+			$('#deleteModal').modal('hide');
 
-	// Remove contact from DOM
-	var contact_li = $(`#contact-${contactId}`);
-	if (contact_li)	$(`#contact-${contactId}`).hide("puff").delay(10).queue(function(){$(this).remove();});
-	
-	// Remove contact from loaded contacts
-	if (loadedContacts)
-	{
-		// Remove deleted contact from loadedContacts
-		loadedContacts = loadedContacts.filter(c => c.id != contactId);
+			// Remove contact from DOM
+			var contact_li = $(`#contact-${contactId}`);
+			if (contact_li)	$(`#contact-${contactId}`).hide("puff").delay(10).queue(function(){$(this).remove();});
+			
+			// Remove contact from loaded contacts
+			if (loadedContacts)
+			{
+				// Remove deleted contact from loadedContacts
+				loadedContacts = loadedContacts.filter(c => c.id != contactId);
 
-		// Load previous page if page is empty
-		if (!loadedContacts.length) loadContacts(token, searchQry, --page);
-	}
-	else loadContacts(token, searchQry, --page);
-
-	// On error:
-	// Show error in red in modal
+				// Load previous page if page is empty
+				if (!loadedContacts.length) loadContacts(token, searchQry, --page);
+			}
+			else loadContacts(token, searchQry, --page);
+		})
+		// On error:
+		// Show error in red in modal
+		.fail(function(err) {
+			errMsg = err.responseJSON && err.responseJSON.error ? err.responseJSON.error : "An error has occured 😟";
+			console.log(err.responseJSON && err.responseJSON.error ? err.responseJSON.error : err.responseJSON); console.log(err);
+			
+			// Display error
+			$("#deleteModal-error").show("puff");
+			$("#deleteModal-error").text(errMsg);
+		});
 }
 
 function displayPagination(page, total_pages)
