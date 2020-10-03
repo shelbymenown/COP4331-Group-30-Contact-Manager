@@ -14,7 +14,11 @@
     --color-grey-dark-3: #999;
     --shadow-dark: 0 2rem 6rem rgba(0, 0, 0, 0.3);
     --shadow-light: 0 2rem 5rem rgba(0, 0, 0, 0.06);
-    --line: 1px solid var(--color-grey-light-2)
+	--line: 1px solid var(--color-grey-light-2);
+
+	/* Relying on Initial avatar example from */
+	/* https://codepen.io/AllThingsSmitty/pen/dWmmQp */
+	--avatar-size: 128px;
 }
 
 html
@@ -178,8 +182,10 @@ body
 
 .search__button
 {
+	transition: all .2s;
+    cursor: pointer;
     border: none;
-    background-color: var(--color-grey-light-2)
+	background-color: var(--color-grey-light-2)
 }
 
 .search__button:focus
@@ -275,6 +281,15 @@ body
 	display: flex;
 	justify-content: center;
 	max-width: 100vw;
+
+	/* Disable select */
+	-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }
 .pagination-nav ul
 {
@@ -304,11 +319,21 @@ body
 	text-decoration: none;
 	color: #777;
 	border-radius: 50px;
-    transition: background-color .3s;
+    transition: background-color .3s, transform .3s;
+}
+
+.pagination-nav ul li.page-number:not(.disabled):not(.active) a:active,
+.pagination-nav ul li:first-child a:not(.disabled):active,
+.pagination-nav ul li:last-child a:not(.disabled):active
+{
+	background-color: #555 !important;
+	transform: scale(.9);
 }
 
 .pagination-nav ul li.page-number:hover:not(.disabled) a,
-.pagination-nav ul li.page-number.active a
+.pagination-nav ul li.page-number.active a,
+.pagination-nav ul li:first-child:hover a,
+.pagination-nav ul li:last-child:hover a
 {
 	background: #333;
 	color: #fff;
@@ -419,7 +444,6 @@ body
 	/* min-height: 50vh; */
 
 	margin-bottom: 3.5rem;
-
 }
 
 
@@ -463,7 +487,7 @@ h1
 .user-body-contacts
 {
     display: block;
-    margin: auto;
+	margin: auto;
 }
 
 .card
@@ -647,7 +671,7 @@ h1
 /* Override bootstrap's row */
 .row
 {
-	padding: 0 1rem 0 2.5rem;
+	padding: 0 1rem;
     margin: 2px auto;
 }
 
@@ -656,6 +680,72 @@ h1
 {
 	opacity: 1;
 	transform: scale(1);
+}
+
+.loader
+{
+	position: relative;
+	text-align: center;
+	margin: 15px auto 35px auto;
+	z-index: 9999;
+	display: block;
+	width: 80px;
+	height: 80px;
+	border: 10px solid rgba(0, 0, 0, .3);
+	border-radius: 50%;
+	border-top-color: #000;
+	animation: spin 1s ease-in-out infinite;
+	-webkit-animation: spin 1s ease-in-out infinite;
+}
+
+
+/* Going off of a slight variation of this example */
+/* https://codepen.io/AllThingsSmitty/pen/dWmmQp */
+.circle
+{
+	border-radius: 50%;
+	text-align: center;
+	height: var(--avatar-size);
+	width: var(--avatar-size);
+	margin: auto;
+}
+  
+.initials
+{
+	/* Disable select */
+	-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+
+	color: #f7f7f7;
+	font-weight: 700;
+	font-size: calc(var(--avatar-size) / 3);
+	
+	/* vertically centers the inside parent div */
+	line-height: var(--avatar-size);
+}
+
+@keyframes spin
+{
+	to {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@-webkit-keyframes spin
+{
+	to {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+span.error {
+	color: #ff0033;
+	font-weight: 600;
 }
 
 @media only screen and (max-width: 31.25em)

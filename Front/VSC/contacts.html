@@ -18,7 +18,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.js"></script>
 	<script type="text/javascript" src="contacts.js"></script>
@@ -71,13 +71,13 @@
 		</div>
 		<nav class="pagination-nav" id="pagination">
 			<ul>
-				<li><a class="page-first disabled" href="javascript:;"><<</a></li>
+				<li><a class="page-first disabled" href="javascript:;">&lt;&lt;</a></li>
 				<li class="page-number disabled mobile"><a href="javascript:;">1</a></li>
 				<li class="page-number disabled mobile"><a href="javascript:;">2</a></li>
 				<li class="page-number disabled mobile"><a href="javascript:;">3</a></li>
 				<li class="page-number disabled"><a href="javascript:;">4</a></li>
 				<li class="page-number disabled"><a href="javascript:;">5</a></li>
-				<li><a class="page-last disabled" href="javascript:;">>></a></li>
+				<li><a class="page-last disabled" href="javascript:;">&gt;&gt;</a></li>
 			</ul>
 		</nav>
 	</section>
@@ -135,7 +135,7 @@
 							<input class="form-control" type="text" name="phone" placeholder="Phone Number">
 						</div>
 						<!-- TODO : STYLE ERROR -->
-						<span class="error" style="display: none" id="editCreateModal-error">An error has occured</span>
+						<span class="error" id="editCreateModal-error">An error has occured</span>
 					</form>
 				</div>
 				<div class="modal-footer">
@@ -175,7 +175,7 @@
 				<div class="modal-body">
 					<p id="alertModal-body"></p>
 					<!-- TODO : STYLE ERROR -->
-					<span class="error" style="display: none" id="alertModal-error">An error has occured</span>
+					<span class="error" id="alertModal-error">An error has occured</span>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-secondary" type="button" data-dismiss="modal"
@@ -185,6 +185,18 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="modal" id="loadingModal">
+		<div class="modal-dialog modal-sm modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body text-center">
+					<div class="loader"></div>
+					<div><p>Loading...</p></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
 
 </html>

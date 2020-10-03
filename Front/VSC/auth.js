@@ -35,11 +35,12 @@ function showError(element, error)
 $(document).ready(function () {
 	token = Cookies.get("token");
 
-	// TODO : Change page to /contacts??
+	// Change page to /contacts if logged in
+	$('#loggedInModal').on('hidden.bs.modal', function() { window.location.pathname = "/contacts.html"; });
 	if (token)
 	{
-		alert("You are already logged in!");
-		window.location.pathname = "/contacts.html"
+		$('#loggedInModal').modal('show');
+		return;
 	}
 
 	var signupBtn = $('#signup');
@@ -61,7 +62,7 @@ $(document).ready(function () {
 	$("#signup-error").removeClass("error-show");
 
 	// Add event listeners
-	$('#alertModal').on('hidden.bs.modal',onCloseAlert);
+	$('#alertModal').on('hidden.bs.modal', onCloseAlert);
 	$("#signup-form").on('submit', doSignup);
 	$("#login-form").on('submit', doLogin);
 });
@@ -72,6 +73,8 @@ function doSignup(e) {
 	// Hide old error
 	if (submitted_signup) fadeError($("#signup-error"));
 	else submitted_signup = true;
+
+	$('#loadingModal').modal({backdrop: 'static', keyboard: false});
 
 	let name = $("#signup-form :input[name='name']").val();
 	let username = $("#signup-form :input[name='username']").val();
@@ -88,7 +91,8 @@ function doSignup(e) {
 
 			// Display error
 			showError($("#signup-error"), errMsg)
-		});
+		})
+		.always(function () { $('#loadingModal').modal('hide');});
 }
 
 function doLogin(e) {
@@ -98,8 +102,7 @@ function doLogin(e) {
 	if (submitted_login) fadeError($("#login-error"));
 	else submitted_login = true;
 
-
-	// TODO : loading state to true
+	$('#loadingModal').modal({backdrop: 'static', keyboard: false});
 
 	let username = $("#login-form :input[name='username']").val();
 	let password = $("#login-form :input[name='password']").val();
@@ -126,7 +129,8 @@ function doLogin(e) {
 
 			// Display error
 			showError($("#login-error"), errMsg)
-		});
+		})
+		.always(function () { $('#loadingModal').modal('hide');});
 }
 
 function onCloseAlert()
