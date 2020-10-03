@@ -58,6 +58,22 @@
 			";
 		$result = $conn->query($sql);
 
+        $sql2 = "SELECT ContactID as id, FirstName as firstName, LastName as lastName,
+				EmailAddress as email, PhoneNumber as phone, Address as address FROM Contact
+				WHERE UserId = $userId AND (FirstName LIKE '%$searching%'
+											OR LastName LIKE  '%$searching%'
+											OR EmailAddress LIKE  '%$searching%'
+											OR PhoneNumber LIKE  '%$searching%')
+			";
+		$result2 = $conn->query($sql2);
+        //Counts total number of people that are being shown
+        $resultcount = $result2->num_rows;
+        
+        //Calculating total number of pages displayed
+        $total_pages = ceil($resultcount / $ITEMS_PER_PAGE);
+        //$page_count = floor($resultcount / $ITEMS_PER_PAGE);
+
+        //echo $page_count;
 		// echo "123";
 
 		// output data of each row
@@ -70,7 +86,7 @@
 
 		// echo "[]";
 		// sendResultInfoAsJson( "{}" );
-		sendResultInfoAsJson( "{\"contacts\": " . json_encode($datas) . "}" );
+		sendResultInfoAsJson( "{\"contacts\": " . json_encode($datas) . ", \"total_pages\": ". $total_pages . "}" );
 
 		// Cleanup
 		$conn->close();

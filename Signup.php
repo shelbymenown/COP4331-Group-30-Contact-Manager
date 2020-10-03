@@ -5,6 +5,12 @@
 	$Username = "";
 	$Name = "";
 
+	//Making sure only method called is POST
+	if ($_SERVER['REQUEST_METHOD'] != 'POST') 
+	{
+		exit;
+	}
+	
 	if (IsNullOrEmptyString($inData["Username"]))
 	{
 		// Bad Request
