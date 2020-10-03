@@ -199,13 +199,6 @@ body
     transform: translateY(2px)
 }
 
-.search__icon
-{
-    height: 1.6rem;
-    width: 1.6rem;
-    fill: var(--color-grey-dark-3)
-}
-
 .user-nav
 {
     -ms-flex-item-align: stretch;
@@ -291,6 +284,7 @@ body
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
+
 .pagination-nav ul
 {
 	transform: scale(.8);
@@ -385,8 +379,6 @@ body
 	margin-left: 30px;
 }
 
-
-
 .main
 {
 	display: flex;
@@ -422,14 +414,6 @@ body
 
 .main__container
 {
-    /* max-width: 120rem; */
-    /* margin: 10rem 10rem 10rem 10rem; */
-	/* margin-top: rem; */
-    /* background-color: var(--color-grey-light-1);
-    -webkit-box-shadow: var(--shadow-dark);
-    box-shadow: var(--shadow-dark);
-	min-height: 50rem */
-
 	zoom: 80%;
 	margin: 0 auto;
 	/* margin-top: 12rem; */
@@ -441,40 +425,9 @@ body
 	overflow: hidden;
 	width: 600px;
 	max-width: 100%;
-	/* min-height: 50vh; */
 
 	margin-bottom: 3.5rem;
 }
-
-
-
-/* 
-.header
-{
-    font-size: 1.4rem;
-	height: 7rem;
-    background-color: #fff;
-    border-bottom: var(--line);
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center
-} */
-
-
-/* .user-body
-{
-	margin-top: 10rem;
-    border-radius: 20px;
-    width: 80%;
-    margin: 0 auto;
-
-} */
 
 h1
 {
@@ -490,18 +443,6 @@ h1
 	margin: auto;
 }
 
-.card
-{
-    float: right;
-    width: 80%;
-    
-}
-
-.search-bar
-{
-    float: initial;
-}
-
 .list-group-item
 {
 	overflow: hidden;
@@ -513,16 +454,6 @@ h1
 .list-group-item:hover
 {
 	background: rgba(0, 0, 0, .006);
-}
-
-/* https://stackoverflow.com/a/41223246/9382757 */
-.list-group-item.closeSlide {
-	z-index: -1;
-	margin-bottom:0;
-	height:0px;
-	padding-top:0;
-	padding-bottom:0;
-	transition: 0.2s all ease-out;
 }
 
 .footer
@@ -697,7 +628,6 @@ h1
 	animation: spin 1s ease-in-out infinite;
 	-webkit-animation: spin 1s ease-in-out infinite;
 }
-
 
 /* Going off of a slight variation of this example */
 /* https://codepen.io/AllThingsSmitty/pen/dWmmQp */
