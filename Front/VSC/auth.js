@@ -132,6 +132,9 @@ function doLogin(e) {
 
 			// Display error
 			showError($("#login-error"), errMsg)
+			
+			// Close loading modal only when login fails
+			$('#loadingModal').modal('hide');
 		})
 }
 
