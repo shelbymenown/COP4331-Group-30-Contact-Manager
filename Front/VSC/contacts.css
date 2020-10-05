@@ -54,6 +54,10 @@ body,
 	padding-right: 0px !important;
 }
 
+/* Modify toastr's z-index and opacity */
+#toast-container { z-index: 1000 !important; }
+#toast-container > div { opacity:1; }
+
 .header
 {
 	z-index: 1000;
