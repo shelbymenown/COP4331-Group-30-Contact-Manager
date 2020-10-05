@@ -1,5 +1,8 @@
-var URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
-var API_EXTENSION = 'php';
+const URL_BASE = `http://spadecontactmanager.com/`;
+const API_BASE = `${URL_BASE}LAMPAPI`;
+const API_EXTENSION = 'php';
+
+const MAX_TOASTS = 5;
 
 var token;
 var userId = 0;
@@ -80,17 +83,25 @@ function doSignup(e) {
 	let username = $("#signup-form :input[name='username']").val();
 	let password = $("#signup-form :input[name='password']").val();
 
-	let uri = `${URL_BASE}/Signup${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/Signup${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	let payload = { Name: name, Username: username, Password: password };
 
 	$.post(uri, JSON.stringify(payload))
-		.done(function (res){ $('#alertModal').modal('toggle'); })
+		.done(function (res){
+			if (!isMobile())
+			{
+				onCloseAlert();
+				toastr["success"]("You can now log in", "Sign Up Successful!");
+			}
+			else $('#alertModal').modal('toggle');
+		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
-			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error + "😢" : "An error has occured 😟";
+			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error : "An error has occured 😟";
 			console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
 
 			// Display error
-			showError($("#signup-error"), errMsg)
+			showError($("#signup-error"), errMsg + "😢")
+			toastr["warning"](errMsg, "Sign Up Failed!");
 		})
 		.always(function () { $('#loadingModal').modal('hide');});
 }
@@ -107,7 +118,7 @@ function doLogin(e) {
 	let username = $("#login-form :input[name='username']").val();
 	let password = $("#login-form :input[name='password']").val();
 	
-	let uri = `${URL_BASE}/Login${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/Login${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	let payload = { Username: username, Password: password };
 
 	$.post(uri, JSON.stringify(payload))
@@ -116,6 +127,7 @@ function doLogin(e) {
 
 			if (token) {
 				Cookies.set("token", token);
+				Cookies.set("redirected", true);
 				window.location.pathname = "/contacts.html"
 			}
 			else {
@@ -124,17 +136,20 @@ function doLogin(e) {
 
 				// Close loading modal only when login fails
 				$('#loadingModal').modal('hide');
+				toastr["error"]("Unexpected result from API 😮", "Login Failed!");
 			}
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
-			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error + "😢" : "An error has occured 😟";
+			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error : "An error has occured 😟";
 			console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
 
 			// Display error
-			showError($("#login-error"), errMsg)
-			
+			showError($("#login-error"), errMsg + "😢")
+
 			// Close loading modal only when login fails
 			$('#loadingModal').modal('hide');
+
+			toastr["warning"](errMsg, "Login Failed!");
 		})
 }
 
@@ -149,4 +164,9 @@ function onCloseAlert()
 		$("#signup-form :input[name='username']").val('');
 		$("#signup-form :input[name='password']").val('');
 	}, 50);
+}
+
+function isMobile()
+{
+	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
