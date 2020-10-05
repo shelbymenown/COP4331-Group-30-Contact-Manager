@@ -56,7 +56,7 @@ body,
 
 /* Modify toastr's z-index and opacity */
 #toast-container { z-index: 1000 !important; }
-#toast-container > div { opacity:1; }
+#toast-container > div { opacity: .99; }
 
 .header
 {
