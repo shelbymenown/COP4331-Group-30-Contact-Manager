@@ -16,6 +16,37 @@ var __uRgx = /^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$/
 var submitted_signup = false;
 var submitted_login = false;
 
+// Toastr settings
+toastr.options = {
+	"closeButton": false,
+	"debug": false,
+	"newestOnTop": false,
+	"progressBar": false,
+	"positionClass": "toast-bottom-left",
+	"preventDuplicates": false,
+	"onclick": null,
+	"showDuration": "300",
+	"hideDuration": "1000",
+	"timeOut": "5000",
+	"extendedTimeOut": "1000",
+	"showEasing": "swing",
+	"hideEasing": "linear",
+	"showMethod": "fadeIn",
+	"hideMethod": "fadeOut"
+}
+
+// Limit the number of toasts
+toastr.subscribe(function(args) {
+	if (args.state === 'visible')
+	{
+		var toasts = $("#toast-container > *:not([hidden])");
+		if (toasts && toasts.length > MAX_TOASTS)
+		{
+			toasts[0].hidden = true;
+		}
+	}
+});
+
 function fadeError(element) {
 	if (element)
 	{
