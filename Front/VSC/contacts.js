@@ -1,11 +1,13 @@
-const URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
+const URL_BASE = `http://spadecontactmanager.com/`;
+const API_BASE = `${URL_BASE}LAMPAPI`;
 const API_EXTENSION = 'php';
 const DEBUG = false;
 // const DEBUG = true;
 const CONTACTS_PER_PAGE = 5;
 const RENDER_ANIMATION = false;
 const USE_RANDOM_AVATAR = false;
-
+const MAX_TOASTS = 5;
+const MAX_PAGES = 4;
 
 // State
 var loadedContacts = [];
@@ -14,16 +16,47 @@ var page = 1;
 var token;
 var isLoading;
 
-function getInt(val, def = 0) {
-	if (!isNaN(val) && parseInt(Number(val) == val) && !isNaN(parseInt(val, 10)))
-		return parseInt(val, 10);
-	else return def;
+// Toastr settings
+toastr.options = {
+	"maxOpened": "2",
+	"closeButton": false,
+	"debug": false,
+	"newestOnTop": false,
+	"progressBar": false,
+	"positionClass": "toast-bottom-left",
+	"preventDuplicates": false,
+	"onclick": null,
+	"showDuration": "300",
+	"hideDuration": "1000",
+	"timeOut": "5000",
+	"extendedTimeOut": "1000",
+	"showEasing": "swing",
+	"hideEasing": "linear",
+	"showMethod": "fadeIn",
+	"hideMethod": "fadeOut"
+}
+
+// Limit the number of toasts
+toastr.subscribe(function(args) {
+	if (args.state === 'visible')
+	{
+		var toasts = $("#toast-container > *:not([hidden])");
+		if (toasts && toasts.length > MAX_TOASTS)
+			toasts[0].hidden = true;
+	}
+});
+
+function getPageNumber()
+{
+	var urlParams = new URLSearchParams(window.location.search);
+	return urlParams.has("page") && urlParams.get("page") > 0 ? parseInt(urlParams.get("page")) : 1;
 }
 
 function mustLogIn()
 {
 	$("#alertModal-title").text("Unauthorized Access");
 	$("#alertModal-body").text("You must log in to view this page!");
+	$("#alertModal-error").hide();
 	$("#alertModal-continue").hide();
 	$("#alertModal-dismiss").text("Continue");
 	$('#alertModal').on('hidden.bs.modal', () => {setTimeout(() => {window.location.pathname = "";}, 50)});
@@ -44,6 +77,13 @@ $(document).ready(function () {
 		mustLogIn();
 		return;
 	}
+
+	if (document.referrer.split(/[?#]/)[0] === URL_BASE && Cookies.get("redirected") === 'true')
+	{
+		// TODO : get name from API
+		toastr["success"]("", "Welcome Aadil!");
+	}
+	Cookies.remove("redirected");
 
 	// Add input mask for phone numbers
 	$("#editCreateModal-form :input[name='phone']").mask('(000) 000-0000');
@@ -66,7 +106,7 @@ function doSearch(e) {
 }
 
 function loadContacts(token, search, page) {
-	let uri = `${URL_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -102,11 +142,20 @@ function loadContacts(token, search, page) {
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
 			// TODO : handle error
-			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error + "😢" : "An error has occured 😟";
-			console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
-			
-			// Display error
-			// showError($("#signup-error"), errMsg)
+			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error : "An error has occured";
+
+			// Empty contact list with error
+			$("#contact-list").empty();
+			$("#contact-list").append(`
+				<div class="text-center">
+					<h3 class="p-3 m-0">No contacts found</h3>
+					<img src="/SVG/forever-alone-bw.svg" alt="forever alone" class="forever-alone">
+					<span class="error">${errMsg + " 😟"}</span>
+				</div>
+			`);
+		
+			// Toast error
+			toastr["error"](errMsg, "Failed to Load Contacts!");
 		});
 		
 	}
@@ -222,7 +271,6 @@ function displayContacts(contacts) {
 	if (should_hide) $("#contact-list > li").hide('slow');
 
 	loadedContacts = [...contacts];
-	console.log(loadedContacts);
 
 	// Generate component html
 	if (loadedContacts && loadedContacts.length) {
@@ -261,7 +309,6 @@ function doLogout() {
 function doEdit(id)
 {
 	contact = loadedContacts.filter(contact => contact.id == id)[0];
-	console.log(contact);
 	$("#editCreateModal-title").text(`Edit Contact (${[contact.firstName, contact.lastName].join(' ')})`);
 	// $("#editCreateModal-title").text(`Edit Contact`);
 	$("#editCreateModal-form :input[name='firstName']")	.val(contact.firstName);
@@ -278,7 +325,6 @@ function doEdit(id)
 
 function doCreate()
 {
-	console.log("Here")
 	$("#editCreateModal-title").text(`Create New Contact`);
 	$("#editCreateModal-form :input[name='firstName']")	.val('');
 	$("#editCreateModal-form :input[name='lastName']")	.val('');
@@ -295,7 +341,6 @@ function doCreate()
 function doDelete(id)
 {
 	contact = loadedContacts.filter(contact => contact.id == id)[0];
-	console.log(contact);
 	$("#deleteModal-body").text(
 		`Are you sure you want to delete 
 		${[contact.firstName, contact.lastName].join(" ")} 
@@ -316,7 +361,7 @@ function submitLogout()
 
 function submitEdit(contactId)
 {
-	let uri = `${URL_BASE}/updateContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/updateContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -339,8 +384,6 @@ function submitEdit(contactId)
 		phone: $("#editCreateModal-form :input[name='phone']").cleanVal()
 	};
 
-	console.log(editedContact);
-	
 	// Do ajax edit
 	// On success:
 	$.ajax({
@@ -369,21 +412,26 @@ function submitEdit(contactId)
 
 			// Maintain old avatar in edited contact
 			if (USE_RANDOM_AVATAR) $(`#contact-${contact.id}-img`).attr('src', avatarSrc);
+
+			// Toast success
+			toastr["info"]("", "Edit Completed!");
 		})
 		// On error:
 		// Show error in red in modal
 		.fail(function(err) {
 			errMsg = err.responseJSON && err.responseJSON.error ? err.responseJSON.error : "An error has occured 😟";
-			console.log(err.responseJSON && err.responseJSON.error ? err.responseJSON.error : err.responseJSON); console.log(err);
 			
 			// Display error
 			$("#editCreateModal-error").show("puff");
 			$("#editCreateModal-error").text(errMsg);
+			
+			// Toast error
+			toastr["warning"](errMsg, "Edit Failed!");
 		});
 }
 function submitCreate()
 {
-	let uri = `${URL_BASE}/addcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/addcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -401,12 +449,6 @@ function submitCreate()
 		phone: $("#editCreateModal-form :input[name='phone']").cleanVal()
 	};
 
-	console.log(createContact);
-
-	// TODO : POST to API
-	// TODO : On success	- close modal
-	// TODO : On fail 		- display error
-	
 	// Do ajax create
 	$.post(uri, JSON.stringify(createContact))
 		// On success:
@@ -416,7 +458,6 @@ function submitCreate()
 
 			// Capture id
 			createContact.id = result.id;
-			console.log(result.id);
 
 			// There are no contacts on display
 			if (!loadedContacts.length)
@@ -428,23 +469,29 @@ function submitCreate()
 			// Append new contact to display
 			$("#contact-list").append(generateContact_li(createContact));
 			$(`#contact-${createContact.id}`).show('puff');
+
+			// Toast success
+			toastr["success"]("", "Creation Completed!");
 		})
 		// On error:
 		// Show error in red in modal
 		.fail(function(err) {
 			errMsg = err.responseJSON && err.responseJSON.error ? err.responseJSON.error : "An error has occured 😟";
-			console.log(err.responseJSON && err.responseJSON.error ? err.responseJSON.error : err.responseJSON); console.log(err);
 			
 			// Display error
 			$("#editCreateModal-error").show("puff");
 			$("#editCreateModal-error").text(errMsg);
+
+			// Toast error
+			toastr["warning"](errMsg, "Creation Failed!");
+
 		});
 }
 
 function submitDelete(contactId)
 {
 	var payload = {id: contactId};
-	let uri = `${URL_BASE}/deleteContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/deleteContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -477,19 +524,24 @@ function submitDelete(contactId)
 				loadedContacts = loadedContacts.filter(c => c.id != contactId);
 
 				// Load previous page if page is empty
-				if (!loadedContacts.length) loadContacts(token, searchQry, --page);
+				if (!loadedContacts.length) loadContacts(token, searchQry, getPageNumber() - 1);
+
+				// Toast success
+				toastr["error"]("", "Deletion Successful!");
 			}
-			else loadContacts(token, searchQry, --page);
+			else loadContacts(token, searchQry, getPageNumber() - 1);
 		})
 		// On error:
 		// Show error in red in modal
 		.fail(function(err) {
 			errMsg = err.responseJSON && err.responseJSON.error ? err.responseJSON.error : "An error has occured 😟";
-			console.log(err.responseJSON && err.responseJSON.error ? err.responseJSON.error : err.responseJSON); console.log(err);
 			
 			// Display error
 			$("#deleteModal-error").show("puff");
 			$("#deleteModal-error").text(errMsg);
+
+			// Toast error
+			toastr["warning"](errMsg, "Deletion Failed!");
 		});
 }
 
@@ -502,16 +554,9 @@ function displayPagination(page, total_pages)
 	let pagination_content = [];
 	pagination_ul.empty();
 	
-	let first_page = page > 3 ? page - 3 : 1;
-	let last_page = page > 3 ? page + 3 : 6;
+	let first_page = page > ~~(MAX_PAGES / 2) ? page - ~~(MAX_PAGES / 2) : 1;
+	let last_page = page > ~~(MAX_PAGES / 2) ? page + ~~(MAX_PAGES / 2) : MAX_PAGES;
 	
-
-	// console.log("[displayPagination()] page:", page);
-	// console.log("[displayPagination()] total_pages:", total_pages);
-	// console.log("[displayPagination()] first_page:", first_page);
-	// console.log("[displayPagination()] last_page:", last_page);
-
-
 	disabled = page == 1;
 	pagination_content.push(`
 		<li>
@@ -523,7 +568,6 @@ function displayPagination(page, total_pages)
 	{
 		disabled = p > total_pages;
 		mobile = Math.abs(p - page) <= 1;
-		// console.log(`Page: ${page}\nTotal Pages: ${total_pages}\nFirst Page: ${first_page}\nLast Page: ${last_page}\np: ${p}\nMobile? - ${mobile}`);
 		pagination_content.push(`
 			<li class="page-number${page==p && !disabled ? ' active':''}${disabled ? ' disabled' : ' flag'}${mobile ? ' mobile' : ''}">
 				<a href="javascript:;" ${page==p || disabled ? '' : `onclick="changePage(${p})"`}>${p}</a>
