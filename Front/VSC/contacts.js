@@ -7,7 +7,7 @@ const CONTACTS_PER_PAGE = 5;
 const RENDER_ANIMATION = false;
 const USE_RANDOM_AVATAR = false;
 const MAX_TOASTS = 5;
-const MAX_PAGES = 5;
+const MAX_PAGES = 4;
 
 // State
 var loadedContacts = [];
@@ -46,10 +46,10 @@ toastr.subscribe(function(args) {
 	}
 });
 
-function getInt(val, def = 0) {
-	if (!isNaN(val) && parseInt(Number(val) == val) && !isNaN(parseInt(val, 10)))
-		return parseInt(val, 10);
-	else return def;
+function getPageNumber()
+{
+	var urlParams = new URLSearchParams(window.location.search);
+	return urlParams.has("page") && urlParams.get("page") > 0 ? parseInt(urlParams.get("page")) : 1;
 }
 
 function mustLogIn()
@@ -147,7 +147,7 @@ function loadContacts(token, search, page) {
 			// Empty contact list with error
 			$("#contact-list").empty();
 			$("#contact-list").append(`
-				<div class="text-center" ${should_hide ? 'style="display: none"' : ''}>
+				<div class="text-center">
 					<h3 class="p-3 m-0">No contacts found</h3>
 					<img src="/SVG/forever-alone-bw.svg" alt="forever alone" class="forever-alone">
 					<span class="error">${errMsg + " 😟"}</span>
@@ -524,12 +524,12 @@ function submitDelete(contactId)
 				loadedContacts = loadedContacts.filter(c => c.id != contactId);
 
 				// Load previous page if page is empty
-				if (!loadedContacts.length) loadContacts(token, searchQry, --page);
+				if (!loadedContacts.length) loadContacts(token, searchQry, getPageNumber() - 1);
 
 				// Toast success
 				toastr["error"]("", "Deletion Successful!");
 			}
-			else loadContacts(token, searchQry, --page);
+			else loadContacts(token, searchQry, getPageNumber() - 1);
 		})
 		// On error:
 		// Show error in red in modal
@@ -554,8 +554,8 @@ function displayPagination(page, total_pages)
 	let pagination_content = [];
 	pagination_ul.empty();
 	
-	let first_page = page > MAX_PAGES / 2 ? page - MAX_PAGES / 2 : 1;
-	let last_page = page > MAX_PAGES / 2 ? page + MAX_PAGES / 2 : MAX_PAGES;
+	let first_page = page > ~~(MAX_PAGES / 2) ? page - ~~(MAX_PAGES / 2) : 1;
+	let last_page = page > ~~(MAX_PAGES / 2) ? page + ~~(MAX_PAGES / 2) : MAX_PAGES;
 	
 	disabled = page == 1;
 	pagination_content.push(`
