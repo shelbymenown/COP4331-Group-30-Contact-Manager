@@ -7,6 +7,7 @@ const CONTACTS_PER_PAGE = 5;
 const RENDER_ANIMATION = false;
 const USE_RANDOM_AVATAR = false;
 const MAX_TOASTS = 5;
+const MAX_PAGES = 5;
 
 // State
 var loadedContacts = [];
@@ -553,8 +554,8 @@ function displayPagination(page, total_pages)
 	let pagination_content = [];
 	pagination_ul.empty();
 	
-	let first_page = page > 3 ? page - 3 : 1;
-	let last_page = page > 3 ? page + 3 : 6;
+	let first_page = page > MAX_PAGES / 2 ? page - MAX_PAGES / 2 : 1;
+	let last_page = page > MAX_PAGES / 2 ? page + MAX_PAGES / 2 : MAX_PAGES;
 	
 	disabled = page == 1;
 	pagination_content.push(`
