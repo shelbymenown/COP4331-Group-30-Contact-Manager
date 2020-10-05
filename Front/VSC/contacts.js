@@ -1,11 +1,12 @@
-const URL_BASE = 'http://spadecontactmanager.com/LAMPAPI';
+const URL_BASE = `http://spadecontactmanager.com/`;
+const API_BASE = `${URL_BASE}LAMPAPI`;
 const API_EXTENSION = 'php';
 const DEBUG = false;
 // const DEBUG = true;
 const CONTACTS_PER_PAGE = 5;
 const RENDER_ANIMATION = false;
 const USE_RANDOM_AVATAR = false;
-
+const MAX_TOASTS = 5;
 
 // State
 var loadedContacts = [];
@@ -13,6 +14,36 @@ var searchQry = ''
 var page = 1;
 var token;
 var isLoading;
+
+// Toastr settings
+toastr.options = {
+	"maxOpened": "2",
+	"closeButton": false,
+	"debug": false,
+	"newestOnTop": false,
+	"progressBar": false,
+	"positionClass": "toast-bottom-left",
+	"preventDuplicates": false,
+	"onclick": null,
+	"showDuration": "300",
+	"hideDuration": "1000",
+	"timeOut": "5000",
+	"extendedTimeOut": "1000",
+	"showEasing": "swing",
+	"hideEasing": "linear",
+	"showMethod": "fadeIn",
+	"hideMethod": "fadeOut"
+}
+
+// Limit the number of toasts
+toastr.subscribe(function(args) {
+	if (args.state === 'visible')
+	{
+		var toasts = $("#toast-container > *:not([hidden])");
+		if (toasts && toasts.length > MAX_TOASTS)
+			toasts[0].hidden = true;
+	}
+});
 
 function getInt(val, def = 0) {
 	if (!isNaN(val) && parseInt(Number(val) == val) && !isNaN(parseInt(val, 10)))
@@ -46,6 +77,13 @@ $(document).ready(function () {
 		return;
 	}
 
+	if (document.referrer.split(/[?#]/)[0] === URL_BASE && Cookies.get("redirected") === 'true')
+	{
+		// TODO : get name from API
+		toastr["success"]("", "Welcome Aadil!");
+	}
+	Cookies.remove("redirected");
+
 	// Add input mask for phone numbers
 	$("#editCreateModal-form :input[name='phone']").mask('(000) 000-0000');
 
@@ -67,7 +105,7 @@ function doSearch(e) {
 }
 
 function loadContacts(token, search, page) {
-	let uri = `${URL_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -317,7 +355,7 @@ function submitLogout()
 
 function submitEdit(contactId)
 {
-	let uri = `${URL_BASE}/updateContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/updateContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -370,6 +408,9 @@ function submitEdit(contactId)
 
 			// Maintain old avatar in edited contact
 			if (USE_RANDOM_AVATAR) $(`#contact-${contact.id}-img`).attr('src', avatarSrc);
+
+			// Toast success
+			toastr["info"]("", "Edit Completed!");
 		})
 		// On error:
 		// Show error in red in modal
@@ -380,11 +421,14 @@ function submitEdit(contactId)
 			// Display error
 			$("#editCreateModal-error").show("puff");
 			$("#editCreateModal-error").text(errMsg);
+			
+			// Toast error
+			toastr["warning"](errMsg, "Edit Failed!");
 		});
 }
 function submitCreate()
 {
-	let uri = `${URL_BASE}/addcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/addcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -429,6 +473,9 @@ function submitCreate()
 			// Append new contact to display
 			$("#contact-list").append(generateContact_li(createContact));
 			$(`#contact-${createContact.id}`).show('puff');
+
+			// Toast success
+			toastr["success"]("", "Creation Completed!");
 		})
 		// On error:
 		// Show error in red in modal
@@ -439,13 +486,17 @@ function submitCreate()
 			// Display error
 			$("#editCreateModal-error").show("puff");
 			$("#editCreateModal-error").text(errMsg);
+
+			// Toast error
+			toastr["warning"](errMsg, "Creation Failed!");
+
 		});
 }
 
 function submitDelete(contactId)
 {
 	var payload = {id: contactId};
-	let uri = `${URL_BASE}/deleteContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/deleteContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -479,6 +530,9 @@ function submitDelete(contactId)
 
 				// Load previous page if page is empty
 				if (!loadedContacts.length) loadContacts(token, searchQry, --page);
+
+				// Toast success
+				toastr["error"]("", "Deletion Successful!");
 			}
 			else loadContacts(token, searchQry, --page);
 		})
@@ -491,6 +545,9 @@ function submitDelete(contactId)
 			// Display error
 			$("#deleteModal-error").show("puff");
 			$("#deleteModal-error").text(errMsg);
+
+			// Toast error
+			toastr["warning"](errMsg, "Deletion Failed!");
 		});
 }
 
