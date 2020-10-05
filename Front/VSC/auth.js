@@ -41,9 +41,7 @@ toastr.subscribe(function(args) {
 	{
 		var toasts = $("#toast-container > *:not([hidden])");
 		if (toasts && toasts.length > MAX_TOASTS)
-		{
 			toasts[0].hidden = true;
-		}
 	}
 });
 
