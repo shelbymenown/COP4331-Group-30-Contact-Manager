@@ -7,6 +7,7 @@ const CONTACTS_PER_PAGE = 5;
 const RENDER_ANIMATION = false;
 const USE_RANDOM_AVATAR = false;
 const MAX_TOASTS = 5;
+const MAX_PAGES = 4;
 
 // State
 var loadedContacts = [];
@@ -45,10 +46,10 @@ toastr.subscribe(function(args) {
 	}
 });
 
-function getInt(val, def = 0) {
-	if (!isNaN(val) && parseInt(Number(val) == val) && !isNaN(parseInt(val, 10)))
-		return parseInt(val, 10);
-	else return def;
+function getPageNumber()
+{
+	var urlParams = new URLSearchParams(window.location.search);
+	return urlParams.has("page") && urlParams.get("page") > 0 ? parseInt(urlParams.get("page")) : 1;
 }
 
 function mustLogIn()
@@ -141,11 +142,20 @@ function loadContacts(token, search, page) {
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
 			// TODO : handle error
-			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error + "😢" : "An error has occured 😟";
-			console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
-			
-			// Display error
-			// showError($("#signup-error"), errMsg)
+			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error : "An error has occured";
+
+			// Empty contact list with error
+			$("#contact-list").empty();
+			$("#contact-list").append(`
+				<div class="text-center">
+					<h3 class="p-3 m-0">No contacts found</h3>
+					<img src="/SVG/forever-alone-bw.svg" alt="forever alone" class="forever-alone">
+					<span class="error">${errMsg + " 😟"}</span>
+				</div>
+			`);
+		
+			// Toast error
+			toastr["error"](errMsg, "Failed to Load Contacts!");
 		});
 		
 	}
@@ -261,7 +271,6 @@ function displayContacts(contacts) {
 	if (should_hide) $("#contact-list > li").hide('slow');
 
 	loadedContacts = [...contacts];
-	console.log(loadedContacts);
 
 	// Generate component html
 	if (loadedContacts && loadedContacts.length) {
@@ -300,7 +309,6 @@ function doLogout() {
 function doEdit(id)
 {
 	contact = loadedContacts.filter(contact => contact.id == id)[0];
-	console.log(contact);
 	$("#editCreateModal-title").text(`Edit Contact (${[contact.firstName, contact.lastName].join(' ')})`);
 	// $("#editCreateModal-title").text(`Edit Contact`);
 	$("#editCreateModal-form :input[name='firstName']")	.val(contact.firstName);
@@ -317,7 +325,6 @@ function doEdit(id)
 
 function doCreate()
 {
-	console.log("Here")
 	$("#editCreateModal-title").text(`Create New Contact`);
 	$("#editCreateModal-form :input[name='firstName']")	.val('');
 	$("#editCreateModal-form :input[name='lastName']")	.val('');
@@ -334,7 +341,6 @@ function doCreate()
 function doDelete(id)
 {
 	contact = loadedContacts.filter(contact => contact.id == id)[0];
-	console.log(contact);
 	$("#deleteModal-body").text(
 		`Are you sure you want to delete 
 		${[contact.firstName, contact.lastName].join(" ")} 
@@ -378,8 +384,6 @@ function submitEdit(contactId)
 		phone: $("#editCreateModal-form :input[name='phone']").cleanVal()
 	};
 
-	console.log(editedContact);
-	
 	// Do ajax edit
 	// On success:
 	$.ajax({
@@ -416,7 +420,6 @@ function submitEdit(contactId)
 		// Show error in red in modal
 		.fail(function(err) {
 			errMsg = err.responseJSON && err.responseJSON.error ? err.responseJSON.error : "An error has occured 😟";
-			console.log(err.responseJSON && err.responseJSON.error ? err.responseJSON.error : err.responseJSON); console.log(err);
 			
 			// Display error
 			$("#editCreateModal-error").show("puff");
@@ -446,12 +449,6 @@ function submitCreate()
 		phone: $("#editCreateModal-form :input[name='phone']").cleanVal()
 	};
 
-	console.log(createContact);
-
-	// TODO : POST to API
-	// TODO : On success	- close modal
-	// TODO : On fail 		- display error
-	
 	// Do ajax create
 	$.post(uri, JSON.stringify(createContact))
 		// On success:
@@ -461,7 +458,6 @@ function submitCreate()
 
 			// Capture id
 			createContact.id = result.id;
-			console.log(result.id);
 
 			// There are no contacts on display
 			if (!loadedContacts.length)
@@ -481,7 +477,6 @@ function submitCreate()
 		// Show error in red in modal
 		.fail(function(err) {
 			errMsg = err.responseJSON && err.responseJSON.error ? err.responseJSON.error : "An error has occured 😟";
-			console.log(err.responseJSON && err.responseJSON.error ? err.responseJSON.error : err.responseJSON); console.log(err);
 			
 			// Display error
 			$("#editCreateModal-error").show("puff");
@@ -529,18 +524,17 @@ function submitDelete(contactId)
 				loadedContacts = loadedContacts.filter(c => c.id != contactId);
 
 				// Load previous page if page is empty
-				if (!loadedContacts.length) loadContacts(token, searchQry, --page);
+				if (!loadedContacts.length) loadContacts(token, searchQry, getPageNumber() - 1);
 
 				// Toast success
 				toastr["error"]("", "Deletion Successful!");
 			}
-			else loadContacts(token, searchQry, --page);
+			else loadContacts(token, searchQry, getPageNumber() - 1);
 		})
 		// On error:
 		// Show error in red in modal
 		.fail(function(err) {
 			errMsg = err.responseJSON && err.responseJSON.error ? err.responseJSON.error : "An error has occured 😟";
-			console.log(err.responseJSON && err.responseJSON.error ? err.responseJSON.error : err.responseJSON); console.log(err);
 			
 			// Display error
 			$("#deleteModal-error").show("puff");
@@ -560,16 +554,9 @@ function displayPagination(page, total_pages)
 	let pagination_content = [];
 	pagination_ul.empty();
 	
-	let first_page = page > 3 ? page - 3 : 1;
-	let last_page = page > 3 ? page + 3 : 6;
+	let first_page = page > ~~(MAX_PAGES / 2) ? page - ~~(MAX_PAGES / 2) : 1;
+	let last_page = page > ~~(MAX_PAGES / 2) ? page + ~~(MAX_PAGES / 2) : MAX_PAGES;
 	
-
-	// console.log("[displayPagination()] page:", page);
-	// console.log("[displayPagination()] total_pages:", total_pages);
-	// console.log("[displayPagination()] first_page:", first_page);
-	// console.log("[displayPagination()] last_page:", last_page);
-
-
 	disabled = page == 1;
 	pagination_content.push(`
 		<li>
@@ -581,7 +568,6 @@ function displayPagination(page, total_pages)
 	{
 		disabled = p > total_pages;
 		mobile = Math.abs(p - page) <= 1;
-		// console.log(`Page: ${page}\nTotal Pages: ${total_pages}\nFirst Page: ${first_page}\nLast Page: ${last_page}\np: ${p}\nMobile? - ${mobile}`);
 		pagination_content.push(`
 			<li class="page-number${page==p && !disabled ? ' active':''}${disabled ? ' disabled' : ' flag'}${mobile ? ' mobile' : ''}">
 				<a href="javascript:;" ${page==p || disabled ? '' : `onclick="changePage(${p})"`}>${p}</a>

@@ -4,6 +4,11 @@
 	box-sizing: border-box;
 }
 
+/* Toasts should appear underneath modals */
+/* Modify toastr's z-index and opacity */
+#toast-container { z-index: 1000 !important; }
+
+
 body {
 	background: #f6f5f7;
 	display: flex;
