@@ -121,6 +121,9 @@ function doLogin(e) {
 			else {
 				// Display error
 				showError($("#login-error"), "Unexpected result from API 😮")
+
+				// Close loading modal only when login fails
+				$('#loadingModal').modal('hide');
 			}
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
@@ -129,8 +132,10 @@ function doLogin(e) {
 
 			// Display error
 			showError($("#login-error"), errMsg)
+			
+			// Close loading modal only when login fails
+			$('#loadingModal').modal('hide');
 		})
-		.always(function () { $('#loadingModal').modal('hide');});
 }
 
 function onCloseAlert()

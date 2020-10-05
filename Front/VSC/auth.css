@@ -122,7 +122,7 @@ span.i-spade.svg {
 span.i-spade.i-spade-left.svg {
 	position: absolute;
 	/* font-size: 15em; */
-	top: 0;
+	top: -16px;
 	left: 0;
 	/* transform: rotate(-28deg); */
 	transform: translateX(6%) rotate(-30deg);
@@ -131,7 +131,7 @@ span.i-spade.i-spade-left.svg {
 span.i-spade.i-spade-right.svg {
 	position: absolute;
 	/* font-size: 15em; */
-	top: 0;
+	top: -16px;
 	left: 100%;
 	transform: translateX(-100%) rotate(28deg);
 }
@@ -164,6 +164,10 @@ a {
 	transition: transform 80ms ease-in,
 				border 1s ease-in-out,
 				background 1s ease-in-out;
+}
+
+.button:not(.ghost) {
+	margin-top: .5rem;
 }
 
 .button:active {
