@@ -49,11 +49,12 @@
 		$startingPage = $page * $ITEMS_PER_PAGE;
 
 		$sql = "SELECT ContactID as id, FirstName as firstName, LastName as lastName,
-				EmailAddress as email, PhoneNumber as phone, Address as address FROM Contact
+				EmailAddress as email, PhoneNumber as phone, Address as address, DateContactMade as createDate FROM Contact
 				WHERE UserId = $userId AND (FirstName LIKE '%$searching%'
 											OR LastName LIKE  '%$searching%'
 											OR EmailAddress LIKE  '%$searching%'
 											OR PhoneNumber LIKE  '%$searching%')
+				ORDER BY FirstName, LastName
 				LIMIT $startingPage, $ITEMS_PER_PAGE
 			";
 		$result = $conn->query($sql);
