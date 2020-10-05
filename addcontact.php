@@ -11,12 +11,7 @@
 		http_response_code ( 400 );
 		returnWithError("New contact must have a first name!");
 	}
-	if (IsNullOrEmptyString($inData["phone"])) {
-		// Bad Request
-		http_response_code ( 400 );
-		returnWithError("New contact must have a phone number!");
-	}
-	if (!$validPhone) {
+	if (!IsNullOrEmptyString($inData["phone"]) && !$validPhone) {
 		// Bad Request
 		http_response_code ( 400 );
 		returnWithError("Phone number is invalid!");
