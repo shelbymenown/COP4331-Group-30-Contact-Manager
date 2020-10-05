@@ -24,6 +24,7 @@ function mustLogIn()
 {
 	$("#alertModal-title").text("Unauthorized Access");
 	$("#alertModal-body").text("You must log in to view this page!");
+	$("#alertModal-error").hide();
 	$("#alertModal-continue").hide();
 	$("#alertModal-dismiss").text("Continue");
 	$('#alertModal').on('hidden.bs.modal', () => {setTimeout(() => {window.location.pathname = "";}, 50)});
