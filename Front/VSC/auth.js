@@ -126,7 +126,6 @@ function doSignup(e) {
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
 			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error : "An error has occured 😟";
-			console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
 
 			// Display error
 			showError($("#signup-error"), errMsg + "😢")
@@ -170,7 +169,6 @@ function doLogin(e) {
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
 			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error : "An error has occured 😟";
-			console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
 
 			// Display error
 			showError($("#login-error"), errMsg + "😢")
