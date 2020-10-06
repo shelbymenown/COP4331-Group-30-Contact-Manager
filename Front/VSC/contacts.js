@@ -107,7 +107,7 @@ function doSearch(e) {
 }
 
 function loadContacts(token, search, page) {
-	let uri = `${API_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/contacts${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -369,7 +369,7 @@ function submitLogout()
 
 function submitEdit(contactId)
 {
-	let uri = `${API_BASE}/updateContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/contact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -439,7 +439,7 @@ function submitEdit(contactId)
 }
 function submitCreate()
 {
-	let uri = `${API_BASE}/addcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/contact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -499,7 +499,7 @@ function submitCreate()
 function submitDelete(contactId)
 {
 	var payload = {id: contactId};
-	let uri = `${API_BASE}/deleteContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/contact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
