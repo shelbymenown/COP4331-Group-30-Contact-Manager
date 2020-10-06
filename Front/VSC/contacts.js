@@ -215,7 +215,9 @@ function generateContact_li(contact, should_hide=true, li_tag=true)
 		return;
 
 	let FULL_NAME = [contact.firstName, contact.lastName].join(contact.firstName && contact.lastName ? " " : "");
-	let date = new Date(contact.createDate.split(' ')[0]).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })
+	let date = new Date(contact.createDate ? contact.createDate.split(' ')[0] : Date.now())
+					.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })
+
 	return `
 		${li_tag ? `<li class="list-group-item" id="${`contact-${contact.id}`}" ${should_hide ? 'style="display: none"' : ''}>` : ''}
 			<div class="row w-100">
@@ -244,11 +246,9 @@ function generateContact_li(contact, should_hide=true, li_tag=true)
 							<span class="text-muted small text-truncate" info="email">${contact.email}</span>
 							<br>
 							` : ``}
-						${contact.createDate ? `
 							<span class="fa fa-calendar fa-fw text-muted" data-toggle="tooltip"
 								data-original-title="" title=""></span>
 							<span class="text-muted small text-truncate" info="email">Since ${date}</span>
-						` : ``}
 					</div>
 				</div>
 				<div class="col-12 col-sm-2 col-md-2">
