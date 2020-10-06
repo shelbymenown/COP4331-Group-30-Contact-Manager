@@ -6,6 +6,7 @@ const DEBUG = false;
 const CONTACTS_PER_PAGE = 5;
 const RENDER_ANIMATION = false;
 const USE_RANDOM_AVATAR = false;
+let USE_TOASTS = false;
 const MAX_TOASTS = 5;
 const MAX_PAGES = 4;
 
@@ -155,7 +156,7 @@ function loadContacts(token, search, page) {
 			`);
 		
 			// Toast error
-			toastr["error"](errMsg, "Failed to Load Contacts!");
+			if (USE_TOASTS) toastr["error"](errMsg, "Failed to Load Contacts!");
 		});
 		
 	}
@@ -421,7 +422,7 @@ function submitEdit(contactId)
 			if (USE_RANDOM_AVATAR) $(`#contact-${contact.id}-img`).attr('src', avatarSrc);
 
 			// Toast success
-			toastr["info"]("", "Edit Completed!");
+			if (USE_TOASTS) toastr["info"]("", "Edit Completed!");
 		})
 		// On error:
 		// Show error in red in modal
@@ -433,7 +434,7 @@ function submitEdit(contactId)
 			$("#editCreateModal-error").text(errMsg);
 			
 			// Toast error
-			toastr["warning"](errMsg, "Edit Failed!");
+			if (USE_TOASTS) toastr["warning"](errMsg, "Edit Failed!");
 		});
 }
 function submitCreate()
@@ -478,7 +479,7 @@ function submitCreate()
 			$(`#contact-${createContact.id}`).show('puff');
 
 			// Toast success
-			toastr["success"]("", "Creation Completed!");
+			if (USE_TOASTS) toastr["success"]("", "Creation Completed!");
 		})
 		// On error:
 		// Show error in red in modal
@@ -490,7 +491,7 @@ function submitCreate()
 			$("#editCreateModal-error").text(errMsg);
 
 			// Toast error
-			toastr["warning"](errMsg, "Creation Failed!");
+			if (USE_TOASTS) toastr["warning"](errMsg, "Creation Failed!");
 
 		});
 }
@@ -534,7 +535,7 @@ function submitDelete(contactId)
 				if (!loadedContacts.length) loadContacts(token, searchQry, getPageNumber() - 1);
 
 				// Toast success
-				toastr["error"]("", "Deletion Successful!");
+				if (USE_TOASTS) toastr["error"]("", "Deletion Successful!");
 			}
 			else loadContacts(token, searchQry, getPageNumber() - 1);
 		})
@@ -548,7 +549,7 @@ function submitDelete(contactId)
 			$("#deleteModal-error").text(errMsg);
 
 			// Toast error
-			toastr["warning"](errMsg, "Deletion Failed!");
+			if (USE_TOASTS) toastr["warning"](errMsg, "Deletion Failed!");
 		});
 }
 

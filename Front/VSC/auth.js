@@ -2,6 +2,7 @@ const URL_BASE = `http://spadecontactmanager.com/`;
 const API_BASE = `${URL_BASE}LAMPAPI`;
 const API_EXTENSION = 'php';
 
+let USE_TOASTS = false;
 const MAX_TOASTS = 5;
 
 var token;
@@ -117,7 +118,7 @@ function doSignup(e) {
 
 	$.post(uri, JSON.stringify(payload))
 		.done(function (res){
-			if (!isMobile())
+			if (USE_TOASTS && !isMobile())
 			{
 				onCloseAlert();
 				toastr["success"]("You can now log in", "Sign Up Successful!");
@@ -129,7 +130,7 @@ function doSignup(e) {
 
 			// Display error
 			showError($("#signup-error"), errMsg + "😢")
-			toastr["warning"](errMsg, "Sign Up Failed!");
+			if (USE_TOASTS) toastr["warning"](errMsg, "Sign Up Failed!");
 		})
 		.always(function () { $('#loadingModal').modal('hide');});
 }
@@ -164,7 +165,8 @@ function doLogin(e) {
 
 				// Close loading modal only when login fails
 				$('#loadingModal').modal('hide');
-				toastr["error"]("Unexpected result from API 😮", "Login Failed!");
+
+				if (USE_TOASTS) toastr["error"]("Unexpected result from API 😮", "Login Failed!");
 			}
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
@@ -176,7 +178,7 @@ function doLogin(e) {
 			// Close loading modal only when login fails
 			$('#loadingModal').modal('hide');
 
-			toastr["warning"](errMsg, "Login Failed!");
+			if (USE_TOASTS) toastr["warning"](errMsg, "Login Failed!");
 		})
 }
 
