@@ -76,17 +76,29 @@ $(document).ready(function () {
 
 	// Change Auth page if not logged in
 	if (!token && !DEBUG) {
-		mustLogIn();
+		Cookies.set("missingLogin", true);
+		window.location.pathname = "";
+		// mustLogIn();
 		return;
+	}
+
+	if (Cookies.get("alreadyLoggedIn") === "true")
+	{
+		toastr['info']('Welcome Back!', 'You are already logged in.');
+		Cookies.remove("alreadyLoggedIn")
 	}
 
 	if (document.referrer.split(/[?#]/)[0] === URL_BASE && Cookies.get("redirected") === 'true' && name)
 	{
 		if (lastLogin)
-			lastLogin = new Date(lastLogin).toLocaleDateString("en-US", { 
+		{
+			lastLogin = new Date(lastLogin);
+			lastLogin.setHours(lastLogin.getHours() + 3)
+			lastLogin = lastLogin.toLocaleDateString("en-US", { 
 				weekday: 'short', year: 'numeric', month: 'long', day: 'numeric',
 				hour: 'numeric', minute: 'numeric', hour12: true
 			});
+		}
 
 		toastr["info"](lastLogin ? `Last logged in on ${lastLogin}` : "", `Welcome ${name}!`);
 	}
