@@ -53,17 +53,6 @@ function getPageNumber()
 	return urlParams.has("page") && urlParams.get("page") > 0 ? parseInt(urlParams.get("page")) : 1;
 }
 
-function mustLogIn()
-{
-	$("#alertModal-title").text("Unauthorized Access");
-	$("#alertModal-body").text("You must log in to view this page!");
-	$("#alertModal-error").hide();
-	$("#alertModal-continue").hide();
-	$("#alertModal-dismiss").text("Continue");
-	$('#alertModal').on('hidden.bs.modal', () => {setTimeout(() => {window.location.pathname = "";}, 50)});
-	$('#alertModal').modal('show');
-}
-
 // Handle page load
 $(document).ready(function () {
 	var urlParams = new URLSearchParams(window.location.search);
@@ -74,14 +63,15 @@ $(document).ready(function () {
 	searchQry = urlParams.has("search") ? urlParams.get("search") : '';
 	$("#search-form :input[name='search']").val(searchQry);
 
-	// Change Auth page if not logged in
+	// Change to Auth page if not logged in
 	if (!token && !DEBUG) {
 		Cookies.set("missingLogin", true);
 		window.location.pathname = "";
-		// mustLogIn();
 		return;
 	}
 
+	// Welcome back user if he went to
+	// Authentication page when already logged in
 	if (Cookies.get("alreadyLoggedIn") === "true")
 	{
 		toastr['info']('Welcome Back!', 'You are already logged in.');

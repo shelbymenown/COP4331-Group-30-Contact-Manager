@@ -70,26 +70,22 @@ $(document).ready(function () {
 	// Keyboard listeners
 	$(document).keyup(function(e)
 	{
-		if (e.code === "Escape")
-		{
-			if ($('#loggedInModal').is(':visible')) 	$('#loggedInModal').modal('hide');
-			else if ($('#alertModal').is(':visible')) 	$('#alertModal').modal('hide');
-		}
+		if (e.code === "Escape" && $('#alertModal').is(':visible'))
+			$('#alertModal').modal('hide');
 	});
 
 	// Check for existing token
 	token = Cookies.get("token");
 
 	// Change page to /contacts if logged in
-	$('#loggedInModal').on('hidden.bs.modal', function() { window.location.pathname = "/contacts.html"; });
 	if (token)
 	{
 		Cookies.set("alreadyLoggedIn", "true");
 		window.location.pathname = "/contacts.html";
-		// $('#loggedInModal').modal('show');
 		return;
 	}
 
+	// Notify of unauthorized access attempt
 	if (Cookies.get("missingLogin") === "true")
 	{
 		toastr['warning']('Please log in to view the page', 'Unauthorized Access');
@@ -113,14 +109,11 @@ $(document).ready(function () {
 	$("#signup-error").text("placeholder");
 	$("#login-error").removeClass("error-show");
 	$("#signup-error").removeClass("error-show");
-
 	
 	// Add event listeners
 	$('#alertModal').on('hide.bs.modal', onCloseAlert);
 	$("#signup-form").on('submit', doSignup);
 	$("#login-form").on('submit', doLogin);
-
-
 });
 
 function doSignup(e) {
