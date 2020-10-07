@@ -101,10 +101,62 @@ $(document).ready(function () {
 	$('#addBtn').click(doCreate);
 	$('#search-form').on('submit', doSearch);
 
+	// Keyboard event listener
+	$(document).keyup(function(e) {
+		if (e.shiftKey || e.ctrlKey || e.altKey)
+			return;
+	
+		var _urlParams = new URLSearchParams(window.location.search);
+		if (e.code === "Escape")
+		{
+			if (!$('.modal:visible').length)
+			{
+				var focus = true;
+				
+				if (focus = !!$("#search-form :input[name='search']").val())				$("#search-form :input[name='search']").val('');
+				else if ($("#search-form :input[name='search']").is(":focus"))				$("#search-form :input[name='search']").blur();
+				else if (focus = (_urlParams.has("search") && _urlParams.get("search")))	loadContacts(token, '', 1);
+
+				if (focus) $("#search-form :input[name='search']").focus();
+			}
+			else if ($('#editCreateModal').is(':visible')) 		$('#editCreateModal').modal('hide');
+			else if ($('#deleteModal').is(':visible')) 			$('#deleteModal').modal('hide');
+			else if ($('#alertModal').is(':visible')) 			$('#alertModal').modal('hide');
+		}
+		else if (e.code === "Enter")
+		{
+			if ($('#editCreateModal').is(':visible')) 		$('#editCreateModal-continue').click();
+			else if ($('#deleteModal').is(':visible')) 		$('#deleteModal-continue').click();
+			else if ($('#alertModal').is(':visible')) 		$('#alertModal-continue').click();
+		}
+		else if (e.code === "KeyP")
+		{
+			// No modal is open and not focused on search bar
+			if (!$('.modal:visible').length && !$("#search-form :input[name='search']").is(":focus"))
+			{
+				$('#editCreateModal').modal('show');
+				doCreate();
+			}
+		}
+		else if (e.code === "KeyF")
+		{
+			// No modal is open and not focused on search bar
+			if (!$('.modal:visible').length && !$("#search-form :input[name='search']").is(":focus"))
+				$("#search-form :input[name='search']").focus();
+		}
+		else if (e.code === "KeyC")
+		{
+			if (!$('.modal:visible').length && _urlParams.has("search") && _urlParams.get("search"))
+			{
+				loadContacts(token, '', 1);
+				$("#search-form :input[name='search']").focus();
+			}
+		}
+	});
+
 	// Load Contacts on page render
 	loadContacts(token, searchQry, page);
 });
-
 
 function doSearch(e) {
 	e.preventDefault();
