@@ -43,16 +43,20 @@ else
 	}
 	else
 	{
-		$sql = "SELECT UserID, Password, Name FROM User WHERE Username='" . $inData["Username"] . "'";
+		$sql = "SELECT UserID, Password, Name, DateLastLoggedIn FROM User WHERE Username='" . $inData["Username"] . "'";
 		$result = $conn->query($sql);
 
 		// Check if username matched as well as password verified
 		if ($result->num_rows > 0 && password_verify($inData["Password"], ($row = $result->fetch_assoc())["Password"]))
 		{
-			$Username = $row["Username"];
+			$name = $row["Name"];
+			$lastLogin = $row["DateLastLoggedIn"];
 			$UserID = $row["UserID"];
+
+			$sql = "UPDATE User SET DateLastLoggedIn=NOW() WHERE UserID=". $UserID;
+			$conn->query($sql);
 			
-			returnWithInfo( $UserID );
+			returnWithInfo( $UserID, $name, $lastLogin );
 		}
 		else
 		{
@@ -83,7 +87,7 @@ function returnWithError( $err )
 	sendResultInfoAsJson( $retValue );
 }
 
-function returnWithInfo( $UserID )
+function returnWithInfo( $UserID, $name, $lastLogin )
 {
 	global $serverKey;
 	
@@ -95,7 +99,7 @@ function returnWithInfo( $UserID )
 	$token = JWT::encode($payloadArray, $serverKey);
 
 	// Respond with token
-	sendResultInfoAsJson( '{"token": "' . $token . '"}' );
+	sendResultInfoAsJson( '{"name": "' . $name . '", "lastLogin": "' . $lastLogin . '", "token": "' . $token . '"}' );
 }
 
 function IsNullOrEmptyString($str){
