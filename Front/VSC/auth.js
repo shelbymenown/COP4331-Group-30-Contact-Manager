@@ -157,6 +157,10 @@ function doLogin(e) {
 			if (token) {
 				Cookies.set("token", token);
 				Cookies.set("redirected", true);
+				
+				if (res.name) Cookies.set("name", res.name);
+				if (res.lastLogin) Cookies.set("lastLogin", res.lastLogin);
+				
 				window.location.pathname = "/contacts.html"
 			}
 			else {

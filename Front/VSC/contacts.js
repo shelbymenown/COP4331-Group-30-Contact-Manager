@@ -67,6 +67,7 @@ function mustLogIn()
 // Handle page load
 $(document).ready(function () {
 	var urlParams = new URLSearchParams(window.location.search);
+	var lastLogin = Cookies.get("lastLogin"), name = Cookies.get("name");
 	token = Cookies.get("token");
 
 	page = urlParams.has("page") && urlParams.get("page") > 0 ? urlParams.get("page") : 1;
@@ -79,12 +80,18 @@ $(document).ready(function () {
 		return;
 	}
 
-	if (document.referrer.split(/[?#]/)[0] === URL_BASE && Cookies.get("redirected") === 'true')
+	if (document.referrer.split(/[?#]/)[0] === URL_BASE && Cookies.get("redirected") === 'true' && name)
 	{
-		// TODO : get name from API
-		toastr["success"]("", "Welcome Aadil!");
+		if (lastLogin)
+			lastLogin = new Date(lastLogin).toLocaleDateString("en-US", { 
+				weekday: 'short', year: 'numeric', month: 'long', day: 'numeric',
+				hour: 'numeric', minute: 'numeric', hour12: true
+			});
+
+		toastr["info"](lastLogin ? `Last logged in on ${lastLogin}` : "", `Welcome ${name}!`);
 	}
 	Cookies.remove("redirected");
+	Cookies.remove("lastLogin");
 
 	// Add input mask for phone numbers
 	$("#editCreateModal-form :input[name='phone']").mask('(000) 000-0000');
