@@ -53,38 +53,47 @@ function getPageNumber()
 	return urlParams.has("page") && urlParams.get("page") > 0 ? parseInt(urlParams.get("page")) : 1;
 }
 
-function mustLogIn()
-{
-	$("#alertModal-title").text("Unauthorized Access");
-	$("#alertModal-body").text("You must log in to view this page!");
-	$("#alertModal-error").hide();
-	$("#alertModal-continue").hide();
-	$("#alertModal-dismiss").text("Continue");
-	$('#alertModal').on('hidden.bs.modal', () => {setTimeout(() => {window.location.pathname = "";}, 50)});
-	$('#alertModal').modal('show');
-}
-
 // Handle page load
 $(document).ready(function () {
 	var urlParams = new URLSearchParams(window.location.search);
+	var lastLogin = Cookies.get("lastLogin"), name = Cookies.get("name");
 	token = Cookies.get("token");
 
 	page = urlParams.has("page") && urlParams.get("page") > 0 ? urlParams.get("page") : 1;
 	searchQry = urlParams.has("search") ? urlParams.get("search") : '';
 	$("#search-form :input[name='search']").val(searchQry);
 
-	// Change Auth page if not logged in
+	// Change to Auth page if not logged in
 	if (!token && !DEBUG) {
-		mustLogIn();
+		Cookies.set("missingLogin", true);
+		window.location.pathname = "";
 		return;
 	}
 
-	if (document.referrer.split(/[?#]/)[0] === URL_BASE && Cookies.get("redirected") === 'true')
+	// Welcome back user if he went to
+	// Authentication page when already logged in
+	if (Cookies.get("alreadyLoggedIn") === "true")
 	{
-		// TODO : get name from API
-		toastr["success"]("", "Welcome Aadil!");
+		toastr['info']('Welcome Back!', 'You are already logged in.');
+		Cookies.remove("alreadyLoggedIn")
+	}
+
+	if (document.referrer.split(/[?#]/)[0] === URL_BASE && Cookies.get("redirected") === 'true' && name)
+	{
+		if (lastLogin)
+		{
+			lastLogin = new Date(lastLogin);
+			lastLogin.setHours(lastLogin.getHours() + 3)
+			lastLogin = lastLogin.toLocaleDateString("en-US", { 
+				weekday: 'short', year: 'numeric', month: 'long', day: 'numeric',
+				hour: 'numeric', minute: 'numeric', hour12: true
+			});
+		}
+
+		toastr["info"](lastLogin ? `Last logged in on ${lastLogin}` : "", `Welcome ${name}!`);
 	}
 	Cookies.remove("redirected");
+	Cookies.remove("lastLogin");
 
 	// Add input mask for phone numbers
 	$("#editCreateModal-form :input[name='phone']").mask('(000) 000-0000');
@@ -94,10 +103,62 @@ $(document).ready(function () {
 	$('#addBtn').click(doCreate);
 	$('#search-form').on('submit', doSearch);
 
+	// Keyboard event listener
+	$(document).keyup(function(e) {
+		if (e.shiftKey || e.ctrlKey || e.altKey)
+			return;
+	
+		var _urlParams = new URLSearchParams(window.location.search);
+		if (e.code === "Escape")
+		{
+			if (!$('.modal:visible').length)
+			{
+				var focus = true;
+				
+				if (focus = !!$("#search-form :input[name='search']").val())				$("#search-form :input[name='search']").val('');
+				else if ($("#search-form :input[name='search']").is(":focus"))				$("#search-form :input[name='search']").blur();
+				else if (focus = (_urlParams.has("search") && _urlParams.get("search")))	loadContacts(token, '', 1);
+
+				if (focus) $("#search-form :input[name='search']").focus();
+			}
+			else if ($('#editCreateModal').is(':visible')) 		$('#editCreateModal').modal('hide');
+			else if ($('#deleteModal').is(':visible')) 			$('#deleteModal').modal('hide');
+			else if ($('#alertModal').is(':visible')) 			$('#alertModal').modal('hide');
+		}
+		else if (e.code === "Enter")
+		{
+			if ($('#editCreateModal').is(':visible')) 		$('#editCreateModal-continue').click();
+			else if ($('#deleteModal').is(':visible')) 		$('#deleteModal-continue').click();
+			else if ($('#alertModal').is(':visible')) 		$('#alertModal-continue').click();
+		}
+		else if (e.code === "KeyP")
+		{
+			// No modal is open and not focused on search bar
+			if (!$('.modal:visible').length && !$("#search-form :input[name='search']").is(":focus"))
+			{
+				$('#editCreateModal').modal('show');
+				doCreate();
+			}
+		}
+		else if (e.code === "KeyF")
+		{
+			// No modal is open and not focused on search bar
+			if (!$('.modal:visible').length && !$("#search-form :input[name='search']").is(":focus"))
+				$("#search-form :input[name='search']").focus();
+		}
+		else if (e.code === "KeyC")
+		{
+			if (!$('.modal:visible').length && _urlParams.has("search") && _urlParams.get("search"))
+			{
+				loadContacts(token, '', 1);
+				$("#search-form :input[name='search']").focus();
+			}
+		}
+	});
+
 	// Load Contacts on page render
 	loadContacts(token, searchQry, page);
 });
-
 
 function doSearch(e) {
 	e.preventDefault();
@@ -107,7 +168,7 @@ function doSearch(e) {
 }
 
 function loadContacts(token, search, page) {
-	let uri = `${API_BASE}/searchcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/contacts${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -121,9 +182,11 @@ function loadContacts(token, search, page) {
 	// Update URL bar
 	if (history.pushState) {
 		var newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`
-						+ `?search=${searchQry}&page=${page}`
+						+ `?search=${search}&page=${page}`
 		window.history.pushState({path:newurl},'',newurl);
 	}
+	$("#search-form :input[name='search']").val(search);
+	searchQry=search;
 
 	// Show loading modal and disable pagination
 	$('#loadingModal').modal({backdrop: 'static', keyboard: false});
@@ -215,7 +278,9 @@ function generateContact_li(contact, should_hide=true, li_tag=true)
 		return;
 
 	let FULL_NAME = [contact.firstName, contact.lastName].join(contact.firstName && contact.lastName ? " " : "");
-	let date = new Date(contact.createDate.split(' ')[0]).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })
+	let date = new Date(contact.createDate ? contact.createDate.split(' ')[0] : Date.now())
+					.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })
+
 	return `
 		${li_tag ? `<li class="list-group-item" id="${`contact-${contact.id}`}" ${should_hide ? 'style="display: none"' : ''}>` : ''}
 			<div class="row w-100">
@@ -244,11 +309,9 @@ function generateContact_li(contact, should_hide=true, li_tag=true)
 							<span class="text-muted small text-truncate" info="email">${contact.email}</span>
 							<br>
 							` : ``}
-						${contact.createDate ? `
 							<span class="fa fa-calendar fa-fw text-muted" data-toggle="tooltip"
 								data-original-title="" title=""></span>
 							<span class="text-muted small text-truncate" info="email">Since ${date}</span>
-						` : ``}
 					</div>
 				</div>
 				<div class="col-12 col-sm-2 col-md-2">
@@ -369,7 +432,7 @@ function submitLogout()
 
 function submitEdit(contactId)
 {
-	let uri = `${API_BASE}/updateContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/contact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -439,7 +502,7 @@ function submitEdit(contactId)
 }
 function submitCreate()
 {
-	let uri = `${API_BASE}/addcontact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/contact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token
@@ -499,7 +562,7 @@ function submitCreate()
 function submitDelete(contactId)
 {
 	var payload = {id: contactId};
-	let uri = `${API_BASE}/deleteContact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
+	let uri = `${API_BASE}/contact${API_EXTENSION ? "." : ""}${API_EXTENSION}`
 	$.ajaxSetup({
 		headers: {
 			'x-access-token': token

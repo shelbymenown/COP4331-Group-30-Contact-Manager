@@ -2,7 +2,8 @@ const URL_BASE = `http://spadecontactmanager.com/`;
 const API_BASE = `${URL_BASE}LAMPAPI`;
 const API_EXTENSION = 'php';
 
-let USE_TOASTS = false;
+let USE_TOASTS = true;
+let TOAST_ONLY_SIGNUP = true;
 const MAX_TOASTS = 5;
 
 var token;
@@ -66,14 +67,29 @@ function showError(element, error)
 
 // Handle page load
 $(document).ready(function () {
+	// Keyboard listeners
+	$(document).keyup(function(e)
+	{
+		if (e.code === "Escape" && $('#alertModal').is(':visible'))
+			$('#alertModal').modal('hide');
+	});
+
+	// Check for existing token
 	token = Cookies.get("token");
 
 	// Change page to /contacts if logged in
-	$('#loggedInModal').on('hidden.bs.modal', function() { window.location.pathname = "/contacts.html"; });
 	if (token)
 	{
-		$('#loggedInModal').modal('show');
+		Cookies.set("alreadyLoggedIn", "true");
+		window.location.pathname = "/contacts.html";
 		return;
+	}
+
+	// Notify of unauthorized access attempt
+	if (Cookies.get("missingLogin") === "true")
+	{
+		toastr['warning']('Please log in to view the page', 'Unauthorized Access');
+		Cookies.remove("missingLogin");
 	}
 
 	var signupBtn = $('#signup');
@@ -93,9 +109,9 @@ $(document).ready(function () {
 	$("#signup-error").text("placeholder");
 	$("#login-error").removeClass("error-show");
 	$("#signup-error").removeClass("error-show");
-
+	
 	// Add event listeners
-	$('#alertModal').on('hidden.bs.modal', onCloseAlert);
+	$('#alertModal').on('hide.bs.modal', onCloseAlert);
 	$("#signup-form").on('submit', doSignup);
 	$("#login-form").on('submit', doLogin);
 });
@@ -121,16 +137,16 @@ function doSignup(e) {
 			if (USE_TOASTS && !isMobile())
 			{
 				onCloseAlert();
-				toastr["success"]("You can now log in", "Sign Up Successful!");
+				toastr["info"]("You can now log in", "Sign Up Successful!");
 			}
-			else $('#alertModal').modal('toggle');
+			else $('#alertModal').modal('show');
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
 			errMsg = jqXHR.responseJSON && jqXHR.responseJSON.error ? jqXHR.responseJSON.error : "An error has occured 😟";
 
 			// Display error
 			showError($("#signup-error"), errMsg + "😢")
-			if (USE_TOASTS) toastr["warning"](errMsg, "Sign Up Failed!");
+			if (USE_TOASTS && !TOAST_ONLY_SIGNUP) toastr["warning"](errMsg, "Sign Up Failed!");
 		})
 		.always(function () { $('#loadingModal').modal('hide');});
 }
@@ -157,6 +173,10 @@ function doLogin(e) {
 			if (token) {
 				Cookies.set("token", token);
 				Cookies.set("redirected", true);
+				
+				if (res.name) Cookies.set("name", res.name);
+				if (res.lastLogin) Cookies.set("lastLogin", res.lastLogin);
+				
 				window.location.pathname = "/contacts.html"
 			}
 			else {
@@ -166,7 +186,7 @@ function doLogin(e) {
 				// Close loading modal only when login fails
 				$('#loadingModal').modal('hide');
 
-				if (USE_TOASTS) toastr["error"]("Unexpected result from API 😮", "Login Failed!");
+				if (USE_TOASTS && !TOAST_ONLY_SIGNUP) toastr["error"]("Unexpected result from API 😮", "Login Failed!");
 			}
 		})
 		.fail(function (jqXHR, textStatus, errorThrown) {
@@ -178,7 +198,7 @@ function doLogin(e) {
 			// Close loading modal only when login fails
 			$('#loadingModal').modal('hide');
 
-			if (USE_TOASTS) toastr["warning"](errMsg, "Login Failed!");
+			if (USE_TOASTS && !TOAST_ONLY_SIGNUP) toastr["warning"](errMsg, "Login Failed!");
 		})
 }
 
