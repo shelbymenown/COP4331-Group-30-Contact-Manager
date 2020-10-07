@@ -180,9 +180,11 @@ function loadContacts(token, search, page) {
 	// Update URL bar
 	if (history.pushState) {
 		var newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`
-						+ `?search=${searchQry}&page=${page}`
+						+ `?search=${search}&page=${page}`
 		window.history.pushState({path:newurl},'',newurl);
 	}
+	$("#search-form :input[name='search']").val(search);
+	searchQry=search;
 
 	// Show loading modal and disable pagination
 	$('#loadingModal').modal({backdrop: 'static', keyboard: false});
