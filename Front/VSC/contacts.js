@@ -148,7 +148,10 @@ $(document).ready(function () {
 		}
 		else if (e.code === "KeyC")
 		{
-			if (!$('.modal:visible').length && _urlParams.has("search") && _urlParams.get("search"))
+			// No modal open, not writing in search bar,
+			// and currently have active search query or not on first page
+			if (!$('.modal:visible').length && !$("#search-form :input[name='search']").is(":focus")
+				&& ((_urlParams.has("search") && _urlParams.get("search")) || (_urlParams.has("page") && _urlParams.get("page") != 1)))
 			{
 				loadContacts(token, '', 1);
 				$("#search-form :input[name='search']").focus();
